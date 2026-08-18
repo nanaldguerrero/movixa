@@ -1,0 +1,109 @@
+.dashboard {
+  min-height: 100vh;
+  background: #f5f6fa;
+  font-family: system-ui, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-logo {
+  color: #6a3de8;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.dashboard-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dashboard-saludo {
+  color: #2b2b2b;
+  margin: 0 0 20px 0;
+}
+
+.dashboard-principal {
+  margin-bottom: 16px;
+}
+
+.tarjeta-grande {
+  width: 100%;
+  background: linear-gradient(135deg, #6a3de8 0%, #4fc3f7 100%);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(106, 61, 232, 0.3);
+}
+
+.tarjeta-grande .tarjeta-icono {
+  font-size: 28px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tarjeta {
+  background: white;
+  border: none;
+  border-radius: 16px;
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.tarjeta-icono {
+  font-size: 26px;
+}
+
+.tarjeta-texto {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.dashboard-secundario {
+  display: flex;
+  gap: 10px;
+}
+
+.tarjeta-chica {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  color: #666;
+  cursor: pointer;
+}

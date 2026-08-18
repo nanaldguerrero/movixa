@@ -1,0 +1,95 @@
+.maleta {
+  min-height: 100vh;
+  background: #f5f6fa;
+  font-family: system-ui, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.mal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mal-volver {
+  background: none;
+  border: none;
+  color: #6a3de8;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.mal-logo {
+  color: #6a3de8;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.mal-titulo {
+  color: #2b2b2b;
+  margin: 0 0 4px 0;
+}
+
+.mal-progreso {
+  color: #888;
+  font-size: 14px;
+  margin: 0 0 24px 0;
+}
+
+.mal-categoria {
+  margin-bottom: 20px;
+}
+
+.mal-categoria-titulo {
+  color: #444;
+  font-size: 15px;
+  margin: 0 0 10px 0;
+}
+
+.mal-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mal-item {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-size: 14px;
+  color: #333;
+}
+
+.mal-item-hecho {
+  opacity: 0.5;
+}
+
+.mal-item-hecho span {
+  text-decoration: line-through;
+}
+
+.mal-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: white;
+}
+
+.mal-checkbox-marcado {
+  background: #6a3de8;
+  border-color: #6a3de8;
+}

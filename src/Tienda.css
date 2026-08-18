@@ -1,0 +1,88 @@
+.tienda {
+  min-height: 100vh;
+  background: #f5f6fa;
+  font-family: system-ui, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.tie-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tie-volver {
+  background: none;
+  border: none;
+  color: #6a3de8;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tie-logo {
+  color: #6a3de8;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.tie-titulo {
+  color: #2b2b2b;
+  margin: 0 0 4px 0;
+}
+
+.tie-subtitulo {
+  color: #888;
+  font-size: 14px;
+  margin: 0 0 24px 0;
+}
+
+.tie-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.tie-tarjeta {
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.tie-icono {
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.tie-nombre {
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.tie-desc {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.tie-boton {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #6a3de8;
+  background: white;
+  color: #6a3de8;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}

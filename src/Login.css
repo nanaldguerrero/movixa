@@ -1,0 +1,79 @@
+.login {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #6a3de8 0%, #4fc3f7 100%);
+  font-family: system-ui, sans-serif;
+}
+
+.login-logo {
+  color: white;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+}
+
+.login-card {
+  background: white;
+  border-radius: 20px;
+  padding: 32px 28px;
+  width: 300px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.login-card h2 {
+  margin: 0 0 20px 0;
+  color: #2b2b2b;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.login-boton {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #6a3de8;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.login-olvide {
+  font-size: 13px;
+  color: #6a3de8;
+  margin: 14px 0 0 0;
+  cursor: pointer;
+}
+
+.login-separador {
+  color: #999;
+  font-size: 13px;
+  margin: 18px 0;
+}
+
+.login-crear-cuenta {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 2px solid #6a3de8;
+  background: white;
+  color: #6a3de8;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+}

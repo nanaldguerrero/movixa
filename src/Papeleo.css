@@ -1,0 +1,104 @@
+.papeleo {
+  min-height: 100vh;
+  background: #f5f6fa;
+  font-family: system-ui, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.pap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pap-volver {
+  background: none;
+  border: none;
+  color: #6a3de8;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.pap-logo {
+  color: #6a3de8;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.pap-titulo {
+  color: #2b2b2b;
+  margin: 0 0 4px 0;
+}
+
+.pap-progreso {
+  color: #888;
+  font-size: 14px;
+  margin: 0 0 20px 0;
+}
+
+.pap-info-destino {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.pap-info-item {
+  background: white;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.pap-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pap-item {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-size: 14px;
+  color: #333;
+}
+
+.pap-item-hecho {
+  opacity: 0.5;
+}
+
+.pap-item-hecho span {
+  text-decoration: line-through;
+}
+
+.pap-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 13px;
+  color: white;
+}
+
+.pap-checkbox-marcado {
+  background: #6a3de8;
+  border-color: #6a3de8;
+}
