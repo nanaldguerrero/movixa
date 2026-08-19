@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './CrearViaje.css'
 
-function CrearViaje({ irADashboard }) {
+function CrearViaje({ irADashboard, irADetalle  }) {
   const [sabeDestino, setSabeDestino] = useState(null)
   const [destino, setDestino] = useState('')
   const [motivo, setMotivo] = useState('')
@@ -49,7 +49,7 @@ function CrearViaje({ irADashboard }) {
               <option value="otro">Otro</option>
             </select>
 
-            <button className="cv-boton">Continuar</button>
+            <button className="cv-boton" onClick={() => irADetalle(destino, motivo)}>Continuar</button>
             <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
           </>
         )}
@@ -67,8 +67,7 @@ function CrearViaje({ irADashboard }) {
               <option value="relax">Relax</option>
             </select>
 
-            <button className="cv-boton">Ver recomendaciones</button>
-            <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
+<button className="cv-boton" onClick={() => irADetalle('Destino recomendado', motivo)}>Ver recomendaciones</button>            <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
           </>
         )}
       </div>

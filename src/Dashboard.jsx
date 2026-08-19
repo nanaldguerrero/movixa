@@ -1,11 +1,11 @@
 import './Dashboard.css'
 
-function Dashboard({ irACrearViaje, irAPapeleo,  irAMaleta, irAWishlist,  irADiario, irATienda  }) {
+function Dashboard({ irACrearViaje, irAPapeleo,  irAMaleta, irAWishlist,  irADiario, irATienda, irAConfiguracion, irAPerfil  }) {
   return (
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="dashboard-logo">MOVIXA</div>
-        <div className="dashboard-avatar">👤</div>
+        <div className="dashboard-avatar" onClick={irAPerfil} style={{ cursor: 'pointer' }}>👤</div>
       </div>
 
       <h2 className="dashboard-saludo">¡Hola, Adriana! 👋</h2>
@@ -39,7 +39,7 @@ function Dashboard({ irACrearViaje, irAPapeleo,  irAMaleta, irAWishlist,  irADia
       </div>
 
       <div className="dashboard-secundario">
-<button className="tarjeta-chica" onClick={irATienda}>🛍️ Tienda</button>        <button className="tarjeta-chica">⚙️ Más opciones</button>
+<button className="tarjeta-chica" onClick={irATienda}>🛍️ Tienda</button>        <button className="tarjeta-chica" onClick={irAConfiguracion}>⚙️ Más opciones</button>
       </div>
     </div>
   )

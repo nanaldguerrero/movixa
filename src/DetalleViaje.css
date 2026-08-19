@@ -1,0 +1,139 @@
+.dv {
+  min-height: 100vh;
+  background: #f5f6fa;
+  font-family: system-ui, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.dv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dv-volver {
+  background: none;
+  border: none;
+  color: #6a3de8;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dv-logo {
+  color: #6a3de8;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.dv-portada {
+  background: linear-gradient(135deg, #6a3de8 0%, #4fc3f7 100%);
+  border-radius: 18px;
+  padding: 24px;
+  color: white;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.dv-destino {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.dv-motivo {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.dv-progreso-card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.dv-progreso-texto {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.dv-progreso-porcentaje {
+  font-weight: bold;
+  color: #6a3de8;
+}
+
+.dv-barra-fondo {
+  background: #eee;
+  border-radius: 10px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.dv-barra-relleno {
+  background: linear-gradient(90deg, #6a3de8, #4fc3f7);
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+.dv-categoria {
+  margin-bottom: 18px;
+}
+
+.dv-categoria-titulo {
+  color: #444;
+  font-size: 14px;
+  margin: 0 0 10px 0;
+}
+
+.dv-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dv-item {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-size: 14px;
+  color: #333;
+}
+
+.dv-item-hecho {
+  opacity: 0.5;
+}
+
+.dv-item-hecho span {
+  text-decoration: line-through;
+}
+
+.dv-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: white;
+}
+
+.dv-checkbox-marcado {
+  background: #6a3de8;
+  border-color: #6a3de8;
+}
