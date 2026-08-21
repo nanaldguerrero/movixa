@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #6a3de8 0%, #4fc3f7 100%);
+  background: linear-gradient(160deg, #6a3de8 0%, #4fc3f7 100%);
   font-family: system-ui, sans-serif;
   padding: 30px 0;
 }
@@ -19,10 +19,10 @@
 
 .registro-card {
   background: white;
-  border-radius: 20px;
+  border-radius: 22px;
   padding: 28px 26px;
   width: 320px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
 }
 
@@ -32,29 +32,75 @@
   text-align: center;
 }
 
+.registro-ruta {
+  position: relative;
+  border-left: 2px dashed #b89bff;
+  margin-left: 10px;
+  padding-left: 22px;
+}
+
+.registro-ruta-avion {
+  position: absolute;
+  left: -14px;
+  top: -22px;
+  font-size: 18px;
+  transform: rotate(90deg);
+}
+
+.registro-ruta-meta {
+  position: absolute;
+  left: -12px;
+  bottom: -4px;
+  font-size: 16px;
+}
+
 .registro-label {
   display: block;
   font-size: 12px;
   color: #666;
-  margin-bottom: 4px;
-  margin-top: 12px;
+  margin-bottom: 2px;
+  margin-top: 16px;
   font-weight: 600;
+  position: relative;
+}
+
+.registro-label::before {
+  content: '';
+  position: absolute;
+  left: -27px;
+  top: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6a3de8;
+  box-shadow: 0 0 0 3px #F1EDFF;
 }
 
 .registro-input, .registro-select {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  padding: 12px 30px 12px 14px;
+  border: 2px solid #8a5cf0;
   font-size: 14px;
+  font-weight: 600;
   box-sizing: border-box;
-  background: white;
-  color: #333;
+  background: #EDE4FF;
+  color: #4a2ba8;
+  clip-path: polygon(0% 0%, 88% 0%, 100% 50%, 88% 100%, 0% 100%);
+}
+
+.registro-input::placeholder {
+  color: #9a7fd4;
+  font-weight: 400;
+}
+
+.registro-input:focus, .registro-select:focus {
+  outline: none;
+  background: #E0D2FF;
 }
 
 .registro-fecha {
   display: flex;
-  gap: 6px;
+  gap: 10px;
 }
 
 .registro-fecha .registro-select {
@@ -63,15 +109,16 @@
 
 .registro-boton {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 13px;
+  border-radius: 12px;
   border: none;
-  background: #6a3de8;
+  background: linear-gradient(135deg, #6a3de8, #8a5cf0);
   color: white;
   font-weight: bold;
   font-size: 15px;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 22px;
+  box-shadow: 0 6px 16px rgba(106, 61, 232, 0.3);
 }
 
 .registro-volver {

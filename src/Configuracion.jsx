@@ -1,5 +1,23 @@
-import { useState } from 'react'
+import { useConfiguracion } from './ConfiguracionContext'
 import './Configuracion.css'
+
+const temas = [
+  { id: 'claro', emoji: '☀️', nombre: 'Claro' },
+  { id: 'oscuro', emoji: '🌙', nombre: 'Oscuro' },
+  
+]
+
+const tamaños = [
+  { id: 'pequena', nombre: 'Pequeña' },
+  { id: 'normal', nombre: 'Normal' },
+  { id: 'grande', nombre: 'Grande' },
+]
+
+const tiposLetra = [
+  { id: 'normal', nombre: 'Normal' },
+  { id: 'cursiva', nombre: 'Cursiva' },
+  { id: 'clasica', nombre: 'Clásica' },
+]
 
 const companeros = [
   { id: 'perro', emoji: '🐶', nombre: 'Perro' },
@@ -9,10 +27,13 @@ const companeros = [
 ]
 
 function Configuracion({ irADashboard }) {
-  const [companero, setCompanero] = useState('perro')
-  const [tema, setTema] = useState('claro')
-  const [tamañoLetra, setTamañoLetra] = useState('normal')
-  const [idioma, setIdioma] = useState('es')
+  const {
+    tema, setTema,
+    tamañoLetra, setTamañoLetra,
+    tipoLetra, setTipoLetra,
+    idioma, setIdioma,
+    companero, setCompanero,
+  } = useConfiguracion()
 
   return (
     <div className="config">
@@ -40,41 +61,48 @@ function Configuracion({ irADashboard }) {
       </div>
 
       <div className="config-seccion">
-        <h3>Apariencia</h3>
-        <div className="config-fila">
-          <span>Tema</span>
-          <div className="config-toggle-grupo">
+        <h3>Tema</h3>
+        <div className="config-companeros">
+          {temas.map((t) => (
             <button
-              className={`config-toggle ${tema === 'claro' ? 'config-toggle-activo' : ''}`}
-              onClick={() => setTema('claro')}
+              key={t.id}
+              className={`config-companero ${tema === t.id ? 'config-companero-activo' : ''}`}
+              onClick={() => setTema(t.id)}
             >
-              ☀️ Claro
+              <span className="config-companero-emoji">{t.emoji}</span>
+              <span>{t.nombre}</span>
             </button>
-            <button
-              className={`config-toggle ${tema === 'oscuro' ? 'config-toggle-activo' : ''}`}
-              onClick={() => setTema('oscuro')}
-            >
-              🌙 Oscuro
-            </button>
-          </div>
+          ))}
         </div>
+      </div>
 
-        <div className="config-fila">
-          <span>Tamaño de letra</span>
-          <div className="config-toggle-grupo">
+      <div className="config-seccion">
+        <h3>Tamaño de letra</h3>
+        <div className="config-toggle-grupo config-toggle-grupo-3">
+          {tamaños.map((t) => (
             <button
-              className={`config-toggle ${tamañoLetra === 'normal' ? 'config-toggle-activo' : ''}`}
-              onClick={() => setTamañoLetra('normal')}
+              key={t.id}
+              className={`config-toggle ${tamañoLetra === t.id ? 'config-toggle-activo' : ''}`}
+              onClick={() => setTamañoLetra(t.id)}
             >
-              Normal
+              {t.nombre}
             </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="config-seccion">
+        <h3>Tipo de letra</h3>
+        <div className="config-toggle-grupo config-toggle-grupo-3">
+          {tiposLetra.map((t) => (
             <button
-              className={`config-toggle ${tamañoLetra === 'grande' ? 'config-toggle-activo' : ''}`}
-              onClick={() => setTamañoLetra('grande')}
+              key={t.id}
+              className={`config-toggle ${tipoLetra === t.id ? 'config-toggle-activo' : ''}`}
+              onClick={() => setTipoLetra(t.id)}
             >
-              Grande
+              {t.nombre}
             </button>
-          </div>
+          ))}
         </div>
       </div>
 

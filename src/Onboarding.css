@@ -1,0 +1,155 @@
+.onb {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #6a3de8 0%, #4fc3f7 100%);
+  font-family: system-ui, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.onb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.onb-logo {
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.onb-pasos {
+  color: white;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.onb-barra-fondo {
+  background: rgba(255,255,255,0.3);
+  border-radius: 10px;
+  height: 6px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.onb-barra-relleno {
+  background: white;
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+.onb-card {
+  background: white;
+  border-radius: 20px;
+  padding: 28px 24px;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.onb-card h2 {
+  margin: 0 0 6px 0;
+  color: #2b2b2b;
+  text-align: center;
+}
+
+.onb-sub {
+  text-align: center;
+  color: #999;
+  font-size: 13px;
+  margin: 0 0 20px 0;
+}
+
+.onb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.onb-opcion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 10px;
+  border-radius: 14px;
+  border: 2px solid #eee;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  color: #555;
+}
+
+.onb-emoji {
+  font-size: 26px;
+}
+
+.onb-opcion-activa {
+  border-color: #6a3de8;
+  background: #f4f0fe;
+  color: #6a3de8;
+  font-weight: bold;
+}
+
+.onb-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.onb-chip {
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 2px solid #eee;
+  background: white;
+  color: #666;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.onb-chip-activo {
+  border-color: #6a3de8;
+  background: #6a3de8;
+  color: white;
+  font-weight: bold;
+}
+
+.onb-boton {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #6a3de8;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.onb-boton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+.onb-botones-fila {
+  display: flex;
+  gap: 10px;
+}
+
+.onb-boton-atras {
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #666;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.onb-botones-fila .onb-boton {
+  flex: 1;
+}

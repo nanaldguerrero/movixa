@@ -3,7 +3,6 @@ import Login from './Login'
 import Registro from './Registro'
 import Dashboard from './Dashboard'
 import CrearViaje from './CrearViaje'
-import DetalleViaje from './DetalleViaje'
 import Papeleo from './Papeleo'
 import Maleta from './Maleta'
 import Wishlist from './Wishlist'
@@ -11,29 +10,32 @@ import Diario from './Diario'
 import Tienda from './Tienda'
 import Configuracion from './Configuracion'
 import Perfil from './Perfil'
+import DetalleViaje from './DetalleViaje'
+import Onboarding from './Onboarding'
+import { ConfiguracionProvider, useConfiguracion } from './ConfiguracionContext'
 import './App.css'
 
-const textos = {
-  es: { tagline: 'TU MUNDO. TU CAMINO.', boton: 'Comenzar' },
-  en: { tagline: 'YOUR WORLD. YOUR PATH.', boton: 'Get Started' },
-}
-
-function App() {
-  const [idioma, setIdioma] = useState('es')
+function AppInterno() {
+  const { tema, tamañoLetra, tipoLetra, idioma, setIdioma } = useConfiguracion()
   const [pantalla, setPantalla] = useState('splash')
   const [viajeActual, setViajeActual] = useState({ destino: 'Japón', motivo: 'Turismo' })
+
+  const textos = {
+    es: { tagline: 'TU MUNDO. TU CAMINO.', boton: 'Comenzar' },
+    en: { tagline: 'YOUR WORLD. YOUR PATH.', boton: 'Get Started' },
+  }
   const t = textos[idioma]
 
+  let contenido
+
   if (pantalla === 'login') {
-    return <Login irARegistro={() => setPantalla('registro')} />
-  }
-
-  if (pantalla === 'registro') {
-    return <Registro irALogin={() => setPantalla('login')} irADashboard={() => setPantalla('dashboard')} />
-  }
-
-  if (pantalla === 'dashboard') {
-    return (
+    contenido = <Login irARegistro={() => setPantalla('registro')} />
+  } else if (pantalla === 'registro') {
+    contenido = <Registro irALogin={() => setPantalla('login')} irADashboard={() => setPantalla('onboarding')} />
+  } else if (pantalla === 'onboarding') {
+    contenido = <Onboarding irADashboard={() => setPantalla('dashboard')} />
+  } else if (pantalla === 'dashboard') {
+    contenido = (
       <Dashboard
         irACrearViaje={() => setPantalla('crearviaje')}
         irAPapeleo={() => setPantalla('papeleo')}
@@ -45,10 +47,8 @@ function App() {
         irAPerfil={() => setPantalla('perfil')}
       />
     )
-  }
-
-  if (pantalla === 'crearviaje') {
-    return (
+  } else if (pantalla === 'crearviaje') {
+    contenido = (
       <CrearViaje
         irADashboard={() => setPantalla('dashboard')}
         irADetalle={(destino, motivo) => {
@@ -57,55 +57,84 @@ function App() {
         }}
       />
     )
-  }
-    if (pantalla === 'detalleviaje') {
-    return (
+  } else if (pantalla === 'detalleviaje') {
+    contenido = (
       <DetalleViaje
         irADashboard={() => setPantalla('dashboard')}
         destino={viajeActual.destino}
         motivo={viajeActual.motivo}
       />
     )
+  } else if (pantalla === 'papeleo') {
+    contenido = <Papeleo irADashboard={() => setPantalla('dashboard')} />
+  } else if (pantalla === 'maleta') {
+    contenido = <Maleta irADashboard={() => setPantalla('dashboard')} />
+  } else if (pantalla === 'wishlist') {
+    contenido = <Wishlist irADashboard={() => setPantalla('dashboard')} />
+  } else if (pantalla === 'diario') {
+    contenido = <Diario irADashboard={() => setPantalla('dashboard')} />
+  } else if (pantalla === 'tienda') {
+    contenido = <Tienda irADashboard={() => setPantalla('dashboard')} />
+  } else if (pantalla === 'configuracion') {
+    contenido = <Configuracion irADashboard={() => setPantalla('dashboard')} />
+  } else if (pantalla === 'perfil') {
+    contenido = <Perfil irADashboard={() => setPantalla('dashboard')} irAConfiguracion={() => setPantalla('configuracion')} />
+  } else {
+    contenido = (
+      <div className="splash">
+      <svg className="ruta-avion" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="0,400 0,330 60,270 120,320 180,250 240,310 300,260 360,320 400,280 400,400" fill="white" fillOpacity="0.08" />
+        <polygon points="0,400 0,360 50,310 100,350 160,290 220,340 280,300 340,350 400,310 400,400" fill="white" fillOpacity="0.15" />
+        <path d="M10,280 Q120,220 200,260 T390,190" fill="none" stroke="white" strokeOpacity="0.35" strokeWidth="2" strokeDasharray="6 8" />
+        <text x="390" y="190" fontSize="28" textAnchor="middle" dominantBaseline="middle" transform="rotate(20 390 190)" opacity="0.8">✈️</text>
+      </svg>
+      <div className="selector-idioma">
+          <button className={idioma === 'es' ? 'activo' : ''} onClick={() => setIdioma('es')}>Español</button>
+          <button className={idioma === 'en' ? 'activo' : ''} onClick={() => setIdioma('en')}>English</button>
+        </div>
+        <div className="logo">MOVIXA</div>
+        <p className="tagline">{t.tagline}</p>
+        <button className="boton-comenzar" onClick={() => setPantalla('login')}>{t.boton}</button>
+      </div>
+    )
   }
 
-  if (pantalla === 'papeleo') {
-    return <Papeleo irADashboard={() => setPantalla('dashboard')} />
+  const filtros = {
+    claro: 'none',
+    oscuro: 'invert(1) hue-rotate(180deg)',
   }
 
-  if (pantalla === 'maleta') {
-    return <Maleta irADashboard={() => setPantalla('dashboard')} />
+  const zooms = {
+    pequena: 0.85,
+    normal: 1,
+    grande: 1.2,
   }
 
-  if (pantalla === 'wishlist') {
-    return <Wishlist irADashboard={() => setPantalla('dashboard')} />
-  }
-
-  if (pantalla === 'diario') {
-    return <Diario irADashboard={() => setPantalla('dashboard')} />
-  }
-
-  if (pantalla === 'tienda') {
-    return <Tienda irADashboard={() => setPantalla('dashboard')} />
-  }
-
-  if (pantalla === 'configuracion') {
-    return <Configuracion irADashboard={() => setPantalla('dashboard')} />
-  }
-
-  if (pantalla === 'perfil') {
-    return <Perfil irADashboard={() => setPantalla('dashboard')} irAConfiguracion={() => setPantalla('configuracion')} />
+  const fuentes = {
+    normal: "system-ui, sans-serif",
+    cursiva: "'Segoe Script', 'Comic Sans MS', cursive",
+    clasica: "Georgia, 'Times New Roman', serif",
   }
 
   return (
-    <div className="splash">
-      <div className="selector-idioma">
-        <button className={idioma === 'es' ? 'activo' : ''} onClick={() => setIdioma('es')}>Español</button>
-        <button className={idioma === 'en' ? 'activo' : ''} onClick={() => setIdioma('en')}>English</button>
-      </div>
-      <div className="logo">MOVIXA</div>
-      <p className="tagline">{t.tagline}</p>
-      <button className="boton-comenzar" onClick={() => setPantalla('login')}>{t.boton}</button>
+    <div
+      style={{
+        filter: filtros[tema],
+        zoom: zooms[tamañoLetra],
+        minHeight: '100vh',
+        '--fuente-app': fuentes[tipoLetra],
+      }}
+    >
+      {contenido}
     </div>
+  )
+}
+
+function App() {
+  return (
+    <ConfiguracionProvider>
+      <AppInterno />
+    </ConfiguracionProvider>
   )
 }
 

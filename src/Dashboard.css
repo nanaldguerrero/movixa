@@ -107,3 +107,347 @@
   color: #666;
   cursor: pointer;
 }
+
+.dashboard-config {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dashboard-progreso {
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.dashboard-progreso-titulo {
+  font-size: 13px;
+  color: #666;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.dashboard-pasos {
+  display: flex;
+  align-items: flex-start;
+}
+
+.dashboard-paso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.dashboard-paso-circulo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #eee;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.dashboard-paso-hecho {
+  background: #6a3de8;
+  color: white;
+}
+
+.dashboard-paso-texto {
+  font-size: 10px;
+  color: #666;
+  margin-top: 6px;
+  text-align: center;
+}
+
+.dashboard-paso-linea {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: #eee;
+  z-index: 0;
+}
+.dash-fila-hero {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+ .dash-hero {
+  flex: 1.4;
+  background: linear-gradient(135deg, #E4D9FF 0%, #FFE0F0 100%);
+  border-radius: 22px;
+  padding: 26px 24px;
+  box-shadow: 0 6px 20px rgba(106, 61, 232, 0.12);
+}
+
+.dash-hero-texto h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #2b2b2b;
+}
+
+.dash-hero-sub {
+  margin: 6px 0 0 0;
+  font-size: 14px;
+  color: #444;
+  font-weight: 600;
+}
+
+.dash-hero-desc {
+  margin: 4px 0 18px 0;
+  font-size: 12px;
+  color: #888;
+}
+
+.dash-btn-crear {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #6a3de8;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 20px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(106, 61, 232, 0.35);
+  transition: transform 0.15s, background 0.15s;
+}
+
+.dash-btn-crear:hover {
+  transform: scale(1.03);
+  background: #5a2fd8;
+}
+
+.dash-btn-crear-circulo {
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.dash-hero-ilustracion {
+  flex-shrink: 0;
+}
+
+.dash-destino-card {
+  flex: 1;
+  background: white;
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-destino-titulo {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.dash-destino-imagen {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  flex: 1;
+  min-height: 130px;
+}
+
+.dash-destino-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.dash-destino-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.55), transparent);
+  padding: 14px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dash-destino-nombre {
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.dash-destino-dias {
+  color: rgba(255,255,255,0.9);
+  font-size: 11px;
+}
+
+.dash-destino-flecha {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: #6a3de8;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.dashboard-paso-estado {
+  font-size: 9px;
+  color: #aaa;
+  margin-top: 1px;
+}
+
+.dashboard-paso-completado {
+  background: #6a3de8;
+  color: white;
+}
+
+.dashboard-paso-progreso {
+  background: #4fc3f7;
+  color: white;
+}
+
+.dashboard-paso-pendiente {
+  background: #eee;
+  color: #999;
+}
+
+.dash-tarjetas-grandes {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.dash-tarjeta-funcion {
+  border-radius: 22px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+  gap: 16px;
+}
+
+.dash-tarjeta-funcion:nth-child(1) {
+  background: linear-gradient(135deg, #FFFFFF 0%, #EDE4FF 100%);
+}
+
+.dash-tarjeta-funcion:nth-child(2) {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFE9D6 100%);
+}
+
+.dash-tarjeta-funcion:nth-child(3) {
+  background: linear-gradient(135deg, #FFFFFF 0%, #D9F0FF 100%);
+}
+
+.dash-tarjeta-funcion {
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.dash-tarjeta-funcion-texto h3 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  color: #2b2b2b;
+}
+
+.dash-tarjeta-funcion-texto p {
+  margin: 0 0 12px 0;
+  font-size: 12px;
+  color: #777;
+  max-width: 220px;
+}
+
+.dash-tarjeta-funcion-texto button {
+  background: none;
+  border: none;
+  color: #6a3de8;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dash-tarjeta-svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+  .dash-fila-hero {
+    flex-direction: column;
+  }
+  .dash-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+  .dash-hero-texto {
+    order: 1;
+  }
+  .dash-hero-ilustracion {
+    order: 0;
+    margin-bottom: 8px;
+  }
+  .dash-btn-crear {
+    margin: 0 auto;
+  }
+}
+.dash-destino-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.dash-destino-nombre {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.dash-destino-dias {
+  font-size: 12px;
+  color: #888;
+}
+
+.dash-destino-card .dash-destino-flecha {
+  position: static;
+  width: auto;
+  height: auto;
+  border-radius: 20px;
+  padding: 8px 14px;
+  background: #6a3de8;
+  color: white;
+  font-size: 13px;
+  box-shadow: none;
+}
