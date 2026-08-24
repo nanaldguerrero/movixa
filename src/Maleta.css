@@ -93,3 +93,47 @@
   background: #6a3de8;
   border-color: #6a3de8;
 }
+.mal-item {
+  justify-content: space-between;
+}
+
+.mal-item-izquierda {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.mal-cantidad {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f5f6fa;
+  border-radius: 20px;
+  padding: 4px 6px;
+}
+
+.mal-cantidad button {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: #6a3de8;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.mal-cantidad span {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+  min-width: 14px;
+  text-align: center;
+}

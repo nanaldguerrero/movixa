@@ -1,6 +1,6 @@
 import './Dashboard.css'
 
-function Dashboard({ irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil }) {
+function Dashboard({ perfil, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil }) {
   const pasosViaje = [
     { nombre: 'Crear viaje', estado: 'completado' },
     { nombre: 'Papeleo', estado: 'progreso' },
@@ -23,7 +23,7 @@ function Dashboard({ irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiari
 
       <div className="dash-fila-hero">
         <div className="dash-hero">
-          <h1>¡Hola, Ariel! 👋</h1>
+          <h1>¡Hola, {perfil?.nombre_completo?.split(' ')[0] || 'viajero'}! 👋</h1>
           <p className="dash-hero-sub">¿Listo para tu próxima aventura?</p>
           <p className="dash-hero-desc">Planifica, organiza y vive experiencias inolvidables.</p>
           <button className="dash-btn-crear" onClick={irACrearViaje}>

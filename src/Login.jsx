@@ -1,6 +1,38 @@
+import { useState } from 'react'
+import { supabase } from './supabaseClient'
 import './Login.css'
 
-function Login({ irARegistro }) {
+function Login({ irARegistro, irADashboard }) {
+  const [correo, setCorreo] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [cargando, setCargando] = useState(false)
+
+  const iniciarSesion = async () => {
+    setError('')
+
+    if (!correo || !password) {
+      setError('Completá correo y contraseña.')
+      return
+    }
+
+    setCargando(true)
+
+    const { data, error: errorLogin } = await supabase.auth.signInWithPassword({
+      email: correo,
+      password: password,
+    })
+
+    setCargando(false)
+
+    if (errorLogin) {
+      setError(errorLogin.message)
+      return
+    }
+
+    irADashboard()
+  }
+
   return (
     <div className="login">
       <svg className="ruta-avion" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
@@ -16,14 +48,18 @@ function Login({ irARegistro }) {
 
         <div className="login-input-wrapper">
           <span className="login-input-icono">👤</span>
-          <input type="text" placeholder="Usuario o correo" className="login-input" />
+          <input type="email" placeholder="Correo" className="login-input" value={correo} onChange={(e) => setCorreo(e.target.value)} />
         </div>
         <div className="login-input-wrapper">
           <span className="login-input-icono">🔒</span>
-          <input type="password" placeholder="Contraseña" className="login-input" />
+          <input type="password" placeholder="Contraseña" className="login-input" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
 
-        <button className="login-boton">Iniciar sesión</button>
+        {error && <p className="login-error">{error}</p>}
+
+        <button className="login-boton" onClick={iniciarSesion} disabled={cargando}>
+          {cargando ? 'Ingresando...' : 'Iniciar sesión'}
+        </button>
 
         <p className="login-olvide">¿Olvidaste tu contraseña?</p>
 

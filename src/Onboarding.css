@@ -4,6 +4,24 @@
   font-family: system-ui, sans-serif;
   padding: 20px;
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.onb-fondo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 140px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.onb-header, .onb-barra-fondo, .onb-card {
+  position: relative;
+  z-index: 1;
 }
 
 .onb-header {

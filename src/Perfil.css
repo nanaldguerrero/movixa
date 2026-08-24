@@ -1,6 +1,6 @@
 .perfil {
   min-height: 100vh;
-  background: #f5f6fa;
+  background: linear-gradient(180deg, #F5F0FF 0%, #FFF5FA 40%, #f5f6fa 100%);
   font-family: system-ui, sans-serif;
   padding: 20px;
   box-sizing: border-box;
@@ -33,32 +33,82 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  background: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%);
+  border-radius: 22px;
+  padding: 26px 20px;
   margin-bottom: 20px;
+  box-shadow: 0 10px 26px rgba(167, 139, 250, 0.35);
 }
 
 .perfil-avatar {
-  width: 80px;
-  height: 80px;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6a3de8 0%, #4fc3f7 100%);
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 38px;
+  font-size: 40px;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  border: 3px solid rgba(255,255,255,0.6);
+}
+
+.perfil-companero-selector {
+  display: flex;
+  gap: 6px;
   margin-bottom: 12px;
-  box-shadow: 0 6px 16px rgba(106, 61, 232, 0.3);
+}
+
+.perfil-companero-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.2);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.perfil-companero-activo {
+  background: white;
+  border-color: white;
 }
 
 .perfil-nombre {
   margin: 0;
-  color: #2b2b2b;
+  color: white;
   font-size: 19px;
 }
 
+.perfil-input-nombre {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  background: white;
+  color: #4a2ba8;
+  width: 80%;
+}
+
 .perfil-usuario {
-  margin: 4px 0 0 0;
-  color: #999;
+  margin: 4px 0 12px 0;
+  color: rgba(255,255,255,0.9);
   font-size: 14px;
+}
+
+.perfil-boton-editar {
+  background: white;
+  border: none;
+  border-radius: 20px;
+  padding: 9px 20px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #6a3de8;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .perfil-stats {
@@ -67,7 +117,7 @@
   background: white;
   border-radius: 16px;
   padding: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.06);
 }
 
@@ -81,6 +131,17 @@
   color: #6a3de8;
 }
 
+.perfil-stat-input {
+  width: 44px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #6a3de8;
+  border: 1px solid #cbb8ff;
+  border-radius: 8px;
+  padding: 4px;
+}
+
 .perfil-stat-label {
   font-size: 12px;
   color: #999;
@@ -88,11 +149,26 @@
 }
 
 .perfil-seccion {
-  background: white;
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 18px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.perfil-seccion-morada {
+  background: linear-gradient(135deg, #F1EDFF 0%, #E4D9FF 100%);
+}
+
+.perfil-seccion-crema {
+  background: linear-gradient(135deg, #FFF3E8 0%, #FFE4C7 100%);
+}
+
+.perfil-seccion-azul {
+  background: linear-gradient(135deg, #EEF7FF 0%, #D9F0FF 100%);
+}
+
+.perfil-seccion-rosa {
+  background: linear-gradient(135deg, #FFE9F1 0%, #FFD3E4 100%);
 }
 
 .perfil-seccion h3 {
@@ -113,12 +189,58 @@
 }
 
 .perfil-dato-label {
-  color: #999;
+  color: #777;
 }
 
 .perfil-dato-valor {
-  color: #333;
+  color: #2b2b2b;
+  font-weight: 700;
+}
+
+.perfil-campo-label {
+  display: block;
+  font-size: 11px;
+  color: #666;
+  font-weight: 700;
+  margin: 12px 0 4px 0;
+}
+
+.perfil-campo-label:first-of-type {
+  margin-top: 0;
+}
+
+.perfil-campo-input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 2px solid #cbb8ff;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: white;
+  color: #2b2b2b;
   font-weight: 600;
+}
+
+.perfil-campo-input:focus {
+  outline: none;
+  border-color: #6a3de8;
+}
+
+.perfil-gustos-titulo {
+  font-size: 12px;
+  color: #7a5fc0;
+  font-weight: 700;
+  margin: 14px 0 8px 0;
+}
+
+.perfil-gustos-titulo:first-of-type {
+  margin-top: 0;
+}
+
+.perfil-vacio {
+  font-size: 12px;
+  color: #aaa;
+  font-style: italic;
 }
 
 .perfil-chip-lista {
@@ -128,22 +250,164 @@
 }
 
 .perfil-chip {
-  background: #f4f0fe;
-  color: #6a3de8;
+  color: white;
   padding: 8px 14px;
   border-radius: 20px;
   font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.perfil-chip-crema { background: #E8A15C; }
+.perfil-chip-azul { background: #4fc3f7; }
+.perfil-chip-morada { background: #8a5cf0; }
+
+.perfil-chip-seleccionable {
+  background: white;
+  color: #999;
+  border: 2px solid #eee;
+  cursor: pointer;
   font-weight: 600;
+}
+
+.perfil-chip-activo {
+  background: #8a5cf0 !important;
+  color: white !important;
+  border-color: #8a5cf0 !important;
+}
+
+.perfil-chip-solo-lectura {
+  background: #8a5cf0 !important;
+  color: white !important;
+  border: none;
+  cursor: default;
+}
+
+.perfil-chip-quitar {
+  cursor: pointer;
+  font-weight: bold;
+  opacity: 0.85;
+}
+
+.perfil-agregar {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.perfil-agregar input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid #E8A15C;
+  font-size: 13px;
+  color: #2b2b2b;
+  background: white;
+}
+
+.perfil-agregar button {
+  width: 40px;
+  border-radius: 10px;
+  border: none;
+  background: #6a3de8;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.perfil-contacto {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+
+.perfil-contacto-nombre {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2b2b2b;
+}
+
+.perfil-contacto-telefono {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.perfil-agregar-contacto {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.perfil-agregar-contacto input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid #F472B6;
+  font-size: 13px;
+  color: #2b2b2b;
+  background: white;
+}
+
+.perfil-agregar-contacto button {
+  padding: 11px;
+  border-radius: 10px;
+  border: none;
+  background: #F472B6;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.perfil-toggle-grupo {
+  display: flex;
+  gap: 6px;
+  background: white;
+  border-radius: 10px;
+  padding: 3px;
+  margin-top: 4px;
+}
+
+.perfil-toggle-grupo button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 9px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.perfil-toggle-activo {
+  background: #4fc3f7 !important;
+  color: white !important;
+  font-weight: bold;
 }
 
 .perfil-boton-config {
   width: 100%;
   padding: 14px;
   border-radius: 12px;
-  border: 1px solid #ddd;
-  background: white;
-  color: #555;
-  font-weight: 600;
+  border: none;
+  background: linear-gradient(135deg, #6a3de8, #4fc3f7);
+  color: white;
+  font-weight: bold;
   font-size: 14px;
   cursor: pointer;
+  box-shadow: 0 6px 16px rgba(106, 61, 232, 0.25);
+}
+.perfil-nota-privacidad {
+  font-size: 11px;
+  color: #c2478a;
+  margin: -8px 0 14px 0;
+  font-style: italic;
 }

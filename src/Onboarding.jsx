@@ -83,7 +83,18 @@ function Onboarding({ irADashboard }) {
 
   return (
     <div className="onb">
-      <div className="onb-header">
+  <svg className="onb-fondo" viewBox="0 0 400 150" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="30" r="3" fill="white" />
+        <circle cx="200" cy="15" r="3" fill="white" />
+        <circle cx="340" cy="50" r="3" fill="white" />
+        <circle cx="100" cy="80" r="3" fill="white" />
+        <circle cx="300" cy="100" r="3" fill="white" />
+        <path d="M40,30 Q120,-10 200,15 Q280,40 340,50 Q380,60 300,100 Q220,130 100,80 Q60,65 40,30"
+          fill="none" stroke="white" strokeWidth="1.5" strokeDasharray="3 7" opacity="0.7" />
+        <g transform="translate(200,15) rotate(50)"><path d="M0,-7 L6,5 L0,1.5 L-6,5 Z" fill="white" /></g>
+      </svg>
+
+      <div className="onb-header">s
         <div className="onb-logo">MOVIXA</div>
         <div className="onb-pasos">Paso {paso} de 4</div>
       </div>
