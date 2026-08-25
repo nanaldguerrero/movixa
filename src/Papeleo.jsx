@@ -11,10 +11,21 @@ const documentosIniciales = [
   { id: 6, texto: 'Pasaje de regreso', hecho: false },
 ]
 
+const mapaNacionalidad = {
+  'Costa Rica': 'Costarricense',
+  'Canadá': 'Canadiense',
+  'Estados Unidos': 'Estadounidense',
+  'México': 'Mexicano',
+  'España': 'Español',
+  'Panamá': 'Panameño',
+}
+
 function Papeleo({ irADashboard }) {
   const [documentos, setDocumentos] = useState(documentosIniciales)
   const [userId, setUserId] = useState(null)
   const [cargando, setCargando] = useState(true)
+  const [infoDestino, setInfoDestino] = useState(null)
+  const [destinoActivo, setDestinoActivo] = useState(null)
 
   useEffect(() => {
     const cargar = async () => {
@@ -25,11 +36,38 @@ function Papeleo({ irADashboard }) {
       }
       setUserId(user.id)
 
-      const { data } = await supabase.from('perfiles').select('papeleo').eq('id', user.id).single()
+      const { data } = await supabase.from('perfiles').select('papeleo, nacionalidad').eq('id', user.id).single()
 
       if (data && data.papeleo) {
         setDocumentos(data.papeleo)
       }
+
+      const { data: viajes } = await supabase
+        .from('viajes')
+        .select('destino, pasaporte')
+        .eq('user_id', user.id)
+        .order('creado_en', { ascending: false })
+        .limit(1)
+
+      if (viajes && viajes.length > 0) {
+        const viajeReciente = viajes[0]
+        setDestinoActivo(viajeReciente.destino)
+
+        let nacionalidad = data?.nacionalidad || 'Costarricense'
+        if (viajeReciente.pasaporte) {
+          const nombrePais = viajeReciente.pasaporte.replace(/^\S+\s/, '').trim()
+          nacionalidad = mapaNacionalidad[nombrePais] || nombrePais
+        }
+
+        const { data: info } = await supabase
+          .from('requisitos_visa')
+          .select('*')
+          .eq('nacionalidad', nacionalidad)
+          .ilike('destino', `%${viajeReciente.destino}%`)
+          .maybeSingle()
+        setInfoDestino(info)
+      }
+
       setCargando(false)
     }
     cargar()
@@ -64,20 +102,26 @@ function Papeleo({ irADashboard }) {
       <h2 className="pap-titulo">📋 Papeleo</h2>
       <p className="pap-progreso">{completados} de {documentos.length} completados</p>
 
-      <div className="pap-info-destino">
-        <div className="pap-info-item">
-          <span className="pap-info-icono">🌤️</span>
-          <span>Clima: templado</span>
+      {infoDestino ? (
+        <div className="pap-info-destino">
+          <div className="pap-info-item">
+            <span className="pap-info-icono">🌤️</span>
+            <span>Clima: {infoDestino.clima_general}</span>
+          </div>
+          <div className="pap-info-item">
+            <span className="pap-info-icono">💱</span>
+            <span>Moneda: {infoDestino.moneda}</span>
+          </div>
+          <div className="pap-info-item">
+            <span className="pap-info-icono">🗣️</span>
+            <span>Idioma: {infoDestino.idioma_principal}</span>
+          </div>
         </div>
-        <div className="pap-info-item">
-          <span className="pap-info-icono">💱</span>
-          <span>Moneda: local</span>
-        </div>
-        <div className="pap-info-item">
-          <span className="pap-info-icono">🗣️</span>
-          <span>Idioma: local</span>
-        </div>
-      </div>
+      ) : destinoActivo ? (
+        <p className="pap-sin-info">Todavía no tenemos información detallada de {destinoActivo}.</p>
+      ) : (
+        <p className="pap-sin-info">Creá un viaje para ver información específica de tu destino acá.</p>
+      )}
 
       <div className="pap-lista">
         {documentos.map((doc) => (

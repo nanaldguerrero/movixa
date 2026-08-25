@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 import './CrearViaje.css'
 
@@ -19,6 +19,20 @@ function CrearViaje({ irADashboard, irADetalle }) {
   const [destino, setDestino] = useState('')
   const [motivo, setMotivo] = useState('')
   const [creando, setCreando] = useState(false)
+  const [pasaportes, setPasaportes] = useState([])
+  const [pasaporteSeleccionado, setPasaporteSeleccionado] = useState('')
+
+  useEffect(() => {
+    const cargarPasaportes = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { data } = await supabase.from('perfiles').select('pasaportes').eq('id', user.id).single()
+      const lista = data?.pasaportes || []
+      setPasaportes(lista)
+      if (lista.length > 0) setPasaporteSeleccionado(lista[0])
+    }
+    cargarPasaportes()
+  }, [])
 
   const crearViaje = async (destinoFinal, motivoFinal) => {
     setCreando(true)
@@ -35,6 +49,7 @@ function CrearViaje({ irADashboard, irADetalle }) {
         user_id: user.id,
         destino: destinoFinal || 'Mi viaje',
         motivo: motivoFinal || 'Turismo',
+        pasaporte: pasaporteSeleccionado || null,
         checklist: checklistPorDefecto,
       })
       .select()
@@ -74,6 +89,17 @@ function CrearViaje({ irADashboard, irADetalle }) {
 
         {sabeDestino === true && (
           <>
+            {pasaportes.length > 1 && (
+              <>
+                <label className="cv-label">¿Con qué pasaporte vas a viajar?</label>
+                <select className="cv-input" value={pasaporteSeleccionado} onChange={(e) => setPasaporteSeleccionado(e.target.value)}>
+                  {pasaportes.map((p) => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </select>
+              </>
+            )}
+
             <label className="cv-label">¿A dónde querés ir?</label>
             <input
               type="text"
@@ -102,6 +128,17 @@ function CrearViaje({ irADashboard, irADetalle }) {
 
         {sabeDestino === false && (
           <>
+            {pasaportes.length > 1 && (
+              <>
+                <label className="cv-label">¿Con qué pasaporte vas a viajar?</label>
+                <select className="cv-input" value={pasaporteSeleccionado} onChange={(e) => setPasaporteSeleccionado(e.target.value)}>
+                  {pasaportes.map((p) => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </select>
+              </>
+            )}
+
             <p className="cv-pregunta">Contame qué te gusta y te voy a recomendar 5 destinos</p>
             <label className="cv-label">¿Qué buscás en este viaje?</label>
             <select className="cv-input" value={motivo} onChange={(e) => setMotivo(e.target.value)}>

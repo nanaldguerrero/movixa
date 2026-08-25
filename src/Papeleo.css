@@ -102,3 +102,9 @@
   background: #6a3de8;
   border-color: #6a3de8;
 }
+.pap-sin-info {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 20px;
+  font-style: italic;
+}

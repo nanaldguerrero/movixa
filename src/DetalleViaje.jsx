@@ -19,7 +19,22 @@ function DetalleViaje({ irADashboard, viajeId }) {
       if (data) {
         const { data: { user } } = await supabase.auth.getUser()
         const { data: perfil } = await supabase.from('perfiles').select('nacionalidad').eq('id', user.id).single()
-        const nacionalidad = perfil?.nacionalidad || 'Costarricense'
+
+        const mapaNacionalidad = {
+          'Costa Rica': 'Costarricense',
+          'Canadá': 'Canadiense',
+          'Estados Unidos': 'Estadounidense',
+          'México': 'Mexicano',
+          'España': 'Español',
+          'Panamá': 'Panameño',
+        }
+
+        let nacionalidad = perfil?.nacionalidad || 'Costarricense'
+
+        if (data.pasaporte) {
+          const nombrePais = data.pasaporte.replace(/^\S+\s/, '').trim()
+          nacionalidad = mapaNacionalidad[nombrePais] || nombrePais
+        }
 
         const { data: req } = await supabase
           .from('requisitos_visa')
@@ -64,6 +79,7 @@ function DetalleViaje({ irADashboard, viajeId }) {
   const categorias = [...new Set(checklist.map((i) => i.categoria))]
   const hechos = checklist.filter((i) => i.hecho).length
   const porcentaje = checklist.length > 0 ? Math.round((hechos / checklist.length) * 100) : 0
+  const vacunaObligatoria = requisito?.vacunas?.startsWith('OBLIGATORIA')
 
   return (
     <div className="dv">
@@ -78,15 +94,26 @@ function DetalleViaje({ irADashboard, viajeId }) {
       </div>
 
       {requisito ? (
-        <div className={`dv-visa-card ${requisito.requiere_visa ? 'dv-visa-si' : 'dv-visa-no'}`}>
-          <div className="dv-visa-titulo">
-            {requisito.requiere_visa ? '⚠️ Necesitás visa' : '✅ No necesitás visa'}
+        <>
+          <div className={`dv-visa-card ${requisito.requiere_visa ? 'dv-visa-si' : 'dv-visa-no'}`}>
+            <div className="dv-visa-titulo">
+              {requisito.requiere_visa ? '⚠️ Necesitás visa' : '✅ No necesitás visa'}
+            </div>
+            {requisito.nombre_permiso && <p className="dv-visa-detalle"><strong>{requisito.nombre_permiso}</strong></p>}
+            <p className="dv-visa-detalle">Estadía máxima: {requisito.dias_permitidos} días</p>
+            <p className="dv-visa-detalle">Pasaporte con al menos {requisito.vigencia_pasaporte_meses} meses de vigencia</p>
+            {requisito.notas && <p className="dv-visa-notas">{requisito.notas}</p>}
           </div>
-          {requisito.nombre_permiso && <p className="dv-visa-detalle"><strong>{requisito.nombre_permiso}</strong></p>}
-          <p className="dv-visa-detalle">Estadía máxima: {requisito.dias_permitidos} días</p>
-          <p className="dv-visa-detalle">Pasaporte con al menos {requisito.vigencia_pasaporte_meses} meses de vigencia</p>
-          {requisito.notas && <p className="dv-visa-notas">{requisito.notas}</p>}
-        </div>
+
+          {requisito.vacunas && (
+            <div className={`dv-visa-card ${vacunaObligatoria ? 'dv-visa-si' : 'dv-visa-no'}`}>
+              <div className="dv-visa-titulo">
+                {vacunaObligatoria ? '💉 Vacuna obligatoria' : '💉 Vacunas'}
+              </div>
+              <p className="dv-visa-detalle">{requisito.vacunas}</p>
+            </div>
+          )}
+        </>
       ) : (
         <div className="dv-visa-card dv-visa-desconocido">
           <p className="dv-visa-detalle">Todavía no tenemos información verificada de requisitos para este destino. Te recomendamos consultar directamente con la embajada correspondiente antes de viajar.</p>
