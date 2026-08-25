@@ -26,7 +26,7 @@ const companeros = [
   { id: 'ninguno', emoji: '🚫', nombre: 'Ninguno' },
 ]
 
-function Configuracion({ irADashboard }) {
+function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda }) {
   const {
     tema, setTema,
     tamañoLetra, setTamañoLetra,
@@ -206,15 +206,15 @@ function Configuracion({ irADashboard }) {
           <span>Versión</span>
           <span className="config-valor-tenue">1.0.0 (MVP)</span>
         </div>
-        <button className="config-fila-boton">
+        <button className="config-fila-boton" onClick={irATerminos}>
           <span>📄 Términos y condiciones</span>
-          <span className="config-fila-flecha">›</span>
+    <span className="config-fila-flecha">›</span>
         </button>
-        <button className="config-fila-boton">
+        <button className="config-fila-boton" onClick={irAPrivacidad}>
           <span>🔒 Política de privacidad</span>
           <span className="config-fila-flecha">›</span>
         </button>
-        <button className="config-fila-boton">
+        <button className="config-fila-boton" onClick={irAAyuda}>
           <span>💬 Ayuda y soporte</span>
           <span className="config-fila-flecha">›</span>
         </button>

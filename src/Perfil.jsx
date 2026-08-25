@@ -37,6 +37,7 @@ function Perfil({ irADashboard, irAConfiguracion }) {
   const [climas, setClimas] = useState([])
   const [tiposDestino, setTiposDestino] = useState([])
   const [intereses, setIntereses] = useState([])
+  const [ritmo, setRitmo] = useState('')
 
   const [viajesRealizados, setViajesRealizados] = useState(0)
 
@@ -76,6 +77,7 @@ function Perfil({ irADashboard, irAConfiguracion }) {
         setClimas(data.climas || [])
         setTiposDestino(data.tipos_destino || [])
         setIntereses(data.intereses || [])
+        setRitmo(data.ritmo || '')
         setViajesRealizados(data.viajes_realizados || 0)
         setContactos(data.contactos_emergencia || [])
         setMoneda(data.moneda || 'CRC')
@@ -110,6 +112,7 @@ function Perfil({ irADashboard, irAConfiguracion }) {
       climas: climas,
       tipos_destino: tiposDestino,
       intereses: intereses,
+      ritmo: ritmo,
       viajes_realizados: viajesRealizados,
       contactos_emergencia: contactos,
       moneda: moneda,
@@ -332,6 +335,11 @@ function Perfil({ irADashboard, irAConfiguracion }) {
         </div>
 
         <p className="perfil-gustos-titulo">Intereses</p>
+        <p className="perfil-gustos-titulo">Ritmo de viaje</p>
+        <div className="perfil-chip-lista">
+          {!ritmo && !editando && <span className="perfil-vacio">Sin definir todavía</span>}
+          {ritmo && <span className="perfil-chip perfil-chip-morada perfil-chip-solo-lectura">{ritmo}</span>}
+        </div>
         <div className="perfil-chip-lista">
           {intereses.length === 0 && !editando && <span className="perfil-vacio">Sin definir todavía</span>}
           {(editando ? interesesCatalogo : intereses).map((i) => (

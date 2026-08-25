@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { supabase } from './supabaseClient'
 import './Onboarding.css'
 
 const climas = [
@@ -55,11 +56,10 @@ function Onboarding({ irADashboard }) {
   const [tipoDestino, setTipoDestino] = useState([])
   const [ritmo, setRitmo] = useState(null)
   const [intereses, setIntereses] = useState([])
+  const [guardando, setGuardando] = useState(false)
 
   const toggleClima = (id) => {
-    setClima(
-      clima.includes(id) ? clima.filter((c) => c !== id) : [...clima, id]
-    )
+    setClima(clima.includes(id) ? clima.filter((c) => c !== id) : [...clima, id])
   }
 
   const toggleTipoDestino = (id) => {
@@ -71,19 +71,37 @@ function Onboarding({ irADashboard }) {
   }
 
   const toggleInteres = (id) => {
-    setIntereses(
-      intereses.includes(id)
-        ? intereses.filter((i) => i !== id)
-        : [...intereses, id]
-    )
+    setIntereses(intereses.includes(id) ? intereses.filter((i) => i !== id) : [...intereses, id])
   }
 
   const siguiente = () => setPaso(paso + 1)
   const atras = () => setPaso(paso - 1)
 
+  const nombreDe = (lista, catalogo) =>
+    lista.map((id) => catalogo.find((c) => c.id === id)?.nombre || id)
+
+  const finalizar = async () => {
+    setGuardando(true)
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (user) {
+      await supabase.from('perfiles').upsert({
+        id: user.id,
+        climas: nombreDe(clima, climas),
+        tipos_destino: nombreDe(tipoDestino, tiposDestino),
+        intereses: nombreDe(intereses, interesesDisponibles),
+        ritmo: ritmos.find((r) => r.id === ritmo)?.nombre || null,
+      })
+    }
+
+    setGuardando(false)
+    irADashboard()
+  }
+
   return (
     <div className="onb">
-  <svg className="onb-fondo" viewBox="0 0 400 150" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+      <svg className="onb-fondo" viewBox="0 0 400 150" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
         <circle cx="40" cy="30" r="3" fill="white" />
         <circle cx="200" cy="15" r="3" fill="white" />
         <circle cx="340" cy="50" r="3" fill="white" />
@@ -94,7 +112,7 @@ function Onboarding({ irADashboard }) {
         <g transform="translate(200,15) rotate(50)"><path d="M0,-7 L6,5 L0,1.5 L-6,5 Z" fill="white" /></g>
       </svg>
 
-      <div className="onb-header">s
+      <div className="onb-header">
         <div className="onb-logo">MOVIXA</div>
         <div className="onb-pasos">Paso {paso} de 4</div>
       </div>
@@ -192,8 +210,8 @@ function Onboarding({ irADashboard }) {
           </div>
           <div className="onb-botones-fila">
             <button className="onb-boton-atras" onClick={atras}>← Atrás</button>
-            <button className="onb-boton" disabled={intereses.length === 0} onClick={irADashboard}>
-              Empezar a usar MOVIXA
+            <button className="onb-boton" disabled={intereses.length === 0 || guardando} onClick={finalizar}>
+              {guardando ? 'Guardando...' : 'Empezar a usar MOVIXA'}
             </button>
           </div>
         </div>

@@ -4,6 +4,7 @@ import './DetalleViaje.css'
 
 function DetalleViaje({ irADashboard, viajeId }) {
   const [viaje, setViaje] = useState(null)
+  const [requisito, setRequisito] = useState(null)
   const [cargando, setCargando] = useState(true)
 
   useEffect(() => {
@@ -14,6 +15,22 @@ function DetalleViaje({ irADashboard, viajeId }) {
       }
       const { data } = await supabase.from('viajes').select('*').eq('id', viajeId).single()
       setViaje(data)
+
+      if (data) {
+        const { data: { user } } = await supabase.auth.getUser()
+        const { data: perfil } = await supabase.from('perfiles').select('nacionalidad').eq('id', user.id).single()
+        const nacionalidad = perfil?.nacionalidad || 'Costarricense'
+
+        const { data: req } = await supabase
+          .from('requisitos_visa')
+          .select('*')
+          .eq('nacionalidad', nacionalidad)
+          .ilike('destino', `%${data.destino}%`)
+          .maybeSingle()
+
+        setRequisito(req)
+      }
+
       setCargando(false)
     }
     cargar()
@@ -59,6 +76,22 @@ function DetalleViaje({ irADashboard, viajeId }) {
         <div className="dv-destino">✈️ {viaje.destino}</div>
         <div className="dv-motivo">{viaje.motivo}</div>
       </div>
+
+      {requisito ? (
+        <div className={`dv-visa-card ${requisito.requiere_visa ? 'dv-visa-si' : 'dv-visa-no'}`}>
+          <div className="dv-visa-titulo">
+            {requisito.requiere_visa ? '⚠️ Necesitás visa' : '✅ No necesitás visa'}
+          </div>
+          {requisito.nombre_permiso && <p className="dv-visa-detalle"><strong>{requisito.nombre_permiso}</strong></p>}
+          <p className="dv-visa-detalle">Estadía máxima: {requisito.dias_permitidos} días</p>
+          <p className="dv-visa-detalle">Pasaporte con al menos {requisito.vigencia_pasaporte_meses} meses de vigencia</p>
+          {requisito.notas && <p className="dv-visa-notas">{requisito.notas}</p>}
+        </div>
+      ) : (
+        <div className="dv-visa-card dv-visa-desconocido">
+          <p className="dv-visa-detalle">Todavía no tenemos información verificada de requisitos para este destino. Te recomendamos consultar directamente con la embajada correspondiente antes de viajar.</p>
+        </div>
+      )}
 
       <div className="dv-progreso-card">
         <div className="dv-progreso-texto">
