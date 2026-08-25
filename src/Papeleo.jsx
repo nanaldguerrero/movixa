@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from './supabaseClient'
 import './Papeleo.css'
 
 const documentosIniciales = [
@@ -12,14 +13,46 @@ const documentosIniciales = [
 
 function Papeleo({ irADashboard }) {
   const [documentos, setDocumentos] = useState(documentosIniciales)
+  const [userId, setUserId] = useState(null)
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    const cargar = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setCargando(false)
+        return
+      }
+      setUserId(user.id)
+
+      const { data } = await supabase.from('perfiles').select('papeleo').eq('id', user.id).single()
+
+      if (data && data.papeleo) {
+        setDocumentos(data.papeleo)
+      }
+      setCargando(false)
+    }
+    cargar()
+  }, [])
+
+  const guardar = async (nuevosDocumentos) => {
+    if (!userId) return
+    await supabase.from('perfiles').upsert({ id: userId, papeleo: nuevosDocumentos })
+  }
 
   const toggleDocumento = (id) => {
-    setDocumentos(documentos.map((doc) =>
+    const nuevo = documentos.map((doc) =>
       doc.id === id ? { ...doc, hecho: !doc.hecho } : doc
-    ))
+    )
+    setDocumentos(nuevo)
+    guardar(nuevo)
   }
 
   const completados = documentos.filter((d) => d.hecho).length
+
+  if (cargando) {
+    return <div className="papeleo"><p style={{ textAlign: 'center', paddingTop: '60px', color: '#888' }}>Cargando papeleo...</p></div>
+  }
 
   return (
     <div className="papeleo">

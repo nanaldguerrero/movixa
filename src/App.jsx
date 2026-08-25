@@ -19,20 +19,25 @@ import './App.css'
 function AppInterno() {
   const { tema, tamañoLetra, tipoLetra, idioma, setIdioma } = useConfiguracion()
   const [pantalla, setPantalla] = useState('splash')
-  const [viajeActual, setViajeActual] = useState({ destino: 'Japón', motivo: 'Turismo' })
+  const [viajeIdActual, setViajeIdActual] = useState(null)
   const [perfilUsuario, setPerfilUsuario] = useState(null)
+  const [viajeActivo, setViajeActivo] = useState(null)
 
   const cargarPerfil = async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
-    const { data } = await supabase
-      .from('perfiles')
-      .select('*')
-      .eq('id', user.id)
-      .single()
-
+    const { data } = await supabase.from('perfiles').select('*').eq('id', user.id).single()
     setPerfilUsuario(data)
+
+    const { data: viajes } = await supabase
+      .from('viajes')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('creado_en', { ascending: false })
+      .limit(1)
+
+    setViajeActivo(viajes && viajes.length > 0 ? viajes[0] : null)
   }
 
   useEffect(() => {
@@ -77,6 +82,7 @@ function AppInterno() {
     contenido = (
       <Dashboard
         perfil={perfilUsuario}
+        viajeActivo={viajeActivo}
         irACrearViaje={() => setPantalla('crearviaje')}
         irAPapeleo={() => setPantalla('papeleo')}
         irAMaleta={() => setPantalla('maleta')}
@@ -85,26 +91,25 @@ function AppInterno() {
         irATienda={() => setPantalla('tienda')}
         irAConfiguracion={() => setPantalla('configuracion')}
         irAPerfil={() => setPantalla('perfil')}
+        irADetalle={(id) => {
+          setViajeIdActual(id)
+          setPantalla('detalleviaje')
+        }}
       />
     )
   } else if (pantalla === 'crearviaje') {
     contenido = (
       <CrearViaje
         irADashboard={() => setPantalla('dashboard')}
-        irADetalle={(destino, motivo) => {
-          setViajeActual({ destino: destino || 'Mi viaje', motivo: motivo || 'Turismo' })
+        irADetalle={async (id) => {
+          setViajeIdActual(id)
+          await cargarPerfil()
           setPantalla('detalleviaje')
         }}
       />
     )
   } else if (pantalla === 'detalleviaje') {
-    contenido = (
-      <DetalleViaje
-        irADashboard={() => setPantalla('dashboard')}
-        destino={viajeActual.destino}
-        motivo={viajeActual.motivo}
-      />
-    )
+    contenido = <DetalleViaje irADashboard={() => setPantalla('dashboard')} viajeId={viajeIdActual} />
   } else if (pantalla === 'papeleo') {
     contenido = <Papeleo irADashboard={() => setPantalla('dashboard')} />
   } else if (pantalla === 'maleta') {

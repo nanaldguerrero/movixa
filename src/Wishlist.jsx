@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from './supabaseClient'
 import './Wishlist.css'
 
 const destinosIniciales = [
@@ -10,18 +11,52 @@ const destinosIniciales = [
 function Wishlist({ irADashboard }) {
   const [destinos, setDestinos] = useState(destinosIniciales)
   const [nuevoPais, setNuevoPais] = useState('')
+  const [userId, setUserId] = useState(null)
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    const cargar = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setCargando(false)
+        return
+      }
+      setUserId(user.id)
+
+      const { data } = await supabase.from('perfiles').select('wishlist').eq('id', user.id).single()
+
+      if (data && data.wishlist) {
+        setDestinos(data.wishlist)
+      }
+      setCargando(false)
+    }
+    cargar()
+  }, [])
+
+  const guardar = async (nuevosDestinos) => {
+    if (!userId) return
+    await supabase.from('perfiles').upsert({ id: userId, wishlist: nuevosDestinos })
+  }
 
   const agregarDestino = () => {
     if (nuevoPais.trim() === '') return
-    setDestinos([
+    const nuevo = [
       ...destinos,
       { id: Date.now(), pais: nuevoPais, emoji: '🌍', nota: '' },
-    ])
+    ]
+    setDestinos(nuevo)
+    guardar(nuevo)
     setNuevoPais('')
   }
 
   const eliminarDestino = (id) => {
-    setDestinos(destinos.filter((d) => d.id !== id))
+    const nuevo = destinos.filter((d) => d.id !== id)
+    setDestinos(nuevo)
+    guardar(nuevo)
+  }
+
+  if (cargando) {
+    return <div className="wishlist"><p style={{ textAlign: 'center', paddingTop: '60px', color: '#888' }}>Cargando wishlist...</p></div>
   }
 
   return (

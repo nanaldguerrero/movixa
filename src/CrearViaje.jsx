@@ -1,10 +1,54 @@
 import { useState } from 'react'
+import { supabase } from './supabaseClient'
 import './CrearViaje.css'
 
-function CrearViaje({ irADashboard, irADetalle  }) {
+const checklistPorDefecto = [
+  { id: 1, categoria: 'Papeleo', texto: 'Pasaporte vigente', hecho: false },
+  { id: 2, categoria: 'Papeleo', texto: 'Visa (si aplica)', hecho: false },
+  { id: 3, categoria: 'Papeleo', texto: 'Seguro de viaje', hecho: false },
+  { id: 4, categoria: 'Papeleo', texto: 'Reserva de hotel', hecho: false },
+  { id: 5, categoria: 'Maleta', texto: 'Ropa para el clima', hecho: false },
+  { id: 6, categoria: 'Maleta', texto: 'Cargador y adaptador', hecho: false },
+  { id: 7, categoria: 'Maleta', texto: 'Artículos de higiene', hecho: false },
+  { id: 8, categoria: 'Antes de salir', texto: 'Avisar al banco del viaje', hecho: false },
+  { id: 9, categoria: 'Antes de salir', texto: 'Confirmar transporte al aeropuerto', hecho: false },
+]
+
+function CrearViaje({ irADashboard, irADetalle }) {
   const [sabeDestino, setSabeDestino] = useState(null)
   const [destino, setDestino] = useState('')
   const [motivo, setMotivo] = useState('')
+  const [creando, setCreando] = useState(false)
+
+  const crearViaje = async (destinoFinal, motivoFinal) => {
+    setCreando(true)
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      setCreando(false)
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('viajes')
+      .insert({
+        user_id: user.id,
+        destino: destinoFinal || 'Mi viaje',
+        motivo: motivoFinal || 'Turismo',
+        checklist: checklistPorDefecto,
+      })
+      .select()
+      .single()
+
+    setCreando(false)
+
+    if (error) {
+      alert('Hubo un problema creando el viaje: ' + error.message)
+      return
+    }
+
+    irADetalle(data.id)
+  }
 
   return (
     <div className="crear-viaje">
@@ -49,7 +93,9 @@ function CrearViaje({ irADashboard, irADetalle  }) {
               <option value="otro">Otro</option>
             </select>
 
-            <button className="cv-boton" onClick={() => irADetalle(destino, motivo)}>Continuar</button>
+            <button className="cv-boton" onClick={() => crearViaje(destino, motivo)} disabled={creando}>
+              {creando ? 'Creando...' : 'Continuar'}
+            </button>
             <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
           </>
         )}
@@ -67,7 +113,10 @@ function CrearViaje({ irADashboard, irADetalle  }) {
               <option value="relax">Relax</option>
             </select>
 
-<button className="cv-boton" onClick={() => irADetalle('Destino recomendado', motivo)}>Ver recomendaciones</button>            <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
+            <button className="cv-boton" onClick={() => crearViaje('Destino recomendado', motivo)} disabled={creando}>
+              {creando ? 'Creando...' : 'Ver recomendaciones'}
+            </button>
+            <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
           </>
         )}
       </div>

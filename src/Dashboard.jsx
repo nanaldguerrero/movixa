@@ -1,7 +1,6 @@
 import './Dashboard.css'
 
-function Dashboard({ perfil, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil }) {
-  const pasosViaje = [
+function Dashboard({ perfil, viajeActivo, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil, irADetalle }) {  const pasosViaje = [
     { nombre: 'Crear viaje', estado: 'completado' },
     { nombre: 'Papeleo', estado: 'progreso' },
     { nombre: 'Maleta', estado: 'pendiente' },
@@ -34,11 +33,20 @@ function Dashboard({ perfil, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, 
 
         <div className="dash-destino-card">
           <h3 className="dash-destino-titulo">Tu próximo destino ✈️</h3>
-          <div className="dash-destino-info">
-            <span className="dash-destino-nombre">🇯🇵 Japón</span>
-            <span className="dash-destino-dias">📅 15 días restantes</span>
-          </div>
-          <button className="dash-destino-flecha" onClick={irACrearViaje}>Ver detalles →</button>
+          {viajeActivo ? (
+            <>
+              <div className="dash-destino-info">
+                <span className="dash-destino-nombre">✈️ {viajeActivo.destino}</span>
+                <span className="dash-destino-dias">{viajeActivo.motivo}</span>
+              </div>
+              <button className="dash-destino-flecha" onClick={() => irADetalle(viajeActivo.id)}>Ver detalles →</button>
+            </>
+          ) : (
+            <>
+              <p className="dash-destino-vacio">Todavía no tenés ningún viaje planeado.</p>
+              <button className="dash-destino-flecha" onClick={irACrearViaje}>Crear mi primer viaje →</button>
+            </>
+          )}
         </div>
       </div>
 

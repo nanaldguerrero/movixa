@@ -1,30 +1,52 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from './supabaseClient'
 import './DetalleViaje.css'
 
-const checklistInicial = [
-  { id: 1, categoria: 'Papeleo', texto: 'Pasaporte vigente', hecho: false },
-  { id: 2, categoria: 'Papeleo', texto: 'Visa (si aplica)', hecho: false },
-  { id: 3, categoria: 'Papeleo', texto: 'Seguro de viaje', hecho: false },
-  { id: 4, categoria: 'Papeleo', texto: 'Reserva de hotel', hecho: false },
-  { id: 5, categoria: 'Maleta', texto: 'Ropa para el clima', hecho: false },
-  { id: 6, categoria: 'Maleta', texto: 'Cargador y adaptador', hecho: false },
-  { id: 7, categoria: 'Maleta', texto: 'Artículos de higiene', hecho: false },
-  { id: 8, categoria: 'Antes de salir', texto: 'Avisar al banco del viaje', hecho: false },
-  { id: 9, categoria: 'Antes de salir', texto: 'Confirmar transporte al aeropuerto', hecho: false },
-]
+function DetalleViaje({ irADashboard, viajeId }) {
+  const [viaje, setViaje] = useState(null)
+  const [cargando, setCargando] = useState(true)
 
-function DetalleViaje({ irADashboard, destino = 'Japón', motivo = 'Turismo' }) {
-  const [checklist, setChecklist] = useState(checklistInicial)
+  useEffect(() => {
+    const cargar = async () => {
+      if (!viajeId) {
+        setCargando(false)
+        return
+      }
+      const { data } = await supabase.from('viajes').select('*').eq('id', viajeId).single()
+      setViaje(data)
+      setCargando(false)
+    }
+    cargar()
+  }, [viajeId])
 
-  const toggleItem = (id) => {
-    setChecklist(checklist.map((item) =>
+  const toggleItem = async (id) => {
+    const nuevoChecklist = viaje.checklist.map((item) =>
       item.id === id ? { ...item, hecho: !item.hecho } : item
-    ))
+    )
+    setViaje({ ...viaje, checklist: nuevoChecklist })
+    await supabase.from('viajes').update({ checklist: nuevoChecklist }).eq('id', viajeId)
   }
 
+  if (cargando) {
+    return <div className="dv"><p style={{ textAlign: 'center', paddingTop: '60px', color: '#888' }}>Cargando viaje...</p></div>
+  }
+
+  if (!viaje) {
+    return (
+      <div className="dv">
+        <div className="dv-header">
+          <button className="dv-volver" onClick={irADashboard}>← Volver</button>
+          <div className="dv-logo">MOVIXA</div>
+        </div>
+        <p style={{ textAlign: 'center', paddingTop: '40px', color: '#888' }}>No se encontró este viaje.</p>
+      </div>
+    )
+  }
+
+  const checklist = viaje.checklist || []
   const categorias = [...new Set(checklist.map((i) => i.categoria))]
   const hechos = checklist.filter((i) => i.hecho).length
-  const porcentaje = Math.round((hechos / checklist.length) * 100)
+  const porcentaje = checklist.length > 0 ? Math.round((hechos / checklist.length) * 100) : 0
 
   return (
     <div className="dv">
@@ -34,8 +56,8 @@ function DetalleViaje({ irADashboard, destino = 'Japón', motivo = 'Turismo' }) 
       </div>
 
       <div className="dv-portada">
-        <div className="dv-destino">✈️ {destino}</div>
-        <div className="dv-motivo">{motivo}</div>
+        <div className="dv-destino">✈️ {viaje.destino}</div>
+        <div className="dv-motivo">{viaje.motivo}</div>
       </div>
 
       <div className="dv-progreso-card">

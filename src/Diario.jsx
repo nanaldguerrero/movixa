@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from './supabaseClient'
 import './Diario.css'
 
 const entradasIniciales = [
@@ -10,14 +11,46 @@ function Diario({ irADashboard }) {
   const [mostrarForm, setMostrarForm] = useState(false)
   const [titulo, setTitulo] = useState('')
   const [texto, setTexto] = useState('')
+  const [userId, setUserId] = useState(null)
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    const cargar = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setCargando(false)
+        return
+      }
+      setUserId(user.id)
+
+      const { data } = await supabase.from('perfiles').select('diario').eq('id', user.id).single()
+
+      if (data && data.diario) {
+        setEntradas(data.diario)
+      }
+      setCargando(false)
+    }
+    cargar()
+  }, [])
+
+  const guardar = async (nuevasEntradas) => {
+    if (!userId) return
+    await supabase.from('perfiles').upsert({ id: userId, diario: nuevasEntradas })
+  }
 
   const agregarEntrada = () => {
     if (titulo.trim() === '' || texto.trim() === '') return
     const hoy = new Date().toLocaleDateString('es-CR', { day: 'numeric', month: 'long' })
-    setEntradas([{ id: Date.now(), titulo, fecha: hoy, texto }, ...entradas])
+    const nuevo = [{ id: Date.now(), titulo, fecha: hoy, texto }, ...entradas]
+    setEntradas(nuevo)
+    guardar(nuevo)
     setTitulo('')
     setTexto('')
     setMostrarForm(false)
+  }
+
+  if (cargando) {
+    return <div className="diario"><p style={{ textAlign: 'center', paddingTop: '60px', color: '#888' }}>Cargando diario...</p></div>
   }
 
   return (

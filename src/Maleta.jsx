@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from './supabaseClient'
 import './Maleta.css'
 
 const categoriasIniciales = [
@@ -55,6 +56,32 @@ const categoriasIniciales = [
 
 function Maleta({ irADashboard }) {
   const [datos, setDatos] = useState(categoriasIniciales)
+  const [userId, setUserId] = useState(null)
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    const cargar = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setCargando(false)
+        return
+      }
+      setUserId(user.id)
+
+      const { data } = await supabase.from('perfiles').select('maleta').eq('id', user.id).single()
+
+      if (data && data.maleta) {
+        setDatos(data.maleta)
+      }
+      setCargando(false)
+    }
+    cargar()
+  }, [])
+
+  const guardar = async (nuevoDatos) => {
+    if (!userId) return
+    await supabase.from('perfiles').upsert({ id: userId, maleta: nuevoDatos })
+  }
 
   const toggleItem = (catIndex, id) => {
     const nuevo = [...datos]
@@ -65,6 +92,7 @@ function Maleta({ irADashboard }) {
       ),
     }
     setDatos(nuevo)
+    guardar(nuevo)
   }
 
   const cambiarCantidad = (catIndex, id, valor) => {
@@ -76,10 +104,15 @@ function Maleta({ irADashboard }) {
       ),
     }
     setDatos(nuevo)
+    guardar(nuevo)
   }
 
   const totalItems = datos.reduce((acc, cat) => acc + cat.items.length, 0)
   const totalHechos = datos.reduce((acc, cat) => acc + cat.items.filter((i) => i.hecho).length, 0)
+
+  if (cargando) {
+    return <div className="maleta"><p style={{ textAlign: 'center', paddingTop: '60px', color: '#888' }}>Cargando maleta...</p></div>
+  }
 
   return (
     <div className="maleta">
