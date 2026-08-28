@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useConfiguracion } from './ConfiguracionContext'
+import { supabase } from './supabaseClient'
 import './Configuracion.css'
 
 const temas = [
@@ -26,7 +27,7 @@ const companeros = [
   { id: 'ninguno', emoji: '🚫', nombre: 'Ninguno' },
 ]
 
-function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda }) {
+function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda, onCerrarSesion }) {
   const {
     tema, setTema,
     tamañoLetra, setTamañoLetra,
@@ -41,11 +42,47 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda }) {
 
   const [cambiandoPass, setCambiandoPass] = useState(false)
   const [correoVerificado, setCorreoVerificado] = useState(false)
+  const [correoUsuario, setCorreoUsuario] = useState('')
+  const [enviandoVerificacion, setEnviandoVerificacion] = useState(false)
+  const [mensajeVerificacion, setMensajeVerificacion] = useState('')
+
+  const [cerrandoOtras, setCerrandoOtras] = useState(false)
+  const [mensajeOtras, setMensajeOtras] = useState('')
 
   const sesiones = [
-    { id: 1, dispositivo: '📱 iPhone 14 — San José, CR', actual: true },
-    { id: 2, dispositivo: '💻 Chrome en Windows — San José, CR', actual: false },
+    { id: 1, dispositivo: '📱 Este navegador', actual: true },
   ]
+
+  useEffect(() => {
+    const cargar = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setCorreoUsuario(user.email)
+        setCorreoVerificado(!!user.email_confirmed_at)
+      }
+    }
+    cargar()
+  }, [])
+
+  const enviarVerificacion = async () => {
+    setEnviandoVerificacion(true)
+    setMensajeVerificacion('')
+    const { error } = await supabase.auth.resend({ type: 'signup', email: correoUsuario })
+    setEnviandoVerificacion(false)
+    if (error) {
+      setMensajeVerificacion('Hubo un problema: ' + error.message)
+    } else {
+      setMensajeVerificacion('Te enviamos un correo de verificación. Revisá tu bandeja de entrada.')
+    }
+  }
+
+  const cerrarOtrasSesiones = async () => {
+    setCerrandoOtras(true)
+    setMensajeOtras('')
+    const { error } = await supabase.auth.signOut({ scope: 'others' })
+    setCerrandoOtras(false)
+    setMensajeOtras(error ? 'Hubo un problema: ' + error.message : 'Se cerraron las demás sesiones correctamente.')
+  }
 
   return (
     <div className="config">
@@ -183,9 +220,12 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda }) {
           {correoVerificado ? (
             <span className="config-badge-verificado">Verificado ✓</span>
           ) : (
-            <button className="config-boton-chico" onClick={() => setCorreoVerificado(true)}>Enviar verificación</button>
+            <button className="config-boton-chico" onClick={enviarVerificacion} disabled={enviandoVerificacion}>
+              {enviandoVerificacion ? 'Enviando...' : 'Enviar verificación'}
+            </button>
           )}
         </div>
+        {mensajeVerificacion && <p className="config-mensaje">{mensajeVerificacion}</p>}
 
         <div className="config-sesiones">
           <p className="config-sesiones-titulo">📟 Sesiones activas</p>
@@ -197,7 +237,10 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda }) {
           ))}
         </div>
 
-        <button className="config-boton-peligro">Cerrar sesión en otros dispositivos</button>
+        <button className="config-boton-peligro" onClick={cerrarOtrasSesiones} disabled={cerrandoOtras}>
+          {cerrandoOtras ? 'Cerrando sesiones...' : 'Cerrar sesión en otros dispositivos'}
+        </button>
+        {mensajeOtras && <p className="config-mensaje">{mensajeOtras}</p>}
       </div>
 
       <div className="config-seccion">
@@ -208,7 +251,7 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda }) {
         </div>
         <button className="config-fila-boton" onClick={irATerminos}>
           <span>📄 Términos y condiciones</span>
-    <span className="config-fila-flecha">›</span>
+          <span className="config-fila-flecha">›</span>
         </button>
         <button className="config-fila-boton" onClick={irAPrivacidad}>
           <span>🔒 Política de privacidad</span>
@@ -220,7 +263,7 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda }) {
         </button>
       </div>
 
-      <button className="config-cerrar-sesion">Cerrar sesión</button>
+      <button className="config-cerrar-sesion" onClick={onCerrarSesion}>Cerrar sesión</button>
     </div>
   )
 }

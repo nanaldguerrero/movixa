@@ -13,6 +13,7 @@ import Perfil from './Perfil'
 import DetalleViaje from './DetalleViaje'
 import Onboarding from './Onboarding'
 import PantallaInfo from './PantallaInfo'
+import MisViajes from './MisViajes'
 import { ConfiguracionProvider, useConfiguracion } from './ConfiguracionContext'
 import { supabase } from './supabaseClient'
 import './App.css'
@@ -42,9 +43,10 @@ function AppInterno() {
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
-        cargarPerfil()
+        await cargarPerfil()
+        setPantalla('dashboard')
       }
     })
   }, [])
@@ -96,6 +98,18 @@ function AppInterno() {
           setViajeIdActual(id)
           setPantalla('detalleviaje')
         }}
+        irAMisViajes={() => setPantalla('misviajes')}
+      />
+    )
+  } else if (pantalla === 'misviajes') {
+    contenido = (
+      <MisViajes
+        irADashboard={() => setPantalla('dashboard')}
+        irACrearViaje={() => setPantalla('crearviaje')}
+        irADetalle={(id) => {
+          setViajeIdActual(id)
+          setPantalla('detalleviaje')
+        }}
       />
     )
   } else if (pantalla === 'crearviaje') {
@@ -128,6 +142,12 @@ function AppInterno() {
         irATerminos={() => setPantalla('terminos')}
         irAPrivacidad={() => setPantalla('privacidad')}
         irAAyuda={() => setPantalla('ayuda')}
+        onCerrarSesion={async () => {
+          await supabase.auth.signOut()
+          setPerfilUsuario(null)
+          setViajeActivo(null)
+          setPantalla('splash')
+        }}
       />
     )
   } else if (pantalla === 'terminos') {

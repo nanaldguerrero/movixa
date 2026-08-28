@@ -1,6 +1,6 @@
 import './Dashboard.css'
 
-function Dashboard({ perfil, viajeActivo, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil, irADetalle }) {  const pasosViaje = [
+function Dashboard({ perfil, viajeActivo, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil, irADetalle, irAMisViajes }) {  const pasosViaje = [
     { nombre: 'Crear viaje', estado: 'completado' },
     { nombre: 'Papeleo', estado: 'progreso' },
     { nombre: 'Maleta', estado: 'pendiente' },
@@ -50,8 +50,9 @@ function Dashboard({ perfil, viajeActivo, irACrearViaje, irAPapeleo, irAMaleta, 
         </div>
       </div>
 
+<p className="dash-ver-todos" onClick={irAMisViajes}>🧭 Ver todos mis viajes →</p>
       <div className="dashboard-progreso">
-        <div className="dashboard-progreso-titulo">Tu viaje a Japón</div>
+        <div className="dashboard-progreso-titulo">{viajeActivo ? `Tu viaje a ${viajeActivo.destino}` : 'Todavía no tenés un viaje activo'}</div>
         <div className="dashboard-pasos">
           {pasosViaje.map((paso, i) => (
             <div key={paso.nombre} className="dashboard-paso">

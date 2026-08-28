@@ -297,3 +297,8 @@
   color: #888;
   font-size: 13px;
 }
+.config-mensaje {
+  font-size: 11px;
+  color: #6a3de8;
+  margin: -8px 0 12px 0;
+}

@@ -15,6 +15,14 @@ const checklistPorDefecto = [
   { id: 9, categoria: 'Antes de salir', texto: 'Confirmar transporte al aeropuerto', hecho: false },
 ]
 
+const categoriaDestinos = {
+  playa: ['Panamá', 'República Dominicana', 'Cuba', 'Colombia'],
+  montaña: ['Perú', 'Chile', 'Argentina'],
+  ciudad: ['España', 'Francia', 'Italia', 'Alemania', 'Japón', 'Corea del Sur', 'Reino Unido'],
+  aventura: ['Ecuador', 'Perú', 'Chile', 'Argentina'],
+  relax: ['Panamá', 'República Dominicana', 'Cuba', 'México'],
+}
+
 function CrearViaje({ irADashboard, irADetalle }) {
   const [sabeDestino, setSabeDestino] = useState(null)
   const [destino, setDestino] = useState('')
@@ -26,33 +34,35 @@ function CrearViaje({ irADashboard, irADetalle }) {
 
   const [destinosDisponibles, setDestinosDisponibles] = useState([])
   const [destinoManual, setDestinoManual] = useState('')
-  const [mensajeDebug, setMensajeDebug] = useState('cargando...')
+
+  const [preferencia, setPreferencia] = useState('')
+  const [sugerencias, setSugerencias] = useState([])
 
   useEffect(() => {
     const cargarDatos = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        setMensajeDebug('No hay usuario logueado')
-        return
-      }
+      if (!user) return
       const { data } = await supabase.from('perfiles').select('pasaportes, nacionalidad').eq('id', user.id).single()
       const lista = data?.pasaportes || []
       setPasaportes(lista)
       setNacionalidadPerfil(data?.nacionalidad || '')
       if (lista.length > 0) setPasaporteSeleccionado(lista[0])
 
-      const { data: destinos, error: errorDestinos } = await supabase.from('requisitos_visa').select('destino')
-
-      if (errorDestinos) {
-        setMensajeDebug('ERROR: ' + errorDestinos.message)
-      } else if (destinos) {
-        setMensajeDebug('Se encontraron ' + destinos.length + ' destinos')
+      const { data: destinos } = await supabase.from('requisitos_visa').select('destino')
+      if (destinos) {
         const unicos = [...new Set(destinos.map((d) => d.destino))].sort((a, b) => a.localeCompare(b))
         setDestinosDisponibles(unicos)
       }
     }
     cargarDatos()
   }, [])
+
+  const elegirPreferencia = (valor) => {
+    setPreferencia(valor)
+    const candidatos = categoriaDestinos[valor] || []
+    const disponibles = candidatos.filter((c) => destinosDisponibles.includes(c))
+    setSugerencias(disponibles.slice(0, 3))
+  }
 
   const crearViaje = async (destinoFinal, motivoFinal) => {
     setCreando(true)
@@ -180,21 +190,31 @@ function CrearViaje({ irADashboard, irADetalle }) {
               </>
             )}
 
-            <p className="cv-pregunta">Contame qué te gusta y te voy a recomendar 5 destinos</p>
-            <label className="cv-label">¿Qué buscás en este viaje?</label>
-            <select className="cv-input" value={motivo} onChange={(e) => setMotivo(e.target.value)}>
-              <option value="">Seleccioná una opción</option>
-              <option value="playa">Playa</option>
-              <option value="montaña">Montaña</option>
-              <option value="ciudad">Ciudad / cultura</option>
-              <option value="aventura">Aventura</option>
-              <option value="relax">Relax</option>
-            </select>
-
-            <button className="cv-boton" onClick={() => crearViaje('Destino recomendado', motivo)} disabled={creando}>
-              {creando ? 'Creando...' : 'Ver recomendaciones'}
-            </button>
-            <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
+            {sugerencias.length === 0 ? (
+              <>
+                <p className="cv-pregunta">Contame qué te gusta y te voy a recomendar destinos reales</p>
+                <label className="cv-label">¿Qué buscás en este viaje?</label>
+                <select className="cv-input" value={preferencia} onChange={(e) => elegirPreferencia(e.target.value)}>
+                  <option value="">Seleccioná una opción</option>
+                  <option value="playa">Playa</option>
+                  <option value="montaña">Montaña</option>
+                  <option value="ciudad">Ciudad / cultura</option>
+                  <option value="aventura">Aventura</option>
+                  <option value="relax">Relax</option>
+                </select>
+                <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
+              </>
+            ) : (
+              <>
+                <p className="cv-pregunta">Según lo que buscás, te recomiendo estos destinos:</p>
+                {sugerencias.map((pais) => (
+                  <button key={pais} className="cv-opcion" onClick={() => crearViaje(pais, 'Turismo')} disabled={creando}>
+                    ✈️ {pais}
+                  </button>
+                ))}
+                <p className="cv-atras" onClick={() => { setSugerencias([]); setPreferencia('') }}>← Elegir otra preferencia</p>
+              </>
+            )}
           </>
         )}
       </div>
