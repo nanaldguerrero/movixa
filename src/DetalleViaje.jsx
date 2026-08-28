@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
+import { nacionalidadDesde, requisitosCambiaron } from './nacionalidadUtils'
 import './DetalleViaje.css'
 
 function DetalleViaje({ irADashboard, viajeId }) {
   const [viaje, setViaje] = useState(null)
   const [requisito, setRequisito] = useState(null)
   const [cargando, setCargando] = useState(true)
+  const [actualizando, setActualizando] = useState(false)
 
   useEffect(() => {
     const cargar = async () => {
@@ -19,22 +21,7 @@ function DetalleViaje({ irADashboard, viajeId }) {
       if (data) {
         const { data: { user } } = await supabase.auth.getUser()
         const { data: perfil } = await supabase.from('perfiles').select('nacionalidad').eq('id', user.id).single()
-
-        const mapaNacionalidad = {
-          'Costa Rica': 'Costarricense',
-          'Canadá': 'Canadiense',
-          'Estados Unidos': 'Estadounidense',
-          'México': 'Mexicano',
-          'España': 'Español',
-          'Panamá': 'Panameño',
-        }
-
-        let nacionalidad = perfil?.nacionalidad || 'Costarricense'
-
-        if (data.pasaporte) {
-          const nombrePais = data.pasaporte.replace(/^\S+\s/, '').trim()
-          nacionalidad = mapaNacionalidad[nombrePais] || nombrePais
-        }
+        const nacionalidad = nacionalidadDesde(data.pasaporte, perfil?.nacionalidad)
 
         const { data: req } = await supabase
           .from('requisitos_visa')
@@ -50,13 +37,26 @@ function DetalleViaje({ irADashboard, viajeId }) {
     }
     cargar()
   }, [viajeId])
+const eliminarViaje = async () => {
+    const confirmar = window.confirm('¿Seguro que querés eliminar este viaje? Esta acción no se puede deshacer.')
+    if (!confirmar) return
 
+    await supabase.from('viajes').delete().eq('id', viajeId)
+    irADashboard()
+  }
   const toggleItem = async (id) => {
     const nuevoChecklist = viaje.checklist.map((item) =>
       item.id === id ? { ...item, hecho: !item.hecho } : item
     )
     setViaje({ ...viaje, checklist: nuevoChecklist })
     await supabase.from('viajes').update({ checklist: nuevoChecklist }).eq('id', viajeId)
+  }
+
+  const actualizarSnapshot = async () => {
+    setActualizando(true)
+    await supabase.from('viajes').update({ requisitos_snapshot: requisito }).eq('id', viajeId)
+    setViaje({ ...viaje, requisitos_snapshot: requisito })
+    setActualizando(false)
   }
 
   if (cargando) {
@@ -80,6 +80,7 @@ function DetalleViaje({ irADashboard, viajeId }) {
   const hechos = checklist.filter((i) => i.hecho).length
   const porcentaje = checklist.length > 0 ? Math.round((hechos / checklist.length) * 100) : 0
   const vacunaObligatoria = requisito?.vacunas?.startsWith('OBLIGATORIA')
+  const cambio = requisitosCambiaron(viaje.requisitos_snapshot, requisito)
 
   return (
     <div className="dv">
@@ -92,6 +93,16 @@ function DetalleViaje({ irADashboard, viajeId }) {
         <div className="dv-destino">✈️ {viaje.destino}</div>
         <div className="dv-motivo">{viaje.motivo}</div>
       </div>
+
+      {cambio && (
+        <div className="dv-alerta-cambio">
+          <div className="dv-alerta-titulo">⚠️ Los requisitos de este viaje cambiaron</div>
+          <p className="dv-alerta-texto">Desde que creaste este viaje, actualizamos la información de requisitos para este destino. Revisá los detalles abajo.</p>
+          <button className="dv-alerta-boton" onClick={actualizarSnapshot} disabled={actualizando}>
+            {actualizando ? 'Actualizando...' : 'Ya lo revisé, actualizar'}
+          </button>
+        </div>
+      )}
 
       {requisito ? (
         <>
@@ -151,6 +162,8 @@ function DetalleViaje({ irADashboard, viajeId }) {
           </div>
         </div>
       ))}
+
+      <button className="dv-boton-eliminar" onClick={eliminarViaje}>🗑️ Eliminar este viaje</button>
     </div>
   )
 }

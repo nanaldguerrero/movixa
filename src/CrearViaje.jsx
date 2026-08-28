@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
+import { nacionalidadDesde } from './nacionalidadUtils'
 import './CrearViaje.css'
 
 const checklistPorDefecto = [
@@ -21,17 +22,36 @@ function CrearViaje({ irADashboard, irADetalle }) {
   const [creando, setCreando] = useState(false)
   const [pasaportes, setPasaportes] = useState([])
   const [pasaporteSeleccionado, setPasaporteSeleccionado] = useState('')
+  const [nacionalidadPerfil, setNacionalidadPerfil] = useState('')
+
+  const [destinosDisponibles, setDestinosDisponibles] = useState([])
+  const [destinoManual, setDestinoManual] = useState('')
+  const [mensajeDebug, setMensajeDebug] = useState('cargando...')
 
   useEffect(() => {
-    const cargarPasaportes = async () => {
+    const cargarDatos = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-      const { data } = await supabase.from('perfiles').select('pasaportes').eq('id', user.id).single()
+      if (!user) {
+        setMensajeDebug('No hay usuario logueado')
+        return
+      }
+      const { data } = await supabase.from('perfiles').select('pasaportes, nacionalidad').eq('id', user.id).single()
       const lista = data?.pasaportes || []
       setPasaportes(lista)
+      setNacionalidadPerfil(data?.nacionalidad || '')
       if (lista.length > 0) setPasaporteSeleccionado(lista[0])
+
+      const { data: destinos, error: errorDestinos } = await supabase.from('requisitos_visa').select('destino')
+
+      if (errorDestinos) {
+        setMensajeDebug('ERROR: ' + errorDestinos.message)
+      } else if (destinos) {
+        setMensajeDebug('Se encontraron ' + destinos.length + ' destinos')
+        const unicos = [...new Set(destinos.map((d) => d.destino))].sort((a, b) => a.localeCompare(b))
+        setDestinosDisponibles(unicos)
+      }
     }
-    cargarPasaportes()
+    cargarDatos()
   }, [])
 
   const crearViaje = async (destinoFinal, motivoFinal) => {
@@ -43,6 +63,15 @@ function CrearViaje({ irADashboard, irADetalle }) {
       return
     }
 
+    const nacionalidad = nacionalidadDesde(pasaporteSeleccionado, nacionalidadPerfil)
+
+    const { data: requisito } = await supabase
+      .from('requisitos_visa')
+      .select('*')
+      .eq('nacionalidad', nacionalidad)
+      .ilike('destino', `%${destinoFinal}%`)
+      .maybeSingle()
+
     const { data, error } = await supabase
       .from('viajes')
       .insert({
@@ -51,6 +80,7 @@ function CrearViaje({ irADashboard, irADetalle }) {
         motivo: motivoFinal || 'Turismo',
         pasaporte: pasaporteSeleccionado || null,
         checklist: checklistPorDefecto,
+        requisitos_snapshot: requisito || null,
       })
       .select()
       .single()
@@ -101,13 +131,24 @@ function CrearViaje({ irADashboard, irADetalle }) {
             )}
 
             <label className="cv-label">¿A dónde querés ir?</label>
-            <input
-              type="text"
-              placeholder="Ej: Japón, España, Canadá..."
-              className="cv-input"
-              value={destino}
-              onChange={(e) => setDestino(e.target.value)}
-            />
+            <select className="cv-input" value={destino} onChange={(e) => setDestino(e.target.value)}>
+              <option value="">Seleccioná una opción</option>
+              {destinosDisponibles.map((pais) => (
+                <option key={pais} value={pais}>{pais}</option>
+              ))}
+              <option value="__otro__">Otro (escribir destino)</option>
+            </select>
+
+            {destino === '__otro__' && (
+              <input
+                type="text"
+                placeholder="Escribí tu destino"
+                className="cv-input"
+                style={{ marginTop: '8px' }}
+                value={destinoManual}
+                onChange={(e) => setDestinoManual(e.target.value)}
+              />
+            )}
 
             <label className="cv-label">Motivo del viaje</label>
             <select className="cv-input" value={motivo} onChange={(e) => setMotivo(e.target.value)}>
@@ -119,7 +160,7 @@ function CrearViaje({ irADashboard, irADetalle }) {
               <option value="otro">Otro</option>
             </select>
 
-            <button className="cv-boton" onClick={() => crearViaje(destino, motivo)} disabled={creando}>
+            <button className="cv-boton" onClick={() => crearViaje(destino === '__otro__' ? destinoManual : destino, motivo)} disabled={creando}>
               {creando ? 'Creando...' : 'Continuar'}
             </button>
             <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>

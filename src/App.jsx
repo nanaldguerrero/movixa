@@ -12,6 +12,7 @@ import Configuracion from './Configuracion'
 import Perfil from './Perfil'
 import DetalleViaje from './DetalleViaje'
 import Onboarding from './Onboarding'
+import PantallaInfo from './PantallaInfo'
 import { ConfiguracionProvider, useConfiguracion } from './ConfiguracionContext'
 import { supabase } from './supabaseClient'
 import './App.css'
@@ -121,7 +122,55 @@ function AppInterno() {
   } else if (pantalla === 'tienda') {
     contenido = <Tienda irADashboard={() => setPantalla('dashboard')} />
   } else if (pantalla === 'configuracion') {
-    contenido = <Configuracion irADashboard={() => setPantalla('dashboard')} />
+    contenido = (
+      <Configuracion
+        irADashboard={() => setPantalla('dashboard')}
+        irATerminos={() => setPantalla('terminos')}
+        irAPrivacidad={() => setPantalla('privacidad')}
+        irAAyuda={() => setPantalla('ayuda')}
+      />
+    )
+  } else if (pantalla === 'terminos') {
+    contenido = (
+      <PantallaInfo
+        irAConfiguracion={() => setPantalla('configuracion')}
+        titulo="📄 Términos y condiciones"
+        parrafos={[
+          'Al usar MOVIXA aceptás que esta es una versión inicial (MVP) de la aplicación, en desarrollo activo.',
+          'La información sobre visas, requisitos migratorios y documentos que se muestra en la app tiene fines informativos generales y no reemplaza la consulta oficial con embajadas, consulados o autoridades migratorias.',
+          'No garantizamos que la información esté siempre actualizada al 100%. Te recomendamos siempre confirmar los requisitos de tu viaje con fuentes oficiales antes de viajar.',
+          'MOVIXA no se hace responsable por decisiones de viaje tomadas exclusivamente en base a la información de la app.',
+        ]}
+      />
+    )
+  } else if (pantalla === 'privacidad') {
+    contenido = (
+      <PantallaInfo
+        irAConfiguracion={() => setPantalla('configuracion')}
+        titulo="🔒 Política de privacidad"
+        parrafos={[
+          'Guardamos los datos que nos das al registrarte y usar la app (nombre, correo, preferencias de viaje, pasaportes, información médica de emergencia) para poder ofrecerte una experiencia personalizada.',
+          'Tu información se guarda de forma segura y solo vos podés ver y editar tus propios datos.',
+          'No compartimos ni vendemos tu información personal a terceros sin tu consentimiento.',
+          'La información médica de emergencia que agregás es opcional y pensada únicamente para ayudarte en caso de una emergencia durante tu viaje.',
+          'Podés pedir que se elimine tu cuenta y tus datos en cualquier momento contactando a soporte.',
+        ]}
+      />
+    )
+  } else if (pantalla === 'ayuda') {
+    contenido = (
+      <PantallaInfo
+        irAConfiguracion={() => setPantalla('configuracion')}
+        titulo="💬 Ayuda y soporte"
+        parrafos={[
+          '¿Tenés dudas o problemas usando MOVIXA? Escribinos a soporte@movixa.com y te vamos a responder lo antes posible.',
+          'Preguntas frecuentes:',
+          '¿Cómo creo un viaje? Andá al Dashboard y tocá "Crear viaje", elegí tu destino o dejá que MOVIXA te recomiende opciones.',
+          '¿Cómo cambio mi contraseña? Andá a Configuración → Seguridad → Cambiar contraseña.',
+          '¿Mis datos están seguros? Sí, revisá nuestra Política de privacidad para más detalles.',
+        ]}
+      />
+    )
   } else if (pantalla === 'perfil') {
     contenido = <Perfil irADashboard={() => setPantalla('dashboard')} irAConfiguracion={() => setPantalla('configuracion')} />
   } else {
