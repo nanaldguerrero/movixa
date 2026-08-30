@@ -1,6 +1,6 @@
 import './Dashboard.css'
 
-function Dashboard({ perfil, viajeActivo, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil, irADetalle, irAMisViajes }) {  const pasosViaje = [
+function Dashboard({ perfil, viajeActivo, alertaViajeActivo, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil, irADetalle, irAMisViajes }) {  const pasosViaje = [
     { nombre: 'Crear viaje', estado: 'completado' },
     { nombre: 'Papeleo', estado: 'progreso' },
     { nombre: 'Maleta', estado: 'pendiente' },
@@ -36,10 +36,17 @@ function Dashboard({ perfil, viajeActivo, irACrearViaje, irAPapeleo, irAMaleta, 
           {viajeActivo ? (
             <>
               <div className="dash-destino-info">
-                <span className="dash-destino-nombre">✈️ {viajeActivo.destino}</span>
+                <span className="dash-destino-nombre">
+                  ✈️ {viajeActivo.destino} {alertaViajeActivo && <span className="dash-alerta-badge">⚠️</span>}
+                </span>
                 <span className="dash-destino-dias">{viajeActivo.motivo}</span>
               </div>
-              <button className="dash-destino-flecha" onClick={() => irADetalle(viajeActivo.id)}>Ver detalles →</button>
+              <button
+                className={`dash-destino-flecha ${alertaViajeActivo ? 'dash-destino-flecha-alerta' : ''}`}
+                onClick={() => irADetalle(viajeActivo.id)}
+              >
+                {alertaViajeActivo ? '⚠️ Requisitos cambiaron' : 'Ver detalles →'}
+              </button>
             </>
           ) : (
             <>

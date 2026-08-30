@@ -464,3 +464,13 @@
   cursor: pointer;
   margin: -8px 0 16px 0;
 }
+.dash-alerta-badge {
+  font-size: 13px;
+}
+
+.dash-destino-flecha-alerta {
+  background: #fff8e1 !important;
+  color: #8a6500 !important;
+  font-weight: bold;
+}
+

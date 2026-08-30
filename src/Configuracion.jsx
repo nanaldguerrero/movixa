@@ -41,6 +41,13 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda, onC
   const [notifOfertas, setNotifOfertas] = useState(false)
 
   const [cambiandoPass, setCambiandoPass] = useState(false)
+  const [passActual, setPassActual] = useState('')
+  const [passNueva, setPassNueva] = useState('')
+  const [passConfirmar, setPassConfirmar] = useState('')
+  const [errorPass, setErrorPass] = useState('')
+  const [guardandoPass, setGuardandoPass] = useState(false)
+  const [exitoPass, setExitoPass] = useState('')
+
   const [correoVerificado, setCorreoVerificado] = useState(false)
   const [correoUsuario, setCorreoUsuario] = useState('')
   const [enviandoVerificacion, setEnviandoVerificacion] = useState(false)
@@ -63,6 +70,51 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda, onC
     }
     cargar()
   }, [])
+
+  const cambiarPassword = async () => {
+    setErrorPass('')
+    setExitoPass('')
+
+    if (!passActual || !passNueva || !passConfirmar) {
+      setErrorPass('Completá los tres campos.')
+      return
+    }
+    if (passNueva !== passConfirmar) {
+      setErrorPass('La nueva contraseña y la confirmación no coinciden.')
+      return
+    }
+    if (passNueva.length < 6) {
+      setErrorPass('La nueva contraseña debe tener al menos 6 caracteres.')
+      return
+    }
+
+    setGuardandoPass(true)
+
+    const { error: errorVerificar } = await supabase.auth.signInWithPassword({
+      email: correoUsuario,
+      password: passActual,
+    })
+
+    if (errorVerificar) {
+      setGuardandoPass(false)
+      setErrorPass('Tu contraseña actual no es correcta.')
+      return
+    }
+
+    const { error: errorActualizar } = await supabase.auth.updateUser({ password: passNueva })
+
+    setGuardandoPass(false)
+
+    if (errorActualizar) {
+      setErrorPass('Hubo un problema: ' + errorActualizar.message)
+      return
+    }
+
+    setExitoPass('Tu contraseña se actualizó correctamente.')
+    setPassActual('')
+    setPassNueva('')
+    setPassConfirmar('')
+  }
 
   const enviarVerificacion = async () => {
     setEnviandoVerificacion(true)
@@ -208,10 +260,32 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda, onC
 
         {cambiandoPass && (
           <div className="config-form-inline">
-            <input type="password" placeholder="Contraseña actual" className="config-input" />
-            <input type="password" placeholder="Nueva contraseña" className="config-input" />
-            <input type="password" placeholder="Confirmar nueva contraseña" className="config-input" />
-            <button className="config-boton-guardar">Guardar nueva contraseña</button>
+            <input
+              type="password"
+              placeholder="Contraseña actual"
+              className="config-input"
+              value={passActual}
+              onChange={(e) => setPassActual(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Nueva contraseña"
+              className="config-input"
+              value={passNueva}
+              onChange={(e) => setPassNueva(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Confirmar nueva contraseña"
+              className="config-input"
+              value={passConfirmar}
+              onChange={(e) => setPassConfirmar(e.target.value)}
+            />
+            {errorPass && <p className="config-mensaje-error">{errorPass}</p>}
+            {exitoPass && <p className="config-mensaje-exito">{exitoPass}</p>}
+            <button className="config-boton-guardar" onClick={cambiarPassword} disabled={guardandoPass}>
+              {guardandoPass ? 'Guardando...' : 'Guardar nueva contraseña'}
+            </button>
           </div>
         )}
 

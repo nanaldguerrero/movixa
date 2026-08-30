@@ -1,31 +1,12 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
+import { nacionalidadDesde } from './nacionalidadUtils'
 import './Papeleo.css'
 
-const documentosIniciales = [
-  { id: 1, texto: 'Pasaporte vigente', hecho: false },
-  { id: 2, texto: 'Visa (si aplica)', hecho: false },
-  { id: 3, texto: 'Vacunas requeridas', hecho: false },
-  { id: 4, texto: 'Seguro de viaje', hecho: false },
-  { id: 5, texto: 'Reserva de hotel', hecho: false },
-  { id: 6, texto: 'Pasaje de regreso', hecho: false },
-]
-
-const mapaNacionalidad = {
-  'Costa Rica': 'Costarricense',
-  'Canadá': 'Canadiense',
-  'Estados Unidos': 'Estadounidense',
-  'México': 'Mexicano',
-  'España': 'Español',
-  'Panamá': 'Panameño',
-}
-
-function Papeleo({ irADashboard }) {
-  const [documentos, setDocumentos] = useState(documentosIniciales)
-  const [userId, setUserId] = useState(null)
+function Papeleo({ irADashboard, irACrearViaje, irADetalle }) {
+  const [viaje, setViaje] = useState(null)
+  const [requisito, setRequisito] = useState(null)
   const [cargando, setCargando] = useState(true)
-  const [infoDestino, setInfoDestino] = useState(null)
-  const [destinoActivo, setDestinoActivo] = useState(null)
 
   useEffect(() => {
     const cargar = async () => {
@@ -34,38 +15,29 @@ function Papeleo({ irADashboard }) {
         setCargando(false)
         return
       }
-      setUserId(user.id)
 
-      const { data } = await supabase.from('perfiles').select('papeleo, nacionalidad').eq('id', user.id).single()
-
-      if (data && data.papeleo) {
-        setDocumentos(data.papeleo)
-      }
+      const { data: perfil } = await supabase.from('perfiles').select('nacionalidad').eq('id', user.id).single()
 
       const { data: viajes } = await supabase
         .from('viajes')
-        .select('destino, pasaporte')
+        .select('*')
         .eq('user_id', user.id)
         .order('creado_en', { ascending: false })
         .limit(1)
 
       if (viajes && viajes.length > 0) {
         const viajeReciente = viajes[0]
-        setDestinoActivo(viajeReciente.destino)
+        setViaje(viajeReciente)
 
-        let nacionalidad = data?.nacionalidad || 'Costarricense'
-        if (viajeReciente.pasaporte) {
-          const nombrePais = viajeReciente.pasaporte.replace(/^\S+\s/, '').trim()
-          nacionalidad = mapaNacionalidad[nombrePais] || nombrePais
-        }
-
-        const { data: info } = await supabase
+        const nacionalidad = nacionalidadDesde(viajeReciente.pasaporte, perfil?.nacionalidad)
+        const { data: req } = await supabase
           .from('requisitos_visa')
           .select('*')
           .eq('nacionalidad', nacionalidad)
           .ilike('destino', `%${viajeReciente.destino}%`)
           .maybeSingle()
-        setInfoDestino(info)
+
+        setRequisito(req)
       }
 
       setCargando(false)
@@ -73,24 +45,35 @@ function Papeleo({ irADashboard }) {
     cargar()
   }, [])
 
-  const guardar = async (nuevosDocumentos) => {
-    if (!userId) return
-    await supabase.from('perfiles').upsert({ id: userId, papeleo: nuevosDocumentos })
-  }
-
-  const toggleDocumento = (id) => {
-    const nuevo = documentos.map((doc) =>
-      doc.id === id ? { ...doc, hecho: !doc.hecho } : doc
+  const toggleItem = async (id) => {
+    const nuevoChecklist = viaje.checklist.map((item) =>
+      item.id === id ? { ...item, hecho: !item.hecho } : item
     )
-    setDocumentos(nuevo)
-    guardar(nuevo)
+    setViaje({ ...viaje, checklist: nuevoChecklist })
+    await supabase.from('viajes').update({ checklist: nuevoChecklist }).eq('id', viaje.id)
   }
-
-  const completados = documentos.filter((d) => d.hecho).length
 
   if (cargando) {
     return <div className="papeleo"><p style={{ textAlign: 'center', paddingTop: '60px', color: '#888' }}>Cargando papeleo...</p></div>
   }
+
+  if (!viaje) {
+    return (
+      <div className="papeleo">
+        <div className="pap-header">
+          <button className="pap-volver" onClick={irADashboard}>← Volver</button>
+          <div className="pap-logo">MOVIXA</div>
+        </div>
+        <h2 className="pap-titulo">📋 Papeleo</h2>
+        <p className="pap-sin-info">Todavía no tenés ningún viaje. Creá uno para ver acá tu papeleo específico.</p>
+        <button className="pap-boton-crear" onClick={irACrearViaje}>+ Crear mi primer viaje</button>
+      </div>
+    )
+  }
+
+  const itemsPapeleo = (viaje.checklist || []).filter((i) => i.categoria === 'Papeleo')
+  const completados = itemsPapeleo.filter((d) => d.hecho).length
+  const vacunaObligatoria = requisito?.vacunas?.startsWith('OBLIGATORIA')
 
   return (
     <div className="papeleo">
@@ -99,36 +82,55 @@ function Papeleo({ irADashboard }) {
         <div className="pap-logo">MOVIXA</div>
       </div>
 
-      <h2 className="pap-titulo">📋 Papeleo</h2>
-      <p className="pap-progreso">{completados} de {documentos.length} completados</p>
+      <h2 className="pap-titulo">📋 Papeleo para {viaje.destino}</h2>
+      <p className="pap-progreso">{completados} de {itemsPapeleo.length} completados</p>
 
-      {infoDestino ? (
+      {requisito ? (
         <div className="pap-info-destino">
           <div className="pap-info-item">
             <span className="pap-info-icono">🌤️</span>
-            <span>Clima: {infoDestino.clima_general}</span>
+            <span>Clima: {requisito.clima_general}</span>
           </div>
           <div className="pap-info-item">
             <span className="pap-info-icono">💱</span>
-            <span>Moneda: {infoDestino.moneda}</span>
+            <span>Moneda: {requisito.moneda}</span>
           </div>
           <div className="pap-info-item">
             <span className="pap-info-icono">🗣️</span>
-            <span>Idioma: {infoDestino.idioma_principal}</span>
+            <span>Idioma: {requisito.idioma_principal}</span>
           </div>
         </div>
-      ) : destinoActivo ? (
-        <p className="pap-sin-info">Todavía no tenemos información detallada de {destinoActivo}.</p>
       ) : (
-        <p className="pap-sin-info">Creá un viaje para ver información específica de tu destino acá.</p>
+        <p className="pap-sin-info">Todavía no tenemos información detallada de {viaje.destino}.</p>
+      )}
+
+      {requisito && (
+        <>
+          <div className={`pap-visa-card ${requisito.requiere_visa ? 'pap-visa-si' : 'pap-visa-no'}`}>
+            <div className="pap-visa-titulo">
+              {requisito.requiere_visa ? '⚠️ Necesitás visa' : '✅ No necesitás visa'}
+            </div>
+            {requisito.nombre_permiso && <p className="pap-visa-detalle"><strong>{requisito.nombre_permiso}</strong></p>}
+            {requisito.notas && <p className="pap-visa-notas">{requisito.notas}</p>}
+          </div>
+
+          {requisito.vacunas && (
+            <div className={`pap-visa-card ${vacunaObligatoria ? 'pap-visa-si' : 'pap-visa-no'}`}>
+              <div className="pap-visa-titulo">
+                {vacunaObligatoria ? '💉 Vacuna obligatoria' : '💉 Vacunas'}
+              </div>
+              <p className="pap-visa-detalle">{requisito.vacunas}</p>
+            </div>
+          )}
+        </>
       )}
 
       <div className="pap-lista">
-        {documentos.map((doc) => (
+        {itemsPapeleo.map((doc) => (
           <div
             key={doc.id}
             className={`pap-item ${doc.hecho ? 'pap-item-hecho' : ''}`}
-            onClick={() => toggleDocumento(doc.id)}
+            onClick={() => toggleItem(doc.id)}
           >
             <div className={`pap-checkbox ${doc.hecho ? 'pap-checkbox-marcado' : ''}`}>
               {doc.hecho && '✓'}
@@ -137,6 +139,8 @@ function Papeleo({ irADashboard }) {
           </div>
         ))}
       </div>
+
+      <button className="pap-boton-ver-viaje" onClick={() => irADetalle(viaje.id)}>Ver viaje completo →</button>
     </div>
   )
 }

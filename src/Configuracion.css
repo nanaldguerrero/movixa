@@ -302,3 +302,14 @@
   color: #6a3de8;
   margin: -8px 0 12px 0;
 }
+.config-mensaje-error {
+  color: #e74c3c;
+  font-size: 12px;
+  margin: 0;
+}
+
+.config-mensaje-exito {
+  color: #2ecc71;
+  font-size: 12px;
+  margin: 0;
+}

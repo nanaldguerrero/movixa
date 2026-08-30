@@ -16,6 +16,7 @@ import PantallaInfo from './PantallaInfo'
 import MisViajes from './MisViajes'
 import { ConfiguracionProvider, useConfiguracion } from './ConfiguracionContext'
 import { supabase } from './supabaseClient'
+import { nacionalidadDesde, requisitosCambiaron } from './nacionalidadUtils'
 import './App.css'
 
 function AppInterno() {
@@ -24,6 +25,7 @@ function AppInterno() {
   const [viajeIdActual, setViajeIdActual] = useState(null)
   const [perfilUsuario, setPerfilUsuario] = useState(null)
   const [viajeActivo, setViajeActivo] = useState(null)
+const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
 
   const cargarPerfil = async () => {
     const { data: { user } } = await supabase.auth.getUser()
@@ -39,7 +41,22 @@ function AppInterno() {
       .order('creado_en', { ascending: false })
       .limit(1)
 
-    setViajeActivo(viajes && viajes.length > 0 ? viajes[0] : null)
+    const viajeMasReciente = viajes && viajes.length > 0 ? viajes[0] : null
+    setViajeActivo(viajeMasReciente)
+
+    if (viajeMasReciente) {
+      const nacionalidad = nacionalidadDesde(viajeMasReciente.pasaporte, data?.nacionalidad)
+      const { data: requisitoActual } = await supabase
+        .from('requisitos_visa')
+        .select('*')
+        .eq('nacionalidad', nacionalidad)
+        .ilike('destino', `%${viajeMasReciente.destino}%`)
+        .maybeSingle()
+
+      setAlertaViajeActivo(requisitosCambiaron(viajeMasReciente.requisitos_snapshot, requisitoActual))
+    } else {
+      setAlertaViajeActivo(false)
+    }
   }
 
   useEffect(() => {
@@ -86,6 +103,7 @@ function AppInterno() {
       <Dashboard
         perfil={perfilUsuario}
         viajeActivo={viajeActivo}
+        alertaViajeActivo={alertaViajeActivo}
         irACrearViaje={() => setPantalla('crearviaje')}
         irAPapeleo={() => setPantalla('papeleo')}
         irAMaleta={() => setPantalla('maleta')}
@@ -126,7 +144,16 @@ function AppInterno() {
   } else if (pantalla === 'detalleviaje') {
     contenido = <DetalleViaje irADashboard={() => setPantalla('dashboard')} viajeId={viajeIdActual} />
   } else if (pantalla === 'papeleo') {
-    contenido = <Papeleo irADashboard={() => setPantalla('dashboard')} />
+    contenido = (
+      <Papeleo
+        irADashboard={() => setPantalla('dashboard')}
+        irACrearViaje={() => setPantalla('crearviaje')}
+        irADetalle={(id) => {
+          setViajeIdActual(id)
+          setPantalla('detalleviaje')
+        }}
+      />
+    )
   } else if (pantalla === 'maleta') {
     contenido = <Maleta irADashboard={() => setPantalla('dashboard')} />
   } else if (pantalla === 'wishlist') {
