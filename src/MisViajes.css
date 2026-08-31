@@ -122,3 +122,24 @@
   color: #6a3de8;
   z-index: 1;
 }
+.mv-tarjeta-activa {
+  border: 2px solid #6a3de8;
+}
+
+.mv-badge-activo {
+  font-size: 10px;
+  color: #6a3de8;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+.mv-boton-activar {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #666;
+  font-size: 10px;
+  cursor: pointer;
+}

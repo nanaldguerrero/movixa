@@ -18,12 +18,22 @@ function Diario({ irADashboard, irACrearViaje, irADetalle }) {
         return
       }
 
-      const { data: viajes } = await supabase
+      let { data: viajes } = await supabase
         .from('viajes')
         .select('*')
         .eq('user_id', user.id)
-        .order('creado_en', { ascending: false })
+        .eq('activo', true)
         .limit(1)
+
+      if (!viajes || viajes.length === 0) {
+        const resultado = await supabase
+          .from('viajes')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('creado_en', { ascending: false })
+          .limit(1)
+        viajes = resultado.data
+      }
 
       if (viajes && viajes.length > 0) {
         setViaje(viajes[0])

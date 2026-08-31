@@ -84,6 +84,8 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
 
     const nacionalidad = nacionalidadDesde(pasaporteSeleccionado, nacionalidadPerfil)
 
+    await supabase.from('viajes').update({ activo: false }).eq('user_id', user.id)
+
     const { data: requisito } = await supabase
       .from('requisitos_visa')
       .select('*')
