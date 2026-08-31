@@ -23,8 +23,8 @@ const categoriaDestinos = {
   relax: ['Panamá', 'República Dominicana', 'Cuba', 'México'],
 }
 
-function CrearViaje({ irADashboard, irADetalle }) {
-  const [sabeDestino, setSabeDestino] = useState(null)
+function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
+  const [sabeDestino, setSabeDestino] = useState(destinoInicial ? true : null)
   const [destino, setDestino] = useState('')
   const [motivo, setMotivo] = useState('')
   const [creando, setCreando] = useState(false)
@@ -52,6 +52,15 @@ function CrearViaje({ irADashboard, irADetalle }) {
       if (destinos) {
         const unicos = [...new Set(destinos.map((d) => d.destino))].sort((a, b) => a.localeCompare(b))
         setDestinosDisponibles(unicos)
+
+        if (destinoInicial) {
+          if (unicos.includes(destinoInicial)) {
+            setDestino(destinoInicial)
+          } else {
+            setDestino('__otro__')
+            setDestinoManual(destinoInicial)
+          }
+        }
       }
     }
     cargarDatos()

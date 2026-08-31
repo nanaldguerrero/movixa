@@ -23,6 +23,7 @@ function AppInterno() {
   const { tema, tamañoLetra, tipoLetra, idioma, setIdioma } = useConfiguracion()
   const [pantalla, setPantalla] = useState('splash')
   const [viajeIdActual, setViajeIdActual] = useState(null)
+  const [destinoPreseleccionado, setDestinoPreseleccionado] = useState('')
   const [perfilUsuario, setPerfilUsuario] = useState(null)
   const [viajeActivo, setViajeActivo] = useState(null)
 const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
@@ -134,15 +135,25 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
     contenido = (
       <CrearViaje
         irADashboard={() => setPantalla('dashboard')}
+        destinoInicial={destinoPreseleccionado}
         irADetalle={async (id) => {
           setViajeIdActual(id)
+          setDestinoPreseleccionado('')
           await cargarPerfil()
           setPantalla('detalleviaje')
         }}
       />
     )
   } else if (pantalla === 'detalleviaje') {
-    contenido = <DetalleViaje irADashboard={() => setPantalla('dashboard')} viajeId={viajeIdActual} />
+    contenido = (
+      <DetalleViaje
+        irADashboard={async () => {
+          await cargarPerfil()
+          setPantalla('dashboard')
+        }}
+        viajeId={viajeIdActual}
+      />
+    )
   } else if (pantalla === 'papeleo') {
     contenido = (
       <Papeleo
@@ -155,11 +166,28 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
       />
     )
   } else if (pantalla === 'maleta') {
-    contenido = <Maleta irADashboard={() => setPantalla('dashboard')} />
+    contenido = (
+      <Maleta
+        irADashboard={() => setPantalla('dashboard')}
+        irACrearViaje={() => setPantalla('crearviaje')}
+        irADetalle={(id) => {
+          setViajeIdActual(id)
+          setPantalla('detalleviaje')
+        }}
+      />
+    )
   } else if (pantalla === 'wishlist') {
-    contenido = <Wishlist irADashboard={() => setPantalla('dashboard')} />
-  } else if (pantalla === 'diario') {
-    contenido = <Diario irADashboard={() => setPantalla('dashboard')} />
+    contenido = (
+      <Wishlist
+        irADashboard={() => setPantalla('dashboard')}
+        irACrearViajeDesde={(pais) => {
+          setDestinoPreseleccionado(pais)
+          setPantalla('crearviaje')
+        }}
+      />
+    )
+  
+    
   } else if (pantalla === 'tienda') {
     contenido = <Tienda irADashboard={() => setPantalla('dashboard')} />
   } else if (pantalla === 'configuracion') {

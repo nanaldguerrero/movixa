@@ -2,16 +2,12 @@ import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 import './Diario.css'
 
-const entradasIniciales = [
-  { id: 1, titulo: 'Llegada a Costa Rica', fecha: '10 de julio', texto: 'Primer día explorando San José, el clima estuvo perfecto.' },
-]
-
-function Diario({ irADashboard }) {
-  const [entradas, setEntradas] = useState(entradasIniciales)
+function Diario({ irADashboard, irACrearViaje, irADetalle }) {
+  const [viaje, setViaje] = useState(null)
+  const [entradas, setEntradas] = useState([])
   const [mostrarForm, setMostrarForm] = useState(false)
   const [titulo, setTitulo] = useState('')
   const [texto, setTexto] = useState('')
-  const [userId, setUserId] = useState(null)
   const [cargando, setCargando] = useState(true)
 
   useEffect(() => {
@@ -21,21 +17,27 @@ function Diario({ irADashboard }) {
         setCargando(false)
         return
       }
-      setUserId(user.id)
 
-      const { data } = await supabase.from('perfiles').select('diario').eq('id', user.id).single()
+      const { data: viajes } = await supabase
+        .from('viajes')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('creado_en', { ascending: false })
+        .limit(1)
 
-      if (data && data.diario) {
-        setEntradas(data.diario)
+      if (viajes && viajes.length > 0) {
+        setViaje(viajes[0])
+        setEntradas(viajes[0].diario || [])
       }
+
       setCargando(false)
     }
     cargar()
   }, [])
 
   const guardar = async (nuevasEntradas) => {
-    if (!userId) return
-    await supabase.from('perfiles').upsert({ id: userId, diario: nuevasEntradas })
+    if (!viaje) return
+    await supabase.from('viajes').update({ diario: nuevasEntradas }).eq('id', viaje.id)
   }
 
   const agregarEntrada = () => {
@@ -53,6 +55,20 @@ function Diario({ irADashboard }) {
     return <div className="diario"><p style={{ textAlign: 'center', paddingTop: '60px', color: '#888' }}>Cargando diario...</p></div>
   }
 
+  if (!viaje) {
+    return (
+      <div className="diario">
+        <div className="dia-header">
+          <button className="dia-volver" onClick={irADashboard}>← Volver</button>
+          <div className="dia-logo">MOVIXA</div>
+        </div>
+        <h2 className="dia-titulo">📔 Diario de viajes</h2>
+        <p className="dia-sin-info">Todavía no tenés ningún viaje. Creá uno para empezar tu diario acá.</p>
+        <button className="dia-boton-crear" onClick={irACrearViaje}>+ Crear mi primer viaje</button>
+      </div>
+    )
+  }
+
   return (
     <div className="diario">
       <div className="dia-header">
@@ -60,8 +76,8 @@ function Diario({ irADashboard }) {
         <div className="dia-logo">MOVIXA</div>
       </div>
 
-      <h2 className="dia-titulo">📔 Diario de viajes</h2>
-      <p className="dia-subtitulo">Tus recuerdos y experiencias</p>
+      <h2 className="dia-titulo">📔 Diario de {viaje.destino}</h2>
+      <p className="dia-subtitulo">Tus recuerdos y experiencias de este viaje</p>
 
       {!mostrarForm ? (
         <button className="dia-boton-nueva" onClick={() => setMostrarForm(true)}>
@@ -89,6 +105,10 @@ function Diario({ irADashboard }) {
         </div>
       )}
 
+      {entradas.length === 0 && !mostrarForm && (
+        <p className="dia-sin-info">Todavía no escribiste ninguna entrada de este viaje.</p>
+      )}
+
       <div className="dia-lista">
         {entradas.map((entrada) => (
           <div key={entrada.id} className="dia-entrada">
@@ -100,6 +120,8 @@ function Diario({ irADashboard }) {
           </div>
         ))}
       </div>
+
+      <button className="dia-boton-ver-viaje" onClick={() => irADetalle(viaje.id)}>Ver viaje completo →</button>
     </div>
   )
 }

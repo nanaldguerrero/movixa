@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
+import { nacionalidadDesde } from './nacionalidadUtils'
 import './Maleta.css'
 
 const categoriasIniciales = [
@@ -54,9 +55,10 @@ const categoriasIniciales = [
   },
 ]
 
-function Maleta({ irADashboard }) {
+function Maleta({ irADashboard, irACrearViaje, irADetalle }) {
+  const [viaje, setViaje] = useState(null)
   const [datos, setDatos] = useState(categoriasIniciales)
-  const [userId, setUserId] = useState(null)
+  const [climaDestino, setClimaDestino] = useState(null)
   const [cargando, setCargando] = useState(true)
 
   useEffect(() => {
@@ -66,21 +68,39 @@ function Maleta({ irADashboard }) {
         setCargando(false)
         return
       }
-      setUserId(user.id)
 
-      const { data } = await supabase.from('perfiles').select('maleta').eq('id', user.id).single()
+      const { data: perfil } = await supabase.from('perfiles').select('nacionalidad').eq('id', user.id).single()
 
-      if (data && data.maleta) {
-        setDatos(data.maleta)
+      const { data: viajes } = await supabase
+        .from('viajes')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('creado_en', { ascending: false })
+        .limit(1)
+
+      if (viajes && viajes.length > 0) {
+        const viajeReciente = viajes[0]
+        setViaje(viajeReciente)
+        setDatos(viajeReciente.maleta && viajeReciente.maleta.length > 0 ? viajeReciente.maleta : categoriasIniciales)
+
+        const nacionalidad = nacionalidadDesde(viajeReciente.pasaporte, perfil?.nacionalidad)
+        const { data: req } = await supabase
+          .from('requisitos_visa')
+          .select('clima_general')
+          .eq('nacionalidad', nacionalidad)
+          .ilike('destino', `%${viajeReciente.destino}%`)
+          .maybeSingle()
+        setClimaDestino(req?.clima_general || null)
       }
+
       setCargando(false)
     }
     cargar()
   }, [])
 
   const guardar = async (nuevoDatos) => {
-    if (!userId) return
-    await supabase.from('perfiles').upsert({ id: userId, maleta: nuevoDatos })
+    if (!viaje) return
+    await supabase.from('viajes').update({ maleta: nuevoDatos }).eq('id', viaje.id)
   }
 
   const toggleItem = (catIndex, id) => {
@@ -107,12 +127,26 @@ function Maleta({ irADashboard }) {
     guardar(nuevo)
   }
 
-  const totalItems = datos.reduce((acc, cat) => acc + cat.items.length, 0)
-  const totalHechos = datos.reduce((acc, cat) => acc + cat.items.filter((i) => i.hecho).length, 0)
-
   if (cargando) {
     return <div className="maleta"><p style={{ textAlign: 'center', paddingTop: '60px', color: '#888' }}>Cargando maleta...</p></div>
   }
+
+  if (!viaje) {
+    return (
+      <div className="maleta">
+        <div className="mal-header">
+          <button className="mal-volver" onClick={irADashboard}>← Volver</button>
+          <div className="mal-logo">MOVIXA</div>
+        </div>
+        <h2 className="mal-titulo">🧳 Maleta</h2>
+        <p className="mal-sin-info">Todavía no tenés ningún viaje. Creá uno para armar tu maleta acá.</p>
+        <button className="mal-boton-crear" onClick={irACrearViaje}>+ Crear mi primer viaje</button>
+      </div>
+    )
+  }
+
+  const totalItems = datos.reduce((acc, cat) => acc + cat.items.length, 0)
+  const totalHechos = datos.reduce((acc, cat) => acc + cat.items.filter((i) => i.hecho).length, 0)
 
   return (
     <div className="maleta">
@@ -121,8 +155,14 @@ function Maleta({ irADashboard }) {
         <div className="mal-logo">MOVIXA</div>
       </div>
 
-      <h2 className="mal-titulo">🧳 Maleta</h2>
+      <h2 className="mal-titulo">🧳 Maleta para {viaje.destino}</h2>
       <p className="mal-progreso">{totalHechos} de {totalItems} empacados</p>
+
+      {climaDestino && (
+        <div className="mal-clima-card">
+          🌤️ Clima en {viaje.destino}: <strong>{climaDestino}</strong>
+        </div>
+      )}
 
       {datos.map((categoria, catIndex) => (
         <div key={categoria.nombre} className="mal-categoria">
@@ -152,6 +192,8 @@ function Maleta({ irADashboard }) {
           </div>
         </div>
       ))}
+
+      <button className="mal-boton-ver-viaje" onClick={() => irADetalle(viaje.id)}>Ver viaje completo →</button>
     </div>
   )
 }

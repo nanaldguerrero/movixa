@@ -8,7 +8,7 @@ const destinosIniciales = [
   { id: 3, pais: 'Canadá', emoji: '🇨🇦', nota: 'Naturaleza y auroras' },
 ]
 
-function Wishlist({ irADashboard }) {
+function Wishlist({ irADashboard, irACrearViajeDesde }) {
   const [destinos, setDestinos] = useState(destinosIniciales)
   const [nuevoPais, setNuevoPais] = useState('')
   const [userId, setUserId] = useState(null)
@@ -88,6 +88,7 @@ function Wishlist({ irADashboard }) {
             <div className="wl-emoji">{destino.emoji}</div>
             <div className="wl-pais">{destino.pais}</div>
             {destino.nota && <div className="wl-nota">{destino.nota}</div>}
+            <button className="wl-boton-viaje" onClick={() => irACrearViajeDesde(destino.pais)}>✈️ Crear viaje</button>
           </div>
         ))}
       </div>

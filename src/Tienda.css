@@ -86,3 +86,11 @@
   font-size: 13px;
   cursor: pointer;
 }
+.tie-aviso {
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+  margin-top: 20px;
+  font-style: italic;
+  line-height: 1.5;
+}

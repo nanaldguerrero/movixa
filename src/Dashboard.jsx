@@ -1,10 +1,27 @@
 import './Dashboard.css'
 
-function Dashboard({ perfil, viajeActivo, alertaViajeActivo, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil, irADetalle, irAMisViajes }) {  const pasosViaje = [
-    { nombre: 'Crear viaje', estado: 'completado' },
-    { nombre: 'Papeleo', estado: 'progreso' },
-    { nombre: 'Maleta', estado: 'pendiente' },
-    { nombre: '¡Listo!', estado: 'pendiente' },
+function Dashboard({ perfil, viajeActivo, alertaViajeActivo, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil, irADetalle, irAMisViajes }) {  const calcularEstadoCategoria = (items) => {
+    if (!items || items.length === 0) return 'pendiente'
+    const hechos = items.filter((i) => i.hecho).length
+    if (hechos === 0) return 'pendiente'
+    if (hechos === items.length) return 'completado'
+    return 'progreso'
+  }
+
+  const itemsPapeleo = (viajeActivo?.checklist || []).filter((i) => i.categoria === 'Papeleo')
+  const itemsAntesSalir = (viajeActivo?.checklist || []).filter((i) => i.categoria === 'Antes de salir')
+  const itemsMaleta = (viajeActivo?.maleta || []).flatMap((cat) => cat.items || [])
+
+  const estadoPapeleo = calcularEstadoCategoria(itemsPapeleo)
+  const estadoMaleta = calcularEstadoCategoria(itemsMaleta)
+  const todoListo = estadoPapeleo === 'completado' && estadoMaleta === 'completado' && calcularEstadoCategoria(itemsAntesSalir) === 'completado'
+  const algoAvanzado = estadoPapeleo !== 'pendiente' || estadoMaleta !== 'pendiente'
+
+  const pasosViaje = [
+    { nombre: 'Crear viaje', estado: viajeActivo ? 'completado' : 'pendiente' },
+    { nombre: 'Papeleo', estado: viajeActivo ? estadoPapeleo : 'pendiente' },
+    { nombre: 'Maleta', estado: viajeActivo ? estadoMaleta : 'pendiente' },
+    { nombre: '¡Listo!', estado: todoListo ? 'completado' : (algoAvanzado ? 'progreso' : 'pendiente') },
   ]
 
   const etiquetaEstado = {
