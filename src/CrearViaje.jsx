@@ -23,6 +23,8 @@ const categoriaDestinos = {
   relax: ['Panamá', 'República Dominicana', 'Cuba', 'México'],
 }
 
+const mapaRitmoCategoria = { 'Relax': 'relax', 'Aventura': 'aventura' }
+
 function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
   const [sabeDestino, setSabeDestino] = useState(destinoInicial ? true : null)
   const [destino, setDestino] = useState('')
@@ -38,15 +40,29 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
   const [preferencia, setPreferencia] = useState('')
   const [sugerencias, setSugerencias] = useState([])
 
+  const [climasPerfil, setClimasPerfil] = useState([])
+  const [tiposDestinoPerfil, setTiposDestinoPerfil] = useState([])
+  const [ritmoPerfil, setRitmoPerfil] = useState('')
+  const [usarPreferenciasGuardadas, setUsarPreferenciasGuardadas] = useState(null)
+
   useEffect(() => {
     const cargarDatos = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-      const { data } = await supabase.from('perfiles').select('pasaportes, nacionalidad').eq('id', user.id).single()
+      const { data } = await supabase
+        .from('perfiles')
+        .select('pasaportes, nacionalidad, climas, tipos_destino, ritmo')
+        .eq('id', user.id)
+        .single()
+
       const lista = data?.pasaportes || []
       setPasaportes(lista)
       setNacionalidadPerfil(data?.nacionalidad || '')
       if (lista.length > 0) setPasaporteSeleccionado(lista[0])
+
+      setClimasPerfil(data?.climas || [])
+      setTiposDestinoPerfil(data?.tipos_destino || [])
+      setRitmoPerfil(data?.ritmo || '')
 
       const { data: destinos } = await supabase.from('requisitos_visa').select('destino')
       if (destinos) {
@@ -65,6 +81,28 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
     }
     cargarDatos()
   }, [])
+
+  const tienePreferenciasGuardadas = tiposDestinoPerfil.length > 0 || !!ritmoPerfil
+
+  const obtenerSugerenciasDePerfil = (destinosDisp) => {
+    let clavesValidas = Object.keys(categoriaDestinos)
+    let candidatas = tiposDestinoPerfil.map((t) => t.toLowerCase()).filter((t) => clavesValidas.includes(t))
+
+    if (candidatas.length === 0 && ritmoPerfil) {
+      const clave = mapaRitmoCategoria[ritmoPerfil]
+      if (clave) candidatas = [clave]
+    }
+    if (candidatas.length === 0) candidatas = ['ciudad']
+
+    const todos = candidatas.flatMap((c) => categoriaDestinos[c] || [])
+    const unicos = [...new Set(todos)]
+    return unicos.filter((c) => destinosDisp.includes(c)).slice(0, 3)
+  }
+
+  const elegirUsarPreferencias = () => {
+    setUsarPreferenciasGuardadas(true)
+    setSugerencias(obtenerSugerenciasDePerfil(destinosDisponibles))
+  }
 
   const elegirPreferencia = (valor) => {
     setPreferencia(valor)
@@ -102,6 +140,7 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
         pasaporte: pasaporteSeleccionado || null,
         checklist: checklistPorDefecto,
         requisitos_snapshot: requisito || null,
+        activo: true,
       })
       .select()
       .single()
@@ -201,7 +240,24 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
               </>
             )}
 
-            {sugerencias.length === 0 ? (
+            {usarPreferenciasGuardadas === null && tienePreferenciasGuardadas && (
+              <>
+                <p className="cv-pregunta">Según tu Perfil, normalmente te gusta:</p>
+                <div className="cv-chips-perfil">
+                  {tiposDestinoPerfil.map((t) => <span key={t} className="cv-chip">{t}</span>)}
+                  {ritmoPerfil && <span className="cv-chip">{ritmoPerfil}</span>}
+                </div>
+                <button className="cv-opcion" onClick={elegirUsarPreferencias}>
+                  Sí, recomendame con esto
+                </button>
+                <button className="cv-opcion cv-opcion-secundaria" onClick={() => setUsarPreferenciasGuardadas(false)}>
+                  Quiero algo distinto para este viaje
+                </button>
+                <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
+              </>
+            )}
+
+            {(usarPreferenciasGuardadas === false || (usarPreferenciasGuardadas === null && !tienePreferenciasGuardadas)) && sugerencias.length === 0 && (
               <>
                 <p className="cv-pregunta">Contame qué te gusta y te voy a recomendar destinos reales</p>
                 <label className="cv-label">¿Qué buscás en este viaje?</label>
@@ -215,15 +271,21 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
                 </select>
                 <p className="cv-atras" onClick={() => setSabeDestino(null)}>← Volver atrás</p>
               </>
-            ) : (
+            )}
+
+            {sugerencias.length > 0 && (
               <>
-                <p className="cv-pregunta">Según lo que buscás, te recomiendo estos destinos:</p>
+                <p className="cv-pregunta">
+                  {usarPreferenciasGuardadas ? 'Según tu perfil, te recomiendo:' : 'Según lo que buscás, te recomiendo:'}
+                </p>
                 {sugerencias.map((pais) => (
                   <button key={pais} className="cv-opcion" onClick={() => crearViaje(pais, 'Turismo')} disabled={creando}>
                     ✈️ {pais}
                   </button>
                 ))}
-                <p className="cv-atras" onClick={() => { setSugerencias([]); setPreferencia('') }}>← Elegir otra preferencia</p>
+                <p className="cv-atras" onClick={() => { setSugerencias([]); setPreferencia(''); setUsarPreferenciasGuardadas(null) }}>
+                  ← Elegir de otra forma
+                </p>
               </>
             )}
           </>

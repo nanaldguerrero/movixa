@@ -142,3 +142,18 @@
   margin: -8px 0 0 0;
   font-style: italic;
 }
+.cv-chips-perfil {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.cv-chip {
+  background: #f4f0fe;
+  color: #6a3de8;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}

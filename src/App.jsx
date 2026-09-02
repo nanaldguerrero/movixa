@@ -12,6 +12,7 @@ import Configuracion from './Configuracion'
 import Perfil from './Perfil'
 import DetalleViaje from './DetalleViaje'
 import Onboarding from './Onboarding'
+import PantallaSplash from './PantallaSplash'
 import PantallaInfo from './PantallaInfo'
 import MisViajes from './MisViajes'
 import { ConfiguracionProvider, useConfiguracion } from './ConfiguracionContext'
@@ -35,12 +36,22 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
     const { data } = await supabase.from('perfiles').select('*').eq('id', user.id).single()
     setPerfilUsuario(data)
 
-    const { data: viajes } = await supabase
+    let { data: viajes } = await supabase
       .from('viajes')
       .select('*')
       .eq('user_id', user.id)
-      .order('creado_en', { ascending: false })
+      .eq('activo', true)
       .limit(1)
+
+    if (!viajes || viajes.length === 0) {
+      const resultado = await supabase
+        .from('viajes')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('creado_en', { ascending: false })
+        .limit(1)
+      viajes = resultado.data
+    }
 
     const viajeMasReciente = viajes && viajes.length > 0 ? viajes[0] : null
     setViajeActivo(viajeMasReciente)
@@ -186,8 +197,17 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
         }}
       />
     )
-  
-    
+  } else if (pantalla === 'diario') {
+    contenido = (
+      <Diario
+        irADashboard={() => setPantalla('dashboard')}
+        irACrearViaje={() => setPantalla('crearviaje')}
+        irADetalle={(id) => {
+          setViajeIdActual(id)
+          setPantalla('detalleviaje')
+        }}
+      />
+    )
   } else if (pantalla === 'tienda') {
     contenido = <Tienda irADashboard={() => setPantalla('dashboard')} />
   } else if (pantalla === 'configuracion') {
@@ -250,21 +270,12 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
     contenido = <Perfil irADashboard={() => setPantalla('dashboard')} irAConfiguracion={() => setPantalla('configuracion')} />
   } else {
     contenido = (
-      <div className="splash">
-        <svg className="ruta-avion" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="0,400 0,330 60,270 120,320 180,250 240,310 300,260 360,320 400,280 400,400" fill="white" fillOpacity="0.08" />
-          <polygon points="0,400 0,360 50,310 100,350 160,290 220,340 280,300 340,350 400,310 400,400" fill="white" fillOpacity="0.15" />
-          <path d="M10,280 Q120,220 200,260 T390,190" fill="none" stroke="white" strokeOpacity="0.35" strokeWidth="2" strokeDasharray="6 8" />
-          <text x="390" y="190" fontSize="28" textAnchor="middle" dominantBaseline="middle" transform="rotate(20 390 190)" opacity="0.8">✈️</text>
-        </svg>
-        <div className="selector-idioma">
-          <button className={idioma === 'es' ? 'activo' : ''} onClick={() => setIdioma('es')}>Español</button>
-          <button className={idioma === 'en' ? 'activo' : ''} onClick={() => setIdioma('en')}>English</button>
-        </div>
-        <div className="logo">MOVIXA</div>
-        <p className="tagline">{t.tagline}</p>
-        <button className="boton-comenzar" onClick={() => setPantalla('login')}>{t.boton}</button>
-      </div>
+      <PantallaSplash
+        idioma={idioma}
+        setIdioma={setIdioma}
+        t={t}
+        onComenzar={() => setPantalla('login')}
+      />
     )
   }
 
