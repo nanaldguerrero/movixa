@@ -37,13 +37,7 @@ function DetalleViaje({ irADashboard, viajeId }) {
     }
     cargar()
   }, [viajeId])
-const eliminarViaje = async () => {
-    const confirmar = window.confirm('¿Seguro que querés eliminar este viaje? Esta acción no se puede deshacer.')
-    if (!confirmar) return
 
-    await supabase.from('viajes').delete().eq('id', viajeId)
-    irADashboard()
-  }
   const toggleItem = async (id) => {
     const nuevoChecklist = viaje.checklist.map((item) =>
       item.id === id ? { ...item, hecho: !item.hecho } : item
@@ -52,11 +46,66 @@ const eliminarViaje = async () => {
     await supabase.from('viajes').update({ checklist: nuevoChecklist }).eq('id', viajeId)
   }
 
+  const actualizarNotaLocal = (id, texto) => {
+    const nuevoChecklist = viaje.checklist.map((item) =>
+      item.id === id ? { ...item, nota: texto } : item
+    )
+    setViaje({ ...viaje, checklist: nuevoChecklist })
+  }
+
+  const guardarNota = async () => {
+    await supabase.from('viajes').update({ checklist: viaje.checklist }).eq('id', viajeId)
+  }
+
   const actualizarSnapshot = async () => {
     setActualizando(true)
     await supabase.from('viajes').update({ requisitos_snapshot: requisito }).eq('id', viajeId)
     setViaje({ ...viaje, requisitos_snapshot: requisito })
     setActualizando(false)
+  }
+const compartirViaje = () => {
+    const checklist = viaje.checklist || []
+    const hechos = checklist.filter((i) => i.hecho).length
+
+    let mensaje = `✈️ Mi viaje a ${viaje.destino}\n`
+    mensaje += `Motivo: ${viaje.motivo}\n\n`
+
+    if (requisito) {
+      mensaje += requisito.requiere_visa
+        ? `⚠️ Necesito visa (${requisito.nombre_permiso || 'trámite requerido'})\n`
+        : `✅ No necesito visa\n`
+      if (requisito.vacunas && requisito.vacunas.startsWith('OBLIGATORIA')) {
+        mensaje += `💉 Vacuna obligatoria: ver detalles en MOVIXA\n`
+      }
+      mensaje += `\n`
+    }
+
+    mensaje += `📋 Checklist: ${hechos} de ${checklist.length} completado\n\n`
+
+    const pendientes = checklist.filter((i) => !i.hecho)
+    if (pendientes.length > 0) {
+      mensaje += `Pendiente:\n`
+      pendientes.forEach((item) => {
+        mensaje += `• ${item.texto}\n`
+      })
+    }
+
+    mensaje += `\nCreado con MOVIXA`
+
+    if (navigator.share) {
+      navigator.share({ title: `Mi viaje a ${viaje.destino}`, text: mensaje }).catch(() => {})
+    } else {
+      navigator.clipboard.writeText(mensaje)
+      alert('El resumen del viaje se copió al portapapeles. Ya podés pegarlo donde quieras (WhatsApp, notas, etc.)')
+    }
+  }
+
+  const eliminarViaje = async () => {
+    const confirmar = window.confirm('¿Seguro que querés eliminar este viaje? Esta acción no se puede deshacer.')
+    if (!confirmar) return
+
+    await supabase.from('viajes').delete().eq('id', viajeId)
+    irADashboard()
   }
 
   if (cargando) {
@@ -148,21 +197,31 @@ const eliminarViaje = async () => {
             {checklist
               .filter((item) => item.categoria === categoria)
               .map((item) => (
-                <div
-                  key={item.id}
-                  className={`dv-item ${item.hecho ? 'dv-item-hecho' : ''}`}
-                  onClick={() => toggleItem(item.id)}
-                >
-                  <div className={`dv-checkbox ${item.hecho ? 'dv-checkbox-marcado' : ''}`}>
-                    {item.hecho && '✓'}
+                <div key={item.id} className="dv-item-bloque">
+                  <div
+                    className={`dv-item ${item.hecho ? 'dv-item-hecho' : ''}`}
+                    onClick={() => toggleItem(item.id)}
+                  >
+                    <div className={`dv-checkbox ${item.hecho ? 'dv-checkbox-marcado' : ''}`}>
+                      {item.hecho && '✓'}
+                    </div>
+                    <span>{item.texto}</span>
                   </div>
-                  <span>{item.texto}</span>
+                  <input
+                    type="text"
+                    placeholder="Agregar detalles..."
+                    className="dv-nota-input"
+                    value={item.nota || ''}
+                    onChange={(e) => actualizarNotaLocal(item.id, e.target.value)}
+                    onBlur={guardarNota}
+                  />
                 </div>
               ))}
           </div>
         </div>
       ))}
 
+      <button className="dv-boton-compartir" onClick={compartirViaje}>📤 Compartir viaje</button>
       <button className="dv-boton-eliminar" onClick={eliminarViaje}>🗑️ Eliminar este viaje</button>
     </div>
   )

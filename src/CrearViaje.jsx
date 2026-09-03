@@ -30,6 +30,7 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
   const [destino, setDestino] = useState('')
   const [motivo, setMotivo] = useState('')
   const [creando, setCreando] = useState(false)
+  const [errorCreacion, setErrorCreacion] = useState('')
   const [pasaportes, setPasaportes] = useState([])
   const [pasaporteSeleccionado, setPasaporteSeleccionado] = useState('')
   const [nacionalidadPerfil, setNacionalidadPerfil] = useState('')
@@ -112,11 +113,19 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
   }
 
   const crearViaje = async (destinoFinal, motivoFinal) => {
+    setErrorCreacion('')
+
+    if (!destinoFinal || destinoFinal.trim() === '') {
+      setErrorCreacion('Necesitás elegir un destino antes de continuar.')
+      return
+    }
+
     setCreando(true)
 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       setCreando(false)
+      setErrorCreacion('No pudimos confirmar tu sesión. Intentá iniciar sesión de nuevo.')
       return
     }
 
@@ -124,12 +133,16 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
 
     await supabase.from('viajes').update({ activo: false }).eq('user_id', user.id)
 
-    const { data: requisito } = await supabase
+    const { data: requisito, error: errorRequisito } = await supabase
       .from('requisitos_visa')
       .select('*')
       .eq('nacionalidad', nacionalidad)
       .ilike('destino', `%${destinoFinal}%`)
       .maybeSingle()
+
+    if (errorRequisito) {
+      console.warn('No se pudo consultar requisitos:', errorRequisito.message)
+    }
 
     const { data, error } = await supabase
       .from('viajes')
@@ -147,8 +160,8 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
 
     setCreando(false)
 
-    if (error) {
-      alert('Hubo un problema creando el viaje: ' + error.message)
+    if (error || !data) {
+      setErrorCreacion('Hubo un problema creando el viaje: ' + (error?.message || 'no se recibió confirmación del servidor.'))
       return
     }
 
@@ -220,6 +233,7 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
               <option value="otro">Otro</option>
             </select>
 
+            {errorCreacion && <p className="cv-error">{errorCreacion}</p>}
             <button className="cv-boton" onClick={() => crearViaje(destino === '__otro__' ? destinoManual : destino, motivo)} disabled={creando}>
               {creando ? 'Creando...' : 'Continuar'}
             </button>
@@ -278,6 +292,7 @@ function CrearViaje({ irADashboard, irADetalle, destinoInicial }) {
                 <p className="cv-pregunta">
                   {usarPreferenciasGuardadas ? 'Según tu perfil, te recomiendo:' : 'Según lo que buscás, te recomiendo:'}
                 </p>
+                {errorCreacion && <p className="cv-error">{errorCreacion}</p>}
                 {sugerencias.map((pais) => (
                   <button key={pais} className="cv-opcion" onClick={() => crearViaje(pais, 'Turismo')} disabled={creando}>
                     ✈️ {pais}

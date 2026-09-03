@@ -63,6 +63,17 @@ function Papeleo({ irADashboard, irACrearViaje, irADetalle }) {
     await supabase.from('viajes').update({ checklist: nuevoChecklist }).eq('id', viaje.id)
   }
 
+  const actualizarNotaLocal = (id, texto) => {
+    const nuevoChecklist = viaje.checklist.map((item) =>
+      item.id === id ? { ...item, nota: texto } : item
+    )
+    setViaje({ ...viaje, checklist: nuevoChecklist })
+  }
+
+  const guardarNota = async () => {
+    await supabase.from('viajes').update({ checklist: viaje.checklist }).eq('id', viaje.id)
+  }
+
   if (cargando) {
     return <div className="papeleo"><p style={{ textAlign: 'center', paddingTop: '60px', color: '#888' }}>Cargando papeleo...</p></div>
   }
@@ -137,15 +148,24 @@ function Papeleo({ irADashboard, irACrearViaje, irADetalle }) {
 
       <div className="pap-lista">
         {itemsPapeleo.map((doc) => (
-          <div
-            key={doc.id}
-            className={`pap-item ${doc.hecho ? 'pap-item-hecho' : ''}`}
-            onClick={() => toggleItem(doc.id)}
-          >
-            <div className={`pap-checkbox ${doc.hecho ? 'pap-checkbox-marcado' : ''}`}>
-              {doc.hecho && '✓'}
+          <div key={doc.id} className="pap-item-bloque">
+            <div
+              className={`pap-item ${doc.hecho ? 'pap-item-hecho' : ''}`}
+              onClick={() => toggleItem(doc.id)}
+            >
+              <div className={`pap-checkbox ${doc.hecho ? 'pap-checkbox-marcado' : ''}`}>
+                {doc.hecho && '✓'}
+              </div>
+              <span>{doc.texto}</span>
             </div>
-            <span>{doc.texto}</span>
+            <input
+              type="text"
+              placeholder="Agregar detalles (ej: nombre del hotel, número de confirmación)..."
+              className="pap-nota-input"
+              value={doc.nota || ''}
+              onChange={(e) => actualizarNotaLocal(doc.id, e.target.value)}
+              onBlur={guardarNota}
+            />
           </div>
         ))}
       </div>

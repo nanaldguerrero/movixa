@@ -222,3 +222,46 @@
   cursor: pointer;
   margin-top: 10px;
 }
+.dv-item-bloque {
+  margin-bottom: 8px;
+}
+
+.dv-item-bloque .dv-item {
+  margin-bottom: 0;
+  border-radius: 12px 12px 0 0;
+}
+
+.dv-nota-input {
+  width: 100%;
+  padding: 8px 14px;
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  border-radius: 0 0 12px 12px;
+  background: white;
+  font-size: 11px;
+  color: #555;
+  box-sizing: border-box;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.dv-nota-input:focus {
+  outline: none;
+  background: #fafafa;
+}
+
+.dv-nota-input::placeholder {
+  color: #bbb;
+}
+.dv-boton-compartir {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6a3de8, #4fc3f7);
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 6px 16px rgba(106, 61, 232, 0.25);
+}
