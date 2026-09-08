@@ -161,3 +161,6 @@
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(106, 61, 232, 0.25);
 }
+.wl-boton-viaje-existente {
+  background: linear-gradient(135deg, #4fc3f7, #6a3de8);
+}

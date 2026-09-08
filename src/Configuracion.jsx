@@ -36,9 +36,12 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda, onC
     companero, setCompanero,
   } = useConfiguracion()
 
+  const [userId, setUserId] = useState(null)
   const [notifViajes, setNotifViajes] = useState(true)
   const [notifDocumentos, setNotifDocumentos] = useState(true)
   const [notifOfertas, setNotifOfertas] = useState(false)
+  const [permisoNotif, setPermisoNotif] = useState(typeof Notification !== 'undefined' ? Notification.permission : 'denied')
+  const [avisoPermiso, setAvisoPermiso] = useState('')
 
   const [cambiandoPass, setCambiandoPass] = useState(false)
   const [passActual, setPassActual] = useState('')
@@ -64,12 +67,57 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda, onC
     const cargar = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
+        setUserId(user.id)
         setCorreoUsuario(user.email)
         setCorreoVerificado(!!user.email_confirmed_at)
+
+        const { data } = await supabase.from('perfiles').select('notif_viajes, notif_documentos').eq('id', user.id).single()
+        if (data) {
+          setNotifViajes(data.notif_viajes !== false)
+          setNotifDocumentos(data.notif_documentos !== false)
+        }
       }
     }
     cargar()
   }, [])
+
+  const pedirPermisoNotif = async () => {
+    if (typeof Notification === 'undefined') {
+      setAvisoPermiso('Tu navegador no soporta notificaciones.')
+      return false
+    }
+    if (Notification.permission === 'granted') return true
+
+    const resultado = await Notification.requestPermission()
+    setPermisoNotif(resultado)
+
+    if (resultado !== 'granted') {
+      setAvisoPermiso('No diste permiso de notificaciones. Podés activarlo desde la configuración de tu navegador.')
+      return false
+    }
+    setAvisoPermiso('')
+    return true
+  }
+
+  const toggleNotifViajes = async () => {
+    const nuevoValor = !notifViajes
+    if (nuevoValor) {
+      const permitido = await pedirPermisoNotif()
+      if (!permitido) return
+    }
+    setNotifViajes(nuevoValor)
+    if (userId) await supabase.from('perfiles').update({ notif_viajes: nuevoValor }).eq('id', userId)
+  }
+
+  const toggleNotifDocumentos = async () => {
+    const nuevoValor = !notifDocumentos
+    if (nuevoValor) {
+      const permitido = await pedirPermisoNotif()
+      if (!permitido) return
+    }
+    setNotifDocumentos(nuevoValor)
+    if (userId) await supabase.from('perfiles').update({ notif_documentos: nuevoValor }).eq('id', userId)
+  }
 
   const cambiarPassword = async () => {
     setErrorPass('')
@@ -227,17 +275,20 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda, onC
 
       <div className="config-seccion">
         <h3>Notificaciones</h3>
+        <p className="config-nota-notif">
+          Estas notificaciones aparecen mientras tenés MOVIXA abierto en el navegador. Todavía no funcionan con la app cerrada.
+        </p>
 
         <div className="config-switch-fila">
-          <span>Recordatorios de viaje</span>
-          <div className={`config-switch ${notifViajes ? 'config-switch-on' : ''}`} onClick={() => setNotifViajes(!notifViajes)}>
+          <span>Recordatorios de viaje (plan de hoy)</span>
+          <div className={`config-switch ${notifViajes ? 'config-switch-on' : ''}`} onClick={toggleNotifViajes}>
             <div className="config-switch-bola"></div>
           </div>
         </div>
 
         <div className="config-switch-fila">
-          <span>Alertas de documentos</span>
-          <div className={`config-switch ${notifDocumentos ? 'config-switch-on' : ''}`} onClick={() => setNotifDocumentos(!notifDocumentos)}>
+          <span>Alertas de cambios de requisitos</span>
+          <div className={`config-switch ${notifDocumentos ? 'config-switch-on' : ''}`} onClick={toggleNotifDocumentos}>
             <div className="config-switch-bola"></div>
           </div>
         </div>
@@ -248,6 +299,8 @@ function Configuracion({ irADashboard, irATerminos, irAPrivacidad, irAAyuda, onC
             <div className="config-switch-bola"></div>
           </div>
         </div>
+
+        {avisoPermiso && <p className="config-mensaje-error">{avisoPermiso}</p>}
       </div>
 
       <div className="config-seccion">

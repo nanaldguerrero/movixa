@@ -15,6 +15,7 @@ import Onboarding from './Onboarding'
 import PantallaSplash from './PantallaSplash'
 import PantallaInfo from './PantallaInfo'
 import MisViajes from './MisViajes'
+import Bitacora from './Bitacora'
 import { ConfiguracionProvider, useConfiguracion } from './ConfiguracionContext'
 import { supabase } from './supabaseClient'
 import { nacionalidadDesde, requisitosCambiaron } from './nacionalidadUtils'
@@ -28,6 +29,7 @@ function AppInterno() {
   const [perfilUsuario, setPerfilUsuario] = useState(null)
   const [viajeActivo, setViajeActivo] = useState(null)
 const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
+  const [planesHoy, setPlanesHoy] = useState([])
 
   const cargarPerfil = async () => {
     const { data: { user } } = await supabase.auth.getUser()
@@ -56,6 +58,21 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
     const viajeMasReciente = viajes && viajes.length > 0 ? viajes[0] : null
     setViajeActivo(viajeMasReciente)
 
+    if (viajeMasReciente && viajeMasReciente.itinerario) {
+      const hoy = new Date().toLocaleDateString('en-CA')
+      const deHoy = viajeMasReciente.itinerario.filter((p) => p.fecha === hoy && !p.hecho)
+      setPlanesHoy(deHoy)
+
+      if (deHoy.length > 0 && data?.notif_viajes !== false && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+        new Notification('MOVIXA - Plan de hoy', {
+          body: `Tenés ${deHoy.length} plan${deHoy.length > 1 ? 'es' : ''} para hoy: ${deHoy[0].titulo}`,
+          icon: '✈️',
+        })
+      }
+    } else {
+      setPlanesHoy([])
+    }
+
     if (viajeMasReciente) {
       const nacionalidad = nacionalidadDesde(viajeMasReciente.pasaporte, data?.nacionalidad)
       const { data: requisitoActual } = await supabase
@@ -65,7 +82,14 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
         .ilike('destino', `%${viajeMasReciente.destino}%`)
         .maybeSingle()
 
-      setAlertaViajeActivo(requisitosCambiaron(viajeMasReciente.requisitos_snapshot, requisitoActual))
+      const hayCambio = requisitosCambiaron(viajeMasReciente.requisitos_snapshot, requisitoActual)
+      setAlertaViajeActivo(hayCambio)
+
+      if (hayCambio && data?.notif_documentos !== false && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+        new Notification('MOVIXA - Requisitos actualizados', {
+          body: `Los requisitos para tu viaje a ${viajeMasReciente.destino} cambiaron. Revisalos en la app.`,
+        })
+      }
     } else {
       setAlertaViajeActivo(false)
     }
@@ -116,6 +140,7 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
         perfil={perfilUsuario}
         viajeActivo={viajeActivo}
         alertaViajeActivo={alertaViajeActivo}
+        planesHoy={planesHoy}
         irACrearViaje={() => setPantalla('crearviaje')}
         irAPapeleo={() => setPantalla('papeleo')}
         irAMaleta={() => setPantalla('maleta')}
@@ -129,6 +154,7 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
           setPantalla('detalleviaje')
         }}
         irAMisViajes={() => setPantalla('misviajes')}
+        irABitacora={() => setPantalla('bitacora')}
       />
     )
   } else if (pantalla === 'misviajes') {
@@ -163,6 +189,10 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
           setPantalla('dashboard')
         }}
         viajeId={viajeIdActual}
+        irAPapeleo={() => setPantalla('papeleo')}
+        irAMaleta={() => setPantalla('maleta')}
+        irADiario={() => setPantalla('diario')}
+        irABitacora={() => setPantalla('bitacora')}
       />
     )
   } else if (pantalla === 'papeleo') {
@@ -194,6 +224,21 @@ const [alertaViajeActivo, setAlertaViajeActivo] = useState(false)
         irACrearViajeDesde={(pais) => {
           setDestinoPreseleccionado(pais)
           setPantalla('crearviaje')
+        }}
+        irADetalle={(id) => {
+          setViajeIdActual(id)
+          setPantalla('detalleviaje')
+        }}
+      />
+    )
+    } else if (pantalla === 'bitacora') {
+    contenido = (
+      <Bitacora
+        irADashboard={() => setPantalla('dashboard')}
+        irACrearViaje={() => setPantalla('crearviaje')}
+        irADetalle={(id) => {
+          setViajeIdActual(id)
+          setPantalla('detalleviaje')
         }}
       />
     )

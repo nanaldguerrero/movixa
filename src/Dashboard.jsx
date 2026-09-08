@@ -1,6 +1,6 @@
 import './Dashboard.css'
 
-function Dashboard({ perfil, viajeActivo, alertaViajeActivo, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil, irADetalle, irAMisViajes }) {  const calcularEstadoCategoria = (items) => {
+function Dashboard({ perfil, viajeActivo, alertaViajeActivo, planesHoy, irACrearViaje, irAPapeleo, irAMaleta, irAWishlist, irADiario, irATienda, irAConfiguracion, irAPerfil, irADetalle, irAMisViajes, irABitacora }) {  const calcularEstadoCategoria = (items) => {
     if (!items || items.length === 0) return 'pendiente'
     const hechos = items.filter((i) => i.hecho).length
     if (hechos === 0) return 'pendiente'
@@ -139,6 +139,11 @@ function Dashboard({ perfil, viajeActivo, alertaViajeActivo, irACrearViaje, irAP
       </div>
 
       <div className="dashboard-grid">
+        <button className="tarjeta" onClick={irABitacora}>
+          <span className="tarjeta-icono">🗓️</span>
+          <span className="tarjeta-texto">Bitácora</span>
+        </button>
+
         <button className="tarjeta" onClick={irAWishlist}>
           <span className="tarjeta-icono">⭐</span>
           <span className="tarjeta-texto">Wishlist</span>

@@ -8,11 +8,12 @@ const destinosIniciales = [
   { id: 3, pais: 'Canadá', emoji: '🇨🇦', nota: 'Naturaleza y auroras' },
 ]
 
-function Wishlist({ irADashboard, irACrearViajeDesde }) {
+function Wishlist({ irADashboard, irACrearViajeDesde, irADetalle }) {
   const [destinos, setDestinos] = useState(destinosIniciales)
   const [nuevoPais, setNuevoPais] = useState('')
   const [userId, setUserId] = useState(null)
   const [cargando, setCargando] = useState(true)
+  const [viajesExistentes, setViajesExistentes] = useState([])
 
   useEffect(() => {
     const cargar = async () => {
@@ -28,6 +29,10 @@ function Wishlist({ irADashboard, irACrearViajeDesde }) {
       if (data && data.wishlist) {
         setDestinos(data.wishlist)
       }
+
+      const { data: viajes } = await supabase.from('viajes').select('id, destino').eq('user_id', user.id)
+      setViajesExistentes(viajes || [])
+
       setCargando(false)
     }
     cargar()
@@ -82,15 +87,24 @@ function Wishlist({ irADashboard, irACrearViajeDesde }) {
       </div>
 
       <div className="wl-grid">
-        {destinos.map((destino) => (
-          <div key={destino.id} className="wl-tarjeta">
-            <button className="wl-eliminar" onClick={() => eliminarDestino(destino.id)}>×</button>
-            <div className="wl-emoji">{destino.emoji}</div>
-            <div className="wl-pais">{destino.pais}</div>
-            {destino.nota && <div className="wl-nota">{destino.nota}</div>}
-            <button className="wl-boton-viaje" onClick={() => irACrearViajeDesde(destino.pais)}>✈️ Crear viaje</button>
-          </div>
-        ))}
+        {destinos.map((destino) => {
+          const viajeExistente = viajesExistentes.find((v) => v.destino.toLowerCase() === destino.pais.toLowerCase())
+          return (
+            <div key={destino.id} className="wl-tarjeta">
+              <button className="wl-eliminar" onClick={() => eliminarDestino(destino.id)}>×</button>
+              <div className="wl-emoji">{destino.emoji}</div>
+              <div className="wl-pais">{destino.pais}</div>
+              {destino.nota && <div className="wl-nota">{destino.nota}</div>}
+              {viajeExistente ? (
+                <button className="wl-boton-viaje wl-boton-viaje-existente" onClick={() => irADetalle(viajeExistente.id)}>
+                  📍 Ya tenés este viaje
+                </button>
+              ) : (
+                <button className="wl-boton-viaje" onClick={() => irACrearViajeDesde(destino.pais)}>✈️ Crear viaje</button>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

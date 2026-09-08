@@ -473,4 +473,39 @@
   color: #8a6500 !important;
   font-weight: bold;
 }
+.dash-hoy-card {
+  background: linear-gradient(135deg, #2DD4BF 0%, #4fc3f7 100%);
+  border-radius: 18px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 20px rgba(45, 212, 191, 0.3);
+  cursor: pointer;
+}
 
+.dash-hoy-titulo {
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.dash-hoy-item {
+  color: white;
+  font-size: 13px;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.dash-hoy-item:last-child {
+  margin-bottom: 0;
+}
+
+.dash-hoy-item-hecho {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.dash-hoy-hora {
+  font-weight: bold;
+}

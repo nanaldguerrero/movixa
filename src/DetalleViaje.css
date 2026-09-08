@@ -265,3 +265,195 @@
   margin-top: 10px;
   box-shadow: 0 6px 16px rgba(106, 61, 232, 0.25);
 }
+.dv-boton-editar-viaje {
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #6a3de8;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.dv-edicion-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.dv-edicion-label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+  margin: 10px 0 4px 0;
+}
+
+.dv-edicion-label:first-of-type {
+  margin-top: 0;
+}
+
+.dv-edicion-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-bottom: 6px;
+}
+
+.dv-edicion-botones {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.dv-edicion-cancelar, .dv-edicion-guardar {
+  flex: 1;
+  padding: 11px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.dv-edicion-cancelar {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.dv-edicion-guardar {
+  background: #6a3de8;
+  color: white;
+}
+.dv-accesos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.dv-acceso {
+  background: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  cursor: pointer;
+  font-size: 10px;
+  color: #555;
+  font-weight: 600;
+}
+
+.dv-acceso-icono {
+  font-size: 20px;
+}
+.dv-companeros-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.dv-companeros-titulo {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.dv-companeros-vacio {
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+  margin: 0 0 12px 0;
+}
+
+.dv-companero-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dv-companero-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dv-companero-nombre {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.dv-companero-pasaporte {
+  font-size: 11px;
+  color: #999;
+}
+
+.dv-companero-badge {
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: #f0f0f0;
+  color: #888;
+  white-space: nowrap;
+}
+
+.dv-companero-badge-si {
+  background: #fff0ed;
+  color: #d9534f;
+}
+
+.dv-companero-badge-no {
+  background: #eafaf0;
+  color: #2ecc71;
+}
+
+.dv-companero-eliminar {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.dv-companero-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.dv-companero-input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+}
+
+.dv-companero-agregar {
+  padding: 11px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #6a3de8, #4fc3f7);
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+}
