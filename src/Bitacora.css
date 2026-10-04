@@ -1,304 +1,1553 @@
+/* =========================================================
+   MOVIXA — BITÁCORA CREATIVA
+   ========================================================= */
+
 .bit {
+  --morado: #6a3de8;
+  --morado-oscuro: #4f2ba8;
+  --lila: #9b7bea;
+  --celeste: #4fc3f7;
+  --azul: #5b8def;
+  --rosa: #f4a7c1;
+  --crema: #fffdf8;
+  --papel: #fffefb;
+  --texto: #302b3d;
+  --texto-suave: #817b8e;
+  --borde: #ebe6f2;
+
   min-height: 100vh;
-  background: #f5f6fa;
-  font-family: system-ui, sans-serif;
-  padding: 20px;
   box-sizing: border-box;
+  padding: 22px;
+  background:
+    radial-gradient(circle at 10% 5%, rgba(155, 123, 234, 0.12), transparent 25%),
+    radial-gradient(circle at 90% 15%, rgba(79, 195, 247, 0.12), transparent 25%),
+    #f5f3fa;
+
+  color: var(--texto);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  overflow-x: hidden;
 }
 
+/* =========================================================
+   HEADER
+   ========================================================= */
+
 .bit-header {
+  max-width: 900px;
+  margin: 0 auto 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .bit-volver {
-  background: none;
   border: none;
-  color: #6a3de8;
-  font-size: 14px;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--morado);
+  padding: 9px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
-  font-weight: 600;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.bit-volver:hover {
+  transform: translateX(-3px);
+  background: white;
+  box-shadow: 0 5px 16px rgba(70, 45, 120, 0.1);
 }
 
 .bit-logo {
-  color: #6a3de8;
+  color: var(--morado);
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
-.bit-hero {
-  background: linear-gradient(135deg, #2DD4BF 0%, #4fc3f7 100%);
-  border-radius: 22px;
-  padding: 22px 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 10px 26px rgba(45, 212, 191, 0.3);
-  position: relative;
-  overflow: hidden;
-}
+/* =========================================================
+   CARGANDO
+   ========================================================= */
 
-.bit-hero::after {
-  content: '🗺️';
-  position: absolute;
-  right: -6px;
-  bottom: -18px;
-  font-size: 80px;
-  opacity: 0.18;
-}
-
-.bit-titulo {
-  color: white;
-  margin: 0 0 2px 0;
-  position: relative;
-  z-index: 1;
-}
-
-.bit-subtitulo {
-  color: rgba(255,255,255,0.9);
-  font-size: 13px;
-  margin: 0;
-  position: relative;
-  z-index: 1;
-}
-
-.bit-sin-info {
-  font-size: 13px;
-  color: #888;
-  margin: 16px 0;
-}
-
-.bit-boton-crear {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #6a3de8, #4fc3f7);
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.bit-progreso-card {
-  background: white;
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-}
-
-.bit-progreso-texto {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 8px;
-}
-
-.bit-progreso-porcentaje {
-  font-weight: bold;
-  color: #2DD4BF;
-}
-
-.bit-barra-fondo {
-  background: #eee;
-  border-radius: 10px;
-  height: 8px;
-  overflow: hidden;
-}
-
-.bit-barra-relleno {
-  background: linear-gradient(90deg, #2DD4BF, #4fc3f7);
-  height: 100%;
-  border-radius: 10px;
-  transition: width 0.3s;
-}
-
-.bit-boton-nueva {
-  width: 100%;
-  padding: 15px;
-  border-radius: 14px;
-  border: 2px dashed #2DD4BF;
-  background: #EFFCFA;
-  color: #0F9C8D;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
-.bit-form {
-  background: white;
-  border-radius: 18px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-}
-
-.bit-form-label {
-  display: block;
-  font-size: 12px;
-  color: #666;
-  font-weight: 600;
-  margin: 12px 0 4px 0;
-}
-
-.bit-form-label:first-of-type {
-  margin-top: 0;
-}
-
-.bit-input, .bit-textarea {
-  width: 100%;
-  padding: 11px 12px;
-  border-radius: 10px;
-  border: 2px solid #eee;
-  font-size: 14px;
-  box-sizing: border-box;
-  color: #2b2b2b;
-  font-family: inherit;
-}
-
-.bit-input:focus, .bit-textarea:focus {
-  outline: none;
-  border-color: #2DD4BF;
-}
-
-.bit-textarea {
-  min-height: 60px;
-  resize: vertical;
-}
-
-.bit-form-botones {
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-.bit-boton-cancelar, .bit-boton-guardar {
-  flex: 1;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.bit-boton-cancelar {
-  background: #f0f0f0;
-  color: #666;
-}
-
-.bit-boton-guardar {
-  background: linear-gradient(135deg, #2DD4BF, #4fc3f7);
-  color: white;
-}
-
-.bit-dia {
-  margin-bottom: 18px;
-}
-
-.bit-dia-titulo {
-  color: #444;
-  font-size: 14px;
-  margin: 0 0 10px 0;
-  text-transform: capitalize;
-}
-
-.bit-lista {
+.bit-cargando {
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.bit-item {
-  background: white;
-  border-radius: 14px;
-  padding: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  border-left: 4px solid #2DD4BF;
-}
-
-.bit-item-hecho {
-  opacity: 0.55;
-  border-left-color: #ccc;
-}
-
-.bit-item-hecho .bit-item-titulo {
-  text-decoration: line-through;
-}
-
-.bit-item-check {
-  display: flex;
-  gap: 10px;
-  cursor: pointer;
-  flex: 1;
-}
-
-.bit-checkbox {
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  border: 2px solid #ccc;
+.bit-cargando-avion {
+  width: 75px;
+  height: 75px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  font-size: 12px;
-  color: white;
-  margin-top: 2px;
+  border-radius: 24px;
+  background: linear-gradient(
+    135deg,
+    #8c6ce8,
+    #4fc3f7
+  );
+  font-size: 34px;
+  box-shadow:
+    0 15px 35px rgba(106, 61, 232, 0.25);
+  animation: bitAvionCargando 1.5s ease-in-out infinite;
 }
 
-.bit-checkbox-marcado {
-  background: #2DD4BF;
-  border-color: #2DD4BF;
+.bit-cargando h2 {
+  margin: 22px 0 5px;
+  font-size: 20px;
 }
 
-.bit-item-info {
+.bit-cargando p {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 13px;
+}
+
+@keyframes bitAvionCargando {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateY(-9px) rotate(3deg);
+  }
+}
+
+/* =========================================================
+   SIN VIAJE
+   ========================================================= */
+
+.bit-sin-viaje {
+  max-width: 650px;
+  min-height: 65vh;
+  margin: auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.bit-item-hora {
-  font-size: 11px;
-  color: #0F9C8D;
-  font-weight: bold;
+.bit-sin-viaje-icon {
+  width: 110px;
+  height: 110px;
+  border-radius: 34px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(106, 61, 232, 0.15),
+      rgba(79, 195, 247, 0.18)
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 54px;
+  margin-bottom: 22px;
 }
 
-.bit-item-titulo {
+.bit-sin-viaje h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+}
+
+.bit-sin-viaje p {
+  max-width: 460px;
+  line-height: 1.7;
+  color: var(--texto-suave);
   font-size: 14px;
-  color: #333;
-  font-weight: 600;
 }
 
-.bit-item-nota {
-  font-size: 11px;
-  color: #999;
-  margin-top: 2px;
-}
-
-.bit-item-eliminar {
-  background: none;
+.bit-boton-principal {
+  margin-top: 15px;
+  padding: 14px 22px;
   border: none;
-  color: #ccc;
-  font-size: 18px;
+  border-radius: 15px;
+  color: white;
+  font-weight: 800;
   cursor: pointer;
-  line-height: 1;
+  background: linear-gradient(
+    135deg,
+    var(--morado),
+    var(--celeste)
+  );
+  box-shadow:
+    0 12px 28px rgba(106, 61, 232, 0.25);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.bit-boton-ver-viaje {
+.bit-boton-principal:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 17px 32px rgba(106, 61, 232, 0.3);
+}
+
+/* =========================================================
+   PORTADA
+   ========================================================= */
+
+.bit-portada {
+  max-width: 900px;
+  min-height: 315px;
+  margin: 0 auto 25px;
+
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7050d9 0%,
+      #7e62dc 38%,
+      #55bde9 100%
+    );
+
+  box-shadow:
+    0 20px 45px rgba(83, 61, 150, 0.25);
+
+  isolation: isolate;
+
+  animation: bitEntrada 0.6s ease both;
+}
+
+/* papel decorativo */
+
+.bit-portada::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.bit-portada::after {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  right: -90px;
+  top: -100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  z-index: -1;
+}
+
+.bit-portada-decoracion {
+  position: absolute;
+  right: 60px;
+  bottom: 38px;
+  font-size: 75px;
+  opacity: 0.28;
+  transform: rotate(-12deg);
+  animation: bitAvion 4s ease-in-out infinite;
+}
+
+.bit-portada-contenido {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  max-width: 570px;
+  text-align: center;
+  color: white;
+  position: relative;
+  z-index: 2;
+  padding: 35px;
+}
+
+.bit-portada-etiqueta {
+  display: inline-block;
+  padding: 7px 13px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 900;
+}
+
+.bit-portada h1 {
+  margin: 17px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 7vw, 70px);
+  line-height: 1;
+  font-weight: 500;
+}
+
+.bit-portada h2 {
+  margin: 12px 0 12px;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 800;
+}
+
+.bit-portada p {
+  max-width: 390px;
+  margin: auto;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 14px;
+}
+
+.bit-portada-linea {
+  margin-top: 20px;
+  letter-spacing: 8px;
+  opacity: 0.8;
+}
+
+@keyframes bitAvion {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-12deg);
+  }
+
+  50% {
+    transform: translate(-12px, -9px) rotate(-7deg);
+  }
+}
+
+/* =========================================================
+   ENCABEZADOS DE SECCIÓN
+   ========================================================= */
+
+.bit-seccion-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bit-seccion-heading > span {
+  width: 43px;
+  height: 43px;
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   background: white;
-  color: #6a3de8;
-  font-weight: 600;
-  font-size: 13px;
+  box-shadow: 0 6px 18px rgba(60, 40, 100, 0.08);
+
+  font-size: 21px;
+}
+
+.bit-seccion-heading h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 850;
+}
+
+.bit-seccion-heading p {
+  margin: 3px 0 0;
+  color: var(--texto-suave);
+  font-size: 12px;
+}
+
+/* =========================================================
+   CREAR
+   ========================================================= */
+
+.bit-crear {
+  max-width: 900px;
+  margin: 0 auto 30px;
+}
+
+.bit-crear-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+}
+
+.bit-crear-card {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 150px;
+  padding: 20px;
+
+  border: none;
+  border-radius: 21px;
+
+  text-align: left;
   cursor: pointer;
-  margin-top: 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.bit-crear-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 30px rgba(50, 35, 80, 0.15);
+}
+
+.bit-crear-card::after {
+  position: absolute;
+  right: -14px;
+  top: -17px;
+  font-size: 85px;
+  opacity: 0.13;
+}
+
+.bit-crear-escribir {
+  background: linear-gradient(
+    145deg,
+    #eee7ff,
+    #f8f5ff
+  );
+  color: #5534b4;
+}
+
+.bit-crear-escribir::after {
+  content: "✍️";
+}
+
+.bit-crear-dibujar {
+  background: linear-gradient(
+    145deg,
+    #e5f7ff,
+    #f4fbff
+  );
+  color: #1979a3;
+}
+
+.bit-crear-dibujar::after {
+  content: "🎨";
+}
+
+.bit-crear-recuerdo {
+  background: linear-gradient(
+    145deg,
+    #fff0f5,
+    #fff8fb
+  );
+  color: #b65076;
+}
+
+.bit-crear-recuerdo::after {
+  content: "🎟️";
+}
+
+.bit-crear-icon {
+  position: absolute;
+  top: 18px;
+  left: 19px;
+  font-size: 28px;
+}
+
+.bit-crear-card strong {
+  position: relative;
+  z-index: 2;
+  font-size: 17px;
+}
+
+.bit-crear-card small {
+  position: relative;
+  z-index: 2;
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: 0.72;
+}
+
+/* =========================================================
+   HISTORIAS
+   ========================================================= */
+
+.bit-historias {
+  max-width: 900px;
+  margin: 0 auto 30px;
+}
+
+.bit-libro {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* cada página */
+
+.bit-pagina {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 31px,
+      rgba(106, 61, 232, 0.035) 32px
+    ),
+    var(--papel);
+
+  border-radius: 19px;
+
+  box-shadow:
+    0 5px 18px rgba(55, 40, 85, 0.08);
+
+  border: 1px solid rgba(100, 80, 140, 0.07);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.bit-pagina:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 25px rgba(55, 40, 85, 0.11);
+}
+
+.bit-pagina-cabecera {
+  min-height: 92px;
+  padding: 15px 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  cursor: pointer;
+}
+
+/* fecha tipo calendario */
+
+.bit-pagina-fecha {
+  width: 53px;
+  height: 60px;
+  flex-shrink: 0;
+
+  border-radius: 13px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+    145deg,
+    #7353d7,
+    #9a80e8
+  );
+
+  color: white;
+
+  box-shadow:
+    0 7px 15px rgba(106, 61, 232, 0.18);
+}
+
+.bit-pagina-fecha span {
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.bit-pagina-fecha small {
+  margin-top: 3px;
+  font-size: 9px;
+  opacity: 0.85;
+}
+
+.bit-pagina-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.bit-pagina-dia {
+  color: var(--morado);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.bit-pagina-info h3 {
+  margin: 3px 0;
+  font-size: 16px;
+  color: var(--texto);
+}
+
+.bit-pagina-info p {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bit-pagina-emocion {
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f7f2ff;
+
+  font-size: 20px;
+}
+
+.bit-pagina-flecha {
+  color: #aaa;
+  font-size: 17px;
+}
+
+/* contenido */
+
+.bit-pagina-contenido {
+  padding: 0 22px 22px 22px;
+  border-top: 1px dashed #e5deef;
+
+  animation: bitDesplegar 0.3s ease both;
+}
+
+@keyframes bitDesplegar {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bit-texto-recuerdo {
+  padding: 22px 10px 15px;
+
+  white-space: pre-wrap;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  color: #4b4356;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+/* =========================================================
+   COMO ME SENTÍ
+   ========================================================= */
+
+.bit-como-me-senti {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 5px 0 17px;
+  padding: 9px 13px;
+
+  background: #f7f3ff;
+  border-radius: 13px;
+}
+
+.bit-como-me-senti > span {
+  font-size: 24px;
+}
+
+.bit-como-me-senti small {
+  display: block;
+  color: var(--texto-suave);
+  font-size: 9px;
+}
+
+.bit-como-me-senti strong {
+  display: block;
+  color: var(--morado);
+  font-size: 12px;
+}
+
+/* =========================================================
+   RECUERDOS
+   ========================================================= */
+
+.bit-recuerdos {
+  margin-top: 5px;
+}
+
+.bit-recuerdos h4 {
+  margin: 0 0 10px;
+  color: var(--texto);
+  font-size: 12px;
+}
+
+.bit-recuerdos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+}
+
+.bit-recuerdo {
+  padding: 13px;
+  border-radius: 14px;
+  background: #faf8fd;
+  border: 1px solid #eee8f6;
+}
+
+.bit-recuerdo > span {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 22px;
+}
+
+.bit-recuerdo strong {
+  font-size: 12px;
+  color: #4a4354;
+}
+
+.bit-recuerdo p {
+  margin: 5px 0 0;
+  color: var(--texto-suave);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   ACCIONES DE PÁGINA
+   ========================================================= */
+
+.bit-pagina-acciones {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  margin-top: 18px;
+  padding-top: 15px;
+
+  border-top: 1px solid #eee9f4;
+}
+
+.bit-pagina-acciones button {
+  border: none;
+  background: #f5f1fb;
+  color: var(--morado);
+  padding: 8px 11px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.bit-pagina-acciones button:hover {
+  transform: translateY(-2px);
+  background: #ece4fb;
+}
+
+.bit-pagina-acciones .bit-eliminar {
+  margin-left: auto;
+  color: #c75d68;
+  background: #fff2f3;
+}
+
+/* =========================================================
+   ESTADO VACÍO
+   ========================================================= */
+
+.bit-vacio {
+  padding: 45px 25px;
+  border-radius: 23px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px dashed #d9cfee;
+  text-align: center;
+}
+
+.bit-vacio > div {
+  font-size: 43px;
+  margin-bottom: 8px;
+}
+
+.bit-vacio h3 {
+  margin: 0 0 7px;
+  font-size: 17px;
+}
+
+.bit-vacio p {
+  max-width: 400px;
+  margin: 0 auto 18px;
+  color: var(--texto-suave);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.bit-vacio button {
+  border: none;
+  background: var(--morado);
+  color: white;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* =========================================================
+   GALERÍA DE DIBUJOS
+   ========================================================= */
+
+.bit-galeria {
+  max-width: 900px;
+  margin: 0 auto 35px;
+}
+
+.bit-galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.bit-dibujo-card {
+  position: relative;
+  padding: 10px;
+  background: white;
+
+  box-shadow:
+    0 8px 20px rgba(45, 35, 70, 0.1);
+
+  transform: rotate(-1deg);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.bit-dibujo-card:nth-child(2n) {
+  transform: rotate(1.3deg);
+}
+
+.bit-dibujo-card:nth-child(3n) {
+  transform: rotate(-2deg);
+}
+
+.bit-dibujo-card:hover {
+  transform:
+    translateY(-5px)
+    rotate(0deg);
+
+  box-shadow:
+    0 15px 30px rgba(45, 35, 70, 0.15);
+}
+
+.bit-dibujo-card img {
+  width: 100%;
+  aspect-ratio: 1 / 0.78;
+  object-fit: cover;
+  display: block;
+  background: #fffdf8;
+}
+
+.bit-dibujo-card span {
+  display: block;
+  padding: 8px 3px 2px;
+
+  font-family:
+    "Comic Sans MS",
+    "Segoe Print",
+    cursive;
+
+  color: #777;
+  font-size: 10px;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.bit-modal-fondo {
+  position: fixed;
+  inset: 0;
+
+  z-index: 999;
+
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(33, 26, 49, 0.56);
+
+  backdrop-filter: blur(8px);
+
+  animation: bitModalFondo 0.25s ease both;
+}
+
+@keyframes bitModalFondo {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.bit-modal {
+  position: relative;
+
+  width: min(540px, 100%);
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  padding: 29px;
+
+  border-radius: 27px;
+
+  background:
+    linear-gradient(
+      rgba(255, 255, 255, 0.96),
+      rgba(255, 253, 248, 0.98)
+    );
+
+  box-shadow:
+    0 25px 70px rgba(28, 19, 50, 0.3);
+
+  animation: bitModalEntrar 0.35s ease both;
+}
+
+@keyframes bitModalEntrar {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bit-modal-cerrar {
+  position: absolute;
+  top: 15px;
+  right: 17px;
+
+  width: 32px;
+  height: 32px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f2eef7;
+  color: #777;
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.bit-modal-icon {
+  display: block;
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+
+.bit-modal h2 {
+  margin: 0;
+  color: var(--texto);
+  font-size: 24px;
+}
+
+.bit-modal > p {
+  margin: 7px 0 20px;
+  color: var(--texto-suave);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.bit-modal label {
+  display: block;
+  margin: 13px 0 5px;
+
+  color: #625a6d;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.bit-modal input,
+.bit-modal textarea {
+  width: 100%;
+  box-sizing: border-box;
+
+  border: 1.5px solid #e4ddec;
+  border-radius: 12px;
+
+  padding: 12px;
+
+  background: white;
+  color: var(--texto);
+
+  font-family: inherit;
+  font-size: 13px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.bit-modal input:focus,
+.bit-modal textarea:focus {
+  outline: none;
+  border-color: var(--lila);
+  box-shadow:
+    0 0 0 4px rgba(155, 123, 234, 0.1);
+}
+
+.bit-modal textarea {
+  min-height: 145px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   EMOCIONES
+   ========================================================= */
+
+.bit-emociones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+
+.bit-emociones button {
+  min-height: 66px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  border: 1.5px solid #eee8f4;
+  border-radius: 12px;
+
+  background: white;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.bit-emociones button:hover {
+  transform: translateY(-2px);
+}
+
+.bit-emociones button > span {
+  font-size: 21px;
+}
+
+.bit-emociones button small {
+  color: #777;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.bit-emociones .bit-emocion-activa {
+  border-color: var(--morado);
+  background: #f3efff;
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   TIPOS DE RECUERDO
+   ========================================================= */
+
+.bit-recuerdos-tipos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+
+.bit-recuerdos-tipos button {
+  min-height: 65px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  border: 1.5px solid #eee8f4;
+  border-radius: 12px;
+
+  background: white;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.bit-recuerdos-tipos button:hover {
+  transform: translateY(-2px);
+}
+
+.bit-recuerdos-tipos button span {
+  font-size: 20px;
+}
+
+.bit-recuerdos-tipos button small {
+  color: #777;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.bit-recuerdos-tipos .bit-recuerdo-tipo-activo {
+  border-color: #d38aa5;
+  background: #fff1f6;
+}
+
+/* =========================================================
+   BOTÓN MODAL
+   ========================================================= */
+
+.bit-modal-guardar {
+  width: 100%;
+
+  margin-top: 17px;
+
+  padding: 13px 16px;
+
+  border: none;
+  border-radius: 13px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--morado),
+      var(--celeste)
+    );
+
+  font-size: 13px;
+  font-weight: 850;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 20px rgba(106, 61, 232, 0.22);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.bit-modal-guardar:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 25px rgba(106, 61, 232, 0.28);
+}
+
+/* =========================================================
+   DIBUJAR
+   ========================================================= */
+
+.bit-modal-dibujo {
+  width: min(850px, 100%);
+}
+
+.bit-dibujo-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.bit-dibujo-titulo > span {
+  font-size: 35px;
+}
+
+.bit-dibujo-titulo h2 {
+  margin: 0;
+}
+
+.bit-dibujo-titulo p {
+  margin: 3px 0 0;
+  color: var(--texto-suave);
+  font-size: 11px;
+}
+
+.bit-canvas {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  background: #fffdf8;
+
+  border: 2px dashed #d9cfea;
+  border-radius: 17px;
+
+  cursor: crosshair;
+
+  touch-action: none;
+}
+
+.bit-dibujo-controles {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 13px;
+}
+
+.bit-dibujo-controles > button:first-child {
+  padding: 12px 16px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #f0ebf7;
+  color: #665c70;
+
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bit-dibujo-controles .bit-modal-guardar {
+  flex: 1;
+  margin-top: 0;
+}
+
+/* =========================================================
+   FINAL
+   ========================================================= */
+
+.bit-final {
+  max-width: 700px;
+  margin: 45px auto 20px;
+
+  padding: 38px 25px;
+
+  border-radius: 28px;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(106, 61, 232, 0.1),
+      rgba(79, 195, 247, 0.12)
+    );
+
+  border: 1px solid rgba(106, 61, 232, 0.08);
+}
+
+.bit-final-avion {
+  font-size: 34px;
+  margin-bottom: 8px;
+  animation: bitAvion 3s ease-in-out infinite;
+}
+
+.bit-final h2 {
+  margin: 0 0 7px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.bit-final p {
+  max-width: 420px;
+  margin: auto;
+
+  color: var(--texto-suave);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.bit-final button {
+  margin-top: 17px;
+
+  border: none;
+  background: white;
+
+  color: var(--morado);
+
+  padding: 10px 15px;
+  border-radius: 12px;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 5px 15px rgba(50, 35, 80, 0.08);
+}
+
+/* =========================================================
+   ANIMACIONES GENERALES
+   ========================================================= */
+
+@keyframes bitEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bit-crear,
+.bit-historias,
+.bit-galeria,
+.bit-final {
+  animation: bitEntrada 0.55s ease both;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .bit {
+    padding: 15px;
+  }
+
+  .bit-portada {
+    min-height: 290px;
+    border-radius: 24px;
+  }
+
+  .bit-portada-contenido {
+    padding: 25px;
+  }
+
+  .bit-portada-decoracion {
+    right: 20px;
+    bottom: 20px;
+    font-size: 58px;
+  }
+
+  .bit-crear-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bit-crear-card {
+    min-height: 105px;
+  }
+
+  .bit-galeria-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bit-pagina-cabecera {
+    padding: 13px;
+    gap: 10px;
+  }
+
+  .bit-pagina-fecha {
+    width: 47px;
+    height: 55px;
+  }
+
+  .bit-pagina-emocion {
+    width: 33px;
+    height: 33px;
+  }
+
+  .bit-pagina-contenido {
+    padding: 0 15px 17px;
+  }
+
+  .bit-texto-recuerdo {
+    font-size: 15px;
+  }
+
+  .bit-modal {
+    padding: 24px 18px;
+    border-radius: 23px;
+  }
+
+  .bit-emociones {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .bit-recuerdos-tipos {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 470px) {
+
+  .bit {
+    padding: 11px;
+  }
+
+  .bit-header {
+    margin-bottom: 13px;
+  }
+
+  .bit-logo {
+    font-size: 15px;
+  }
+
+  .bit-volver {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .bit-portada {
+    min-height: 260px;
+  }
+
+  .bit-portada h1 {
+    font-size: 43px;
+  }
+
+  .bit-portada h2 {
+    font-size: 20px;
+  }
+
+  .bit-portada p {
+    font-size: 12px;
+  }
+
+  .bit-seccion-heading h2 {
+    font-size: 17px;
+  }
+
+  .bit-seccion-heading p {
+    font-size: 10px;
+  }
+
+  .bit-pagina-info h3 {
+    font-size: 14px;
+  }
+
+  .bit-pagina-dia {
+    font-size: 8px;
+  }
+
+  .bit-pagina-flecha {
+    display: none;
+  }
+
+  .bit-recuerdos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bit-emociones {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .bit-emociones button {
+    min-height: 58px;
+  }
+
+  .bit-emociones button > span {
+    font-size: 18px;
+  }
+
+  .bit-recuerdos-tipos {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .bit-recuerdos-tipos button {
+    min-height: 58px;
+  }
+
+  .bit-recuerdos-tipos button span {
+    font-size: 18px;
+  }
+
+  .bit-pagina-acciones button {
+    flex: 1;
+  }
+
+  .bit-pagina-acciones .bit-eliminar {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+
+  .bit-galeria-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+
+  .bit-final {
+    padding: 30px 18px;
+  }
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.bit-modal::-webkit-scrollbar {
+  width: 7px;
+}
+
+.bit-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bit-modal::-webkit-scrollbar-thumb {
+  background: #d7cfea;
+  border-radius: 10px;
+}
+
+/* =========================================================
+   ACCESIBILIDAD
+   ========================================================= */
+
+.bit button:focus-visible,
+.bit input:focus-visible,
+.bit textarea:focus-visible {
+  outline: 3px solid rgba(79, 195, 247, 0.4);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bit *,
+  .bit *::before,
+  .bit *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

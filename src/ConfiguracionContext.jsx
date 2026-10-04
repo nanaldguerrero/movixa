@@ -1,92 +1,100 @@
-import { createContext, useContext, useState, useEffect } from 'react'
-import { supabase } from './supabaseClient'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 const ConfiguracionContext = createContext(null)
 
 export function ConfiguracionProvider({ children }) {
-  const [tema, setTemaState] = useState('claro')
-  const [tamañoLetra, setTamañoLetraState] = useState('normal')
-  const [tipoLetra, setTipoLetraState] = useState('normal')
-  const [idioma, setIdiomaState] = useState('es')
-  const [companero, setCompaneroState] = useState('perro')
+  const [tema, setTema] = useState(
+    localStorage.getItem('movixa-tema') || 'claro'
+  )
 
-  const [userId, setUserId] = useState(null)
-  const [cargado, setCargado] = useState(false)
+  const [tamañoLetra, setTamañoLetra] = useState(
+    localStorage.getItem('movixa-tamaño') || 'normal'
+  )
 
+  const [tipoLetra, setTipoLetra] = useState(
+    localStorage.getItem('movixa-tipo-letra') || 'normal'
+  )
+
+  const [idioma, setIdioma] = useState(
+    localStorage.getItem('movixa-idioma') || 'es'
+  )
+
+  const [companero, setCompanero] = useState(
+    localStorage.getItem('movixa-companero') || 'ninguno'
+  )
+
+  // Guardar tema
   useEffect(() => {
-    const cargar = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        setCargado(true)
-        return
-      }
-      setUserId(user.id)
+    localStorage.setItem('movixa-tema', tema)
+  }, [tema])
 
-      const { data } = await supabase
-        .from('perfiles')
-        .select('tema, tamano_letra, tipo_letra, idioma_app, companero')
-        .eq('id', user.id)
-        .single()
+  // Guardar tamaño de letra
+  useEffect(() => {
+    localStorage.setItem('movixa-tamaño', tamañoLetra)
+  }, [tamañoLetra])
 
-      if (data) {
-        if (data.tema) setTemaState(data.tema)
-        if (data.tamano_letra) setTamañoLetraState(data.tamano_letra)
-        if (data.tipo_letra) setTipoLetraState(data.tipo_letra)
-        if (data.idioma_app) setIdiomaState(data.idioma_app)
-        if (data.companero) setCompaneroState(data.companero)
-      }
-      setCargado(true)
-    }
-    cargar()
-  }, [])
+  // Guardar tipo de letra
+  useEffect(() => {
+    localStorage.setItem('movixa-tipo-letra', tipoLetra)
+  }, [tipoLetra])
 
-  const guardarCampo = async (campo, valor) => {
-    if (!userId) return
-    await supabase.from('perfiles').upsert({ id: userId, [campo]: valor })
-  }
+  // Guardar idioma
+  useEffect(() => {
+    localStorage.setItem('movixa-idioma', idioma)
+  }, [idioma])
 
-  const setTema = (valor) => {
-    setTemaState(valor)
-    guardarCampo('tema', valor)
-  }
+  // Guardar compañero
+  useEffect(() => {
+    localStorage.setItem('movixa-companero', companero)
+  }, [companero])
 
-  const setTamañoLetra = (valor) => {
-    setTamañoLetraState(valor)
-    guardarCampo('tamano_letra', valor)
-  }
+  // Aplicar configuraciones a toda la aplicación
+  useEffect(() => {
+    const html = document.documentElement
+    const body = document.body
 
-  const setTipoLetra = (valor) => {
-    setTipoLetraState(valor)
-    guardarCampo('tipo_letra', valor)
-  }
+    html.setAttribute('data-tema', tema)
+    body.setAttribute('data-tema', tema)
 
-  const setIdioma = (valor) => {
-    setIdiomaState(valor)
-    guardarCampo('idioma_app', valor)
-  }
+    html.setAttribute('data-tamaño', tamañoLetra)
+    body.setAttribute('data-tamaño', tamañoLetra)
 
-  const setCompanero = (valor) => {
-    setCompaneroState(valor)
-    guardarCampo('companero', valor)
-  }
-
-  const valor = {
-    tema, setTema,
-    tamañoLetra, setTamañoLetra,
-    tipoLetra, setTipoLetra,
-    idioma, setIdioma,
-    companero, setCompanero,
-  }
-
-  if (!cargado) return null
+    html.setAttribute('data-tipo-letra', tipoLetra)
+    body.setAttribute('data-tipo-letra', tipoLetra)
+  }, [tema, tamañoLetra, tipoLetra])
 
   return (
-    <ConfiguracionContext.Provider value={valor}>
+    <ConfiguracionContext.Provider
+      value={{
+        tema,
+        setTema,
+
+        tamañoLetra,
+        setTamañoLetra,
+
+        tipoLetra,
+        setTipoLetra,
+
+        idioma,
+        setIdioma,
+
+        companero,
+        setCompanero,
+      }}
+    >
       {children}
     </ConfiguracionContext.Provider>
   )
 }
 
 export function useConfiguracion() {
-  return useContext(ConfiguracionContext)
+  const context = useContext(ConfiguracionContext)
+
+  if (!context) {
+    throw new Error(
+      'useConfiguracion debe utilizarse dentro de ConfiguracionProvider'
+    )
+  }
+
+  return context
 }

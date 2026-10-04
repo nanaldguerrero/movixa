@@ -34,32 +34,23 @@ function Registro({ irALogin, irADashboard }) {
     const { data, error: errorRegistro } = await supabase.auth.signUp({
       email: correo,
       password: password,
+      options: {
+        data: {
+          nombre_completo: nombre,
+          nombre_usuario: usuario,
+          fecha_nacimiento: año && mes && dia ? `${año}-${mes}-${dia}` : null,
+          genero: genero,
+        },
+      },
     })
 
+    setCargando(false)
+
     if (errorRegistro) {
-      setCargando(false)
       setError(errorRegistro.message)
       return
     }
 
-    if (data.user) {
-      const { error: errorPerfil } = await supabase.from('perfiles').insert({
-        id: data.user.id,
-        nombre_completo: nombre,
-        nombre_usuario: usuario,
-        correo: correo,
-        fecha_nacimiento: año && mes && dia ? `${año}-${mes}-${dia}` : null,
-        genero: genero,
-      })
-
-      if (errorPerfil) {
-        setCargando(false)
-        setError('Cuenta creada, pero hubo un problema guardando el perfil: ' + errorPerfil.message)
-        return
-      }
-    }
-
-    setCargando(false)
     irADashboard()
   }
 

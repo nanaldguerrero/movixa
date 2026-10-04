@@ -1,0 +1,1136 @@
+/* =========================================================
+   MOVIXA — LIBRO DE VIAJE
+   Libro / scrapbook / pasaporte de recuerdos
+   ========================================================= */
+
+.lv {
+  --lv-purple: #7657d9;
+  --lv-purple-dark: #4f3b9a;
+  --lv-purple-soft: #eee9ff;
+
+  --lv-blue: #5ca9dc;
+  --lv-blue-soft: #e1f5ff;
+
+  --lv-pink: #df76a8;
+  --lv-pink-soft: #ffe8f2;
+
+  --lv-yellow: #f4bd62;
+  --lv-yellow-soft: #fff4d9;
+
+  --lv-ink: #302b43;
+  --lv-text: #5c5868;
+  --lv-muted: #8e8998;
+
+  --lv-paper: #fffdf8;
+  --lv-white: #ffffff;
+  --lv-border: #e7e0ef;
+
+  min-height: 100vh;
+  padding: 28px 22px 70px;
+
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(118, 87, 217, 0.08),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(92, 169, 220, 0.08),
+      transparent 25%
+    ),
+    #eeeef3;
+
+  color: var(--lv-ink);
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.lv-header {
+  width: min(900px, 100%);
+  margin: 0 auto 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.lv-volver {
+  border: 0;
+  background: rgba(255, 255, 255, 0.7);
+
+  color: var(--lv-purple);
+
+  padding: 11px 16px;
+  border-radius: 14px;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 6px 18px rgba(55, 43, 90, 0.07);
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.lv-volver:hover {
+  transform: translateX(-3px);
+  background: white;
+
+  box-shadow:
+    0 10px 24px rgba(55, 43, 90, 0.12);
+}
+
+.lv-boton-imprimir {
+  border: 0;
+
+  padding: 12px 19px;
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--lv-purple),
+      var(--lv-blue)
+    );
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 25px rgba(118, 87, 217, 0.25);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.lv-boton-imprimir:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 15px 30px rgba(118, 87, 217, 0.3);
+}
+
+
+/* =========================================================
+   PÁGINAS
+   ========================================================= */
+
+.lv-pagina {
+  position: relative;
+
+  width: min(720px, 100%);
+  min-height: 680px;
+
+  margin: 0 auto 32px;
+  padding: 55px;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      rgba(255, 255, 255, 0.88),
+      rgba(255, 255, 255, 0.88)
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(118, 87, 217, 0.025) 29px
+    );
+
+  border-radius: 5px;
+
+  box-shadow:
+    0 18px 45px rgba(44, 36, 68, 0.14),
+    0 3px 8px rgba(44, 36, 68, 0.06);
+
+  overflow: hidden;
+}
+
+
+/* pequeño borde interior */
+
+.lv-pagina::before {
+  content: "";
+
+  position: absolute;
+  inset: 15px;
+
+  border: 1px solid rgba(118, 87, 217, 0.1);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   PORTADA
+   ========================================================= */
+
+.lv-portada {
+  min-height: 760px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 45px;
+
+  color: white;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.22),
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(255, 255, 255, 0.14),
+      transparent 25%
+    ),
+    linear-gradient(
+      145deg,
+      #6346ca 0%,
+      #7657d9 38%,
+      #5ca9dc 100%
+    );
+}
+
+
+/* decoración */
+
+.lv-portada::after {
+  content: "";
+
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  right: -110px;
+  top: -100px;
+
+  border-radius: 50%;
+
+  border: 35px solid rgba(255, 255, 255, 0.08);
+
+  pointer-events: none;
+}
+
+
+.lv-portada-marco {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  min-height: 600px;
+
+  padding: 65px 35px;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.55);
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+
+/* segunda línea interior */
+
+.lv-portada-marco::before {
+  content: "";
+
+  position: absolute;
+  inset: 13px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.18);
+
+  pointer-events: none;
+}
+
+
+/* avión */
+
+.lv-portada-avion {
+  position: relative;
+  z-index: 2;
+
+  width: 75px;
+  height: 75px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 30px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.14);
+
+  font-size: 36px;
+
+  box-shadow:
+    0 10px 30px rgba(25, 20, 65, 0.15);
+}
+
+
+/* título */
+
+.lv-portada-titulo {
+  position: relative;
+  z-index: 2;
+
+  margin: 0;
+
+  color: white;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(40px, 7vw, 62px);
+
+  font-weight: 700;
+
+  line-height: 1.05;
+
+  letter-spacing: -1.5px;
+
+  text-shadow:
+    0 4px 15px rgba(35, 25, 70, 0.15);
+}
+
+
+/* motivo */
+
+.lv-portada-motivo {
+  position: relative;
+  z-index: 2;
+
+  margin: 24px 0 7px;
+
+  padding: 8px 17px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.14);
+
+  color: rgba(255, 255, 255, 0.94);
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-transform: capitalize;
+}
+
+
+/* fechas */
+
+.lv-portada-fechas {
+  position: relative;
+  z-index: 2;
+
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 13px;
+
+  letter-spacing: 1px;
+}
+
+
+/* marca */
+
+.lv-portada-marca {
+  position: relative;
+  z-index: 2;
+
+  margin-top: 55px;
+
+  font-size: 12px;
+  font-weight: 900;
+
+  letter-spacing: 5px;
+
+  color: rgba(255, 255, 255, 0.85);
+}
+
+
+/* =========================================================
+   PÁGINA VACÍA
+   ========================================================= */
+
+.lv-vacio {
+  min-height: 400px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  color: var(--lv-muted);
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.lv-vacio p {
+  max-width: 400px;
+}
+
+
+/* =========================================================
+   ENTRADA DEL DIARIO
+   ========================================================= */
+
+.lv-entrada {
+  padding: 48px 55px;
+}
+
+
+/* pequeño número de recuerdo */
+
+.lv-entrada::after {
+  content: "MOVIXA • RECUERDO";
+
+  position: absolute;
+
+  right: 45px;
+  bottom: 35px;
+
+  color: rgba(118, 87, 217, 0.28);
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+
+/* foto */
+
+.lv-entrada-foto {
+  width: 100%;
+  max-height: 390px;
+
+  object-fit: cover;
+
+  display: block;
+
+  margin: 0 0 28px;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 14px 30px rgba(40, 30, 65, 0.14);
+
+  transform: rotate(-0.5deg);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.lv-entrada-foto:hover {
+  transform: rotate(0deg) scale(1.01);
+
+  box-shadow:
+    0 18px 35px rgba(40, 30, 65, 0.18);
+}
+
+
+/* fecha */
+
+.lv-entrada-fecha {
+  display: inline-block;
+
+  margin-bottom: 10px;
+
+  padding: 6px 11px;
+
+  border-radius: 8px;
+
+  background: var(--lv-purple-soft);
+
+  color: var(--lv-purple);
+
+  font-size: 10px;
+  font-weight: 900;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1.4px;
+}
+
+
+/* título */
+
+.lv-entrada-titulo {
+  margin: 0 0 18px;
+
+  color: var(--lv-ink);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 34px;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.5px;
+}
+
+
+/* texto */
+
+.lv-entrada-texto {
+  max-width: 590px;
+
+  margin: 0;
+
+  color: var(--lv-text);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 17px;
+
+  line-height: 1.9;
+
+  white-space: pre-wrap;
+}
+
+
+/* =========================================================
+   ELEMENTOS QUE PUEDE MOSTRAR EL NUEVO JSX
+   ========================================================= */
+
+.lv-entrada-meta {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin: 0 0 20px;
+}
+
+.lv-meta-item {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 7px 10px;
+
+  border-radius: 999px;
+
+  background: #f7f5fa;
+
+  color: var(--lv-text);
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.lv-meta-emocion {
+  background: var(--lv-pink-soft);
+  color: #b34e7f;
+}
+
+.lv-meta-lugar {
+  background: var(--lv-blue-soft);
+  color: #357ea9;
+}
+
+.lv-meta-tipo {
+  background: var(--lv-yellow-soft);
+  color: #a47528;
+}
+
+.lv-favorito {
+  background: var(--lv-pink-soft);
+  color: var(--lv-pink);
+}
+
+
+/* etiquetas */
+
+.lv-etiquetas {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  margin-top: 22px;
+}
+
+.lv-etiqueta {
+  padding: 5px 9px;
+
+  border-radius: 7px;
+
+  background: #f3f0f8;
+
+  color: #746e80;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+
+/* dibujo */
+
+.lv-dibujo {
+  margin-top: 28px;
+
+  padding: 15px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffdf8,
+      #f8f4ff
+    );
+
+  border: 1px dashed #d9d0ea;
+}
+
+.lv-dibujo-titulo {
+  margin-bottom: 10px;
+
+  color: var(--lv-purple);
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 1.2px;
+
+  text-transform: uppercase;
+}
+
+.lv-dibujo img {
+  width: 100%;
+
+  display: block;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   RESUMEN
+   ========================================================= */
+
+.lv-resumen {
+  min-height: auto;
+
+  padding-top: 65px;
+  padding-bottom: 65px;
+
+  text-align: center;
+}
+
+.lv-resumen-titulo {
+  margin: 0 0 12px;
+
+  color: var(--lv-ink);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 34px;
+}
+
+.lv-resumen-titulo::after {
+  content: "";
+
+  display: block;
+
+  width: 50px;
+  height: 3px;
+
+  margin: 16px auto 35px;
+
+  border-radius: 99px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--lv-purple),
+      var(--lv-blue)
+    );
+}
+
+
+/* sección */
+
+.lv-resumen-seccion {
+  margin: 0 auto 30px;
+
+  max-width: 500px;
+
+  padding: 20px;
+
+  border-radius: 18px;
+
+  background: #faf8fc;
+
+  text-align: left;
+}
+
+.lv-resumen-seccion h3 {
+  margin: 0 0 13px;
+
+  color: var(--lv-purple);
+
+  font-size: 11px;
+  font-weight: 900;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1.4px;
+}
+
+
+/* lista */
+
+.lv-resumen-lista {
+  list-style: none;
+
+  padding: 0;
+  margin: 0;
+
+  color: var(--lv-text);
+
+  font-size: 14px;
+
+  line-height: 1.9;
+}
+
+.lv-resumen-lista li {
+  padding: 5px 0;
+
+  border-bottom:
+    1px solid #eeeaf3;
+}
+
+.lv-resumen-lista li:last-child {
+  border-bottom: none;
+}
+
+
+/* emociones */
+
+.lv-resumen-animos {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+}
+
+.lv-resumen-animo-emoji {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: white;
+
+  font-size: 25px;
+
+  box-shadow:
+    0 5px 15px rgba(60, 45, 80, 0.1);
+}
+
+
+/* cierre */
+
+.lv-resumen-cierre {
+  margin: 45px 0 0;
+
+  color: var(--lv-purple);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   PÁGINA FINAL
+   ========================================================= */
+
+.lv-final {
+  min-height: 550px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(118, 87, 217, 0.12),
+      transparent 35%
+    ),
+    #fffdf8;
+}
+
+.lv-final-avion {
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 25px;
+
+  border-radius: 50%;
+
+  background: var(--lv-purple-soft);
+
+  font-size: 34px;
+}
+
+.lv-final span {
+  color: var(--lv-purple);
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+.lv-final h2 {
+  margin: 15px 0;
+
+  color: var(--lv-ink);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 38px;
+
+  line-height: 1.15;
+}
+
+.lv-final p {
+  max-width: 400px;
+
+  margin: 0;
+
+  color: var(--lv-muted);
+
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .lv {
+    padding: 15px 12px 45px;
+  }
+
+  .lv-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .lv-volver,
+  .lv-boton-imprimir {
+    width: 100%;
+  }
+
+  .lv-pagina {
+    min-height: 560px;
+
+    padding: 35px 25px;
+
+    margin-bottom: 22px;
+  }
+
+  .lv-pagina::before {
+    inset: 10px;
+  }
+
+  .lv-portada {
+    min-height: 650px;
+
+    padding: 25px;
+  }
+
+  .lv-portada-marco {
+    min-height: 550px;
+
+    padding: 45px 20px;
+  }
+
+  .lv-portada-titulo {
+    font-size: 42px;
+  }
+
+  .lv-entrada {
+    padding: 35px 27px;
+  }
+
+  .lv-entrada-titulo {
+    font-size: 29px;
+  }
+
+  .lv-entrada-texto {
+    font-size: 16px;
+  }
+
+  .lv-final h2 {
+    font-size: 32px;
+  }
+}
+
+
+@media (max-width: 430px) {
+
+  .lv {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .lv-pagina {
+    padding: 28px 20px;
+  }
+
+  .lv-portada {
+    min-height: 590px;
+  }
+
+  .lv-portada-marco {
+    min-height: 500px;
+  }
+
+  .lv-portada-titulo {
+    font-size: 35px;
+  }
+
+  .lv-portada-avion {
+    width: 62px;
+    height: 62px;
+
+    font-size: 29px;
+  }
+
+  .lv-entrada-titulo {
+    font-size: 25px;
+  }
+
+  .lv-entrada-texto {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .lv-entrada-foto {
+    max-height: 280px;
+  }
+}
+
+
+/* =========================================================
+   ANIMACIONES
+   ========================================================= */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .lv-portada-avion {
+    animation: lvAvion 3.5s ease-in-out infinite;
+  }
+
+  .lv-portada-marco {
+    animation: lvEntrada 0.7s ease both;
+  }
+}
+
+@keyframes lvAvion {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateY(-7px) rotate(3deg);
+  }
+}
+
+@keyframes lvEntrada {
+
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   IMPRESIÓN / PDF
+   ========================================================= */
+
+@media print {
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .lv {
+    min-height: auto;
+
+    padding: 0;
+
+    background: white;
+
+    font-family:
+      Georgia,
+      "Times New Roman",
+      serif;
+  }
+
+  .lv-pagina {
+    width: 100%;
+    max-width: none;
+
+    min-height: 100vh;
+
+    margin: 0;
+
+    padding: 45px;
+
+    border-radius: 0;
+
+    box-shadow: none;
+
+    page-break-after: always;
+
+    break-after: page;
+
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .lv-pagina::before {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .lv-portada {
+    min-height: 100vh;
+
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .lv-portada-marco {
+    min-height: calc(100vh - 90px);
+  }
+
+  .lv-entrada-foto {
+    box-shadow: none;
+
+    transform: none;
+
+    break-inside: avoid;
+  }
+
+  .lv-entrada::after {
+    display: none;
+  }
+
+  .lv-resumen-seccion {
+    break-inside: avoid;
+  }
+
+  .lv-final {
+    page-break-after: auto;
+    break-after: auto;
+  }
+}

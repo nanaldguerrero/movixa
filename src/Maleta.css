@@ -1,179 +1,1705 @@
+/* =========================================================
+   MOVIXA — MALETA
+   ========================================================= */
+
 .maleta {
   min-height: 100vh;
-  background: #f5f6fa;
-  font-family: system-ui, sans-serif;
-  padding: 20px;
   box-sizing: border-box;
+
+  padding: 24px;
+
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color: #302b42;
+
+  background:
+    radial-gradient(
+      circle at 10% 5%,
+      rgba(169, 129, 255, 0.17),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 15%,
+      rgba(85, 198, 241, 0.15),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      #faf9ff 0%,
+      #f4f6ff 50%,
+      #eefaff 100%
+    );
+
+  overflow-x: hidden;
 }
 
+/* =========================================================
+   HEADER
+   ========================================================= */
+
 .mal-header {
+  width: 100%;
+  max-width: 920px;
+
+  margin: 0 auto 22px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .mal-volver {
-  background: none;
   border: none;
-  color: #6a3de8;
-  font-size: 14px;
+
+  background: rgba(255, 255, 255, 0.78);
+
+  color: #6842d7;
+
+  padding: 9px 15px;
+
+  border-radius: 14px;
+
+  font-size: 13px;
+  font-weight: 750;
+
   cursor: pointer;
-  font-weight: 600;
+
+  box-shadow:
+    0 5px 16px rgba(80, 60, 140, 0.08);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mal-volver:hover {
+  transform: translateX(-3px);
+
+  box-shadow:
+    0 8px 22px rgba(80, 60, 140, 0.13);
 }
 
 .mal-logo {
-  color: #6a3de8;
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 19px;
+  font-weight: 900;
+
+  letter-spacing: 1.6px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6338dc,
+      #3daee8
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.mal-hero {
+  width: 100%;
+  max-width: 920px;
+
+  min-height: 215px;
+
+  margin: 0 auto 20px;
+
+  padding: 25px 28px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(103, 65, 218, 0.96),
+      rgba(89, 126, 230, 0.94) 55%,
+      rgba(76, 194, 235, 0.92)
+    );
+
+  box-shadow:
+    0 18px 45px rgba(84, 67, 171, 0.22);
+}
+
+.mal-hero::before {
+  content: "";
+
+  position: absolute;
+
+  width: 260px;
+  height: 260px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  top: -150px;
+  right: 80px;
+}
+
+.mal-hero::after {
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.07);
+
+  bottom: -120px;
+  left: 20%;
+}
+
+/* =========================================================
+   HERO TEXT
+   ========================================================= */
+
+.mal-hero-text {
+  position: relative;
+  z-index: 2;
+
+  max-width: 60%;
+}
+
+.mal-kicker {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
 }
 
 .mal-titulo {
-  color: #2b2b2b;
-  margin: 0 0 4px 0;
+  margin: 0;
+
+  color: white;
+
+  font-size: clamp(29px, 5vw, 40px);
+
+  line-height: 1.1;
+
+  font-weight: 900;
+
+  letter-spacing: -1.2px;
 }
 
-.mal-progreso {
-  color: #888;
+.mal-destino {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 10px 0 5px;
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.mal-destino span {
+  animation: malAvion 3s ease-in-out infinite;
+}
+
+.mal-mensaje {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.76);
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   MALETA GRANDE DEL HERO
+   ========================================================= */
+
+.mal-hero-suitcase {
+  position: relative;
+
+  width: 190px;
+  height: 170px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 2;
+
+  transform: rotate(4deg);
+}
+
+.mal-suitcase-handle {
+  position: absolute;
+
+  top: 3px;
+
+  width: 65px;
+  height: 34px;
+
+  border: 8px solid #5143a8;
+
+  border-bottom: none;
+
+  border-radius: 18px 18px 0 0;
+
+  opacity: 0.9;
+}
+
+.mal-suitcase {
+  position: relative;
+
+  width: 125px;
+  height: 112px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #c9b8ff,
+      #8f78e5
+    );
+
+  border: 4px solid rgba(255, 255, 255, 0.28);
+
+  box-shadow:
+    8px 13px 0 rgba(49, 39, 113, 0.25),
+    inset 0 5px 8px rgba(255, 255, 255, 0.22);
+
+  animation: maletaFlotar 3.5s ease-in-out infinite;
+}
+
+.mal-suitcase-line {
+  position: absolute;
+
+  top: 8px;
+  bottom: 8px;
+
+  left: 50%;
+
+  width: 3px;
+
+  transform: translateX(-50%);
+
+  background: rgba(82, 61, 164, 0.25);
+
+  border-radius: 5px;
+}
+
+.mal-suitcase-sticker {
+  position: absolute;
+
+  left: 50%;
+  top: 38%;
+
+  transform: translate(-50%, -50%);
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #6a45d6;
+
+  font-size: 20px;
+
+  box-shadow:
+    0 4px 10px rgba(60, 50, 120, 0.16);
+}
+
+.mal-suitcase-tag {
+  position: absolute;
+
+  bottom: 14px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  padding: 4px 9px;
+
+  border-radius: 6px;
+
+  background: rgba(255, 255, 255, 0.8);
+
+  color: #6744c7;
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: 1px;
+}
+
+.mal-suitcase-wheel {
+  position: absolute;
+
+  bottom: -11px;
+
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+
+  background: #4d438b;
+
+  border: 4px solid #7870b8;
+}
+
+.wheel-left {
+  left: 20px;
+}
+
+.wheel-right {
+  right: 20px;
+}
+
+@keyframes maletaFlotar {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes malAvion {
+  0%,
+  100% {
+    transform: translateX(0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateX(7px) rotate(4deg);
+  }
+}
+
+/* =========================================================
+   PROGRESO
+   ========================================================= */
+
+.mal-progreso-card {
+  width: 100%;
+  max-width: 920px;
+
+  margin: 0 auto 18px;
+
+  padding: 18px 20px;
+
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  border: 1px solid rgba(104, 71, 205, 0.09);
+
+  border-radius: 21px;
+
+  box-shadow:
+    0 8px 25px rgba(68, 55, 118, 0.06);
+}
+
+.mal-progreso-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mal-progreso-top > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mal-progreso-label {
+  color: #918ba4;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 1.5px;
+}
+
+.mal-progreso-top strong {
+  color: #423b55;
+
   font-size: 14px;
-  margin: 0 0 24px 0;
+}
+
+.mal-porcentaje {
+  color: #6a45d7;
+
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.mal-barra {
+  height: 10px;
+
+  margin-top: 13px;
+
+  border-radius: 20px;
+
+  background: #eeeaf8;
+
+  overflow: hidden;
+}
+
+.mal-barra-progreso {
+  height: 100%;
+
+  min-width: 0;
+
+  position: relative;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6d45dc,
+      #8562e9,
+      #55c2e8
+    );
+
+  transition: width 0.45s ease;
+}
+
+.mal-barra-progreso span {
+  position: absolute;
+
+  right: 5px;
+  top: 2px;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  opacity: 0.8;
+}
+
+.mal-progreso-footer {
+  margin-top: 9px;
+
+  display: flex;
+  justify-content: space-between;
+
+  color: #9892a5;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.mal-lista-final {
+  color: #5b9d71;
+
+  font-weight: 800;
+}
+
+/* =========================================================
+   CLIMA
+   ========================================================= */
+
+.mal-clima-card {
+  width: 100%;
+  max-width: 920px;
+
+  box-sizing: border-box;
+
+  margin: 0 auto 20px;
+
+  padding: 13px 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(84, 176, 221, 0.18);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(232, 248, 255, 0.94)
+    );
+
+  box-shadow:
+    0 7px 22px rgba(65, 130, 165, 0.07);
+}
+
+.mal-clima-icon {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 13px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #FFF0B8;
+
+  font-size: 21px;
+}
+
+.mal-clima-card > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mal-clima-card span {
+  color: #898494;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 1.2px;
+}
+
+.mal-clima-card strong {
+  color: #4c4a5b;
+
+  font-size: 13px;
+}
+
+.mal-clima-airplane {
+  margin-left: auto;
+
+  color: #6a8fd1;
+
+  font-size: 18px;
+
+  animation: malAvion 3s ease-in-out infinite;
+}
+
+/* =========================================================
+   CATEGORÍAS
+   ========================================================= */
+
+.mal-categorias {
+  width: 100%;
+  max-width: 920px;
+
+  margin: 0 auto;
 }
 
 .mal-categoria {
-  margin-bottom: 20px;
+  margin-bottom: 11px;
+
+  background: rgba(255, 255, 255, 0.87);
+
+  border: 1px solid rgba(103, 77, 189, 0.08);
+
+  border-radius: 20px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 5px 18px rgba(67, 52, 118, 0.045);
+
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
-.mal-categoria-titulo {
-  color: #444;
-  font-size: 15px;
-  margin: 0 0 10px 0;
+.mal-categoria-abierta {
+  box-shadow:
+    0 10px 27px rgba(67, 52, 118, 0.09);
 }
+
+.mal-categoria-header {
+  width: 100%;
+
+  min-height: 75px;
+
+  padding: 10px 14px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+.mal-categoria-icono {
+  width: 45px;
+  height: 45px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f0eaff,
+      #e9f7ff
+    );
+
+  font-size: 23px;
+}
+
+.mal-categoria-info {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.mal-categoria-info strong {
+  color: #3d374d;
+
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.mal-categoria-info span {
+  color: #9a94a7;
+
+  font-size: 10px;
+}
+
+.mal-categoria-mini-progress {
+  width: 65px;
+
+  flex-shrink: 0;
+}
+
+.mal-categoria-mini-progress > div {
+  width: 100%;
+  height: 5px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  background: #ece9f5;
+}
+
+.mal-categoria-mini-progress span {
+  display: block;
+
+  height: 100%;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #7250df,
+      #66bfe6
+    );
+
+  transition: width 0.35s ease;
+}
+
+.mal-categoria-flecha {
+  width: 25px;
+  height: 25px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #7352d5;
+
+  font-size: 18px;
+  font-weight: 800;
+
+  border-radius: 50%;
+
+  background: #f2effb;
+}
+
+/* =========================================================
+   LISTA COLAPSABLE
+   ========================================================= */
+
+.mal-lista-wrapper {
+  display: grid;
+
+  grid-template-rows: 0fr;
+
+  transition:
+    grid-template-rows 0.35s ease;
+}
+
+.mal-lista-abierta {
+  grid-template-rows: 1fr;
+}
+
+.mal-lista-wrapper .mal-lista {
+  min-height: 0;
+
+  overflow: hidden;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.2s ease,
+    padding 0.35s ease;
+}
+
+.mal-lista-abierta .mal-lista {
+  padding: 0 12px 14px;
+
+  opacity: 1;
+}
+
+/* =========================================================
+   ITEM
+   ========================================================= */
 
 .mal-lista {
   display: flex;
   flex-direction: column;
+
   gap: 8px;
 }
 
 .mal-item {
-  background: white;
-  border-radius: 12px;
-  padding: 14px;
+  min-height: 68px;
+
+  padding: 7px 8px 7px 8px;
+
+  box-sizing: border-box;
+
   display: flex;
   align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  font-size: 14px;
-  color: #333;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border-radius: 16px;
+
+  background: #fbfaff;
+
+  border: 1px solid rgba(108, 78, 202, 0.06);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.mal-item:hover {
+  transform: translateX(2px);
+
+  background: white;
+
+  box-shadow:
+    0 5px 15px rgba(72, 56, 130, 0.08);
 }
 
 .mal-item-hecho {
-  opacity: 0.5;
+  background: #f7f7fa;
+
+  opacity: 0.78;
 }
 
-.mal-item-hecho span {
-  text-decoration: line-through;
+/* =========================================================
+   PARTE IZQUIERDA DEL ITEM
+   ========================================================= */
+
+.mal-item-izquierda {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  cursor: pointer;
 }
 
-.mal-checkbox {
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  border: 2px solid #ccc;
+.mal-item-dibujo {
+  width: 52px;
+  height: 52px;
+
+  flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f1edff,
+      #edfaff
+    );
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.mal-item:hover .mal-item-dibujo {
+  transform: scale(1.05) rotate(-2deg);
+
+  background:
+    linear-gradient(
+      145deg,
+      #ebe4ff,
+      #e4f7ff
+    );
+}
+
+.mal-item-hecho .mal-item-dibujo {
+  filter: grayscale(0.15);
+
+  opacity: 0.7;
+}
+
+.mal-icono-svg {
+  display: block;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.mal-item-texto {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.mal-item-texto > span {
+  overflow: hidden;
+
+  color: #3e394d;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    text-decoration 0.2s ease;
+}
+
+.mal-item-hecho .mal-item-texto > span {
+  color: #aaa5b3;
+
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
+
+.mal-item-texto small {
+  color: #69a27a;
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+
+.mal-item-acciones {
   flex-shrink: 0;
-  font-size: 12px;
-  color: white;
-}
 
-.mal-checkbox-marcado {
-  background: #6a3de8;
-  border-color: #6a3de8;
-}
-.mal-item {
-  justify-content: space-between;
-}
-
-.mal-item-izquierda {
   display: flex;
   align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  flex: 1;
+
+  gap: 7px;
 }
+
+.mal-check {
+  width: 27px;
+  height: 27px;
+
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  border: 2px solid #d5d0e0;
+
+  background: white;
+
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 13px;
+  font-weight: 900;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.mal-check:hover {
+  transform: scale(1.08);
+
+  border-color: #8059df;
+}
+
+.mal-check:active {
+  transform: scale(0.88);
+}
+
+.mal-check-activo {
+  border-color: transparent;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7047df,
+      #58a9df
+    );
+
+  box-shadow:
+    0 4px 10px rgba(105, 67, 218, 0.25);
+
+  animation: malCheckPop 0.3s ease;
+}
+
+@keyframes malCheckPop {
+  0% {
+    transform: scale(0.6);
+  }
+
+  60% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* =========================================================
+   CANTIDAD
+   ========================================================= */
 
 .mal-cantidad {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #f5f6fa;
-  border-radius: 20px;
-  padding: 4px 6px;
+
+  gap: 4px;
+
+  padding: 3px;
+
+  border-radius: 12px;
+
+  background: #f1eef9;
 }
 
 .mal-cantidad button {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+
   border: none;
-  background: #6a3de8;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: #6842d5;
+
+  font-size: 16px;
+  font-weight: 900;
+
   cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
+
+  box-shadow:
+    0 2px 5px rgba(70, 50, 120, 0.07);
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.mal-cantidad button:hover {
+  background: #6e47db;
+
+  color: white;
+}
+
+.mal-cantidad button:active {
+  transform: scale(0.84);
 }
 
 .mal-cantidad span {
-  font-size: 13px;
-  font-weight: bold;
-  color: #333;
-  min-width: 14px;
+  min-width: 18px;
+
+  color: #4a4458;
+
+  font-size: 12px;
+  font-weight: 850;
+
   text-align: center;
 }
-.mal-sin-info {
-  font-size: 13px;
-  color: #888;
-  margin: 16px 0;
-}
 
-.mal-boton-crear {
+/* =========================================================
+   FINAL
+   ========================================================= */
+
+.mal-final {
   width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #6a3de8, #4fc3f7);
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
+  max-width: 920px;
+
+  box-sizing: border-box;
+
+  margin: 20px auto;
+
+  padding: 18px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  border-radius: 21px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f3edff,
+      #eafaff
+    );
+
+  border: 1px solid rgba(108, 77, 212, 0.12);
+
+  animation: malAparecer 0.5s ease both;
 }
 
-.mal-clima-card {
-  background: #EEF7FF;
-  border: 1px solid #CFE9FF;
-  border-radius: 12px;
-  padding: 12px 14px;
-  font-size: 13px;
-  color: #333;
-  margin-bottom: 18px;
+.mal-final-icon {
+  width: 47px;
+  height: 47px;
+
+  border-radius: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: white;
+
+  font-size: 23px;
+
+  box-shadow:
+    0 5px 14px rgba(80, 65, 140, 0.08);
 }
+
+.mal-final strong {
+  color: #5540a1;
+
+  font-size: 15px;
+}
+
+.mal-final p {
+  margin: 3px 0 0;
+
+  color: #777187;
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   BOTÓN VER VIAJE
+   ========================================================= */
 
 .mal-boton-ver-viaje {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  background: white;
-  color: #6a3de8;
-  font-weight: 600;
+  max-width: 920px;
+
+  margin: 20px auto 10px;
+
+  padding: 15px 18px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 1px solid rgba(104, 68, 210, 0.14);
+
+  border-radius: 17px;
+
+  background: rgba(255, 255, 255, 0.88);
+
+  color: #6841d4;
+
   font-size: 13px;
+  font-weight: 800;
+
   cursor: pointer;
-  margin-top: 10px;
+
+  box-shadow:
+    0 7px 20px rgba(65, 50, 110, 0.05);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.mal-boton-ver-viaje:hover {
+  transform: translateY(-2px);
+
+  background: white;
+
+  box-shadow:
+    0 11px 25px rgba(65, 50, 110, 0.09);
+}
+
+.mal-boton-ver-viaje strong {
+  font-size: 19px;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.mal-boton-ver-viaje:hover strong {
+  transform: translateX(4px);
+}
+
+/* =========================================================
+   SIN VIAJE
+   ========================================================= */
+
+.mal-empty {
+  width: 100%;
+  max-width: 600px;
+
+  margin: 50px auto;
+
+  padding: 35px 25px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  border-radius: 30px;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  border: 1px solid rgba(104, 74, 197, 0.08);
+
+  box-shadow:
+    0 15px 40px rgba(65, 50, 110, 0.08);
+}
+
+.mal-empty-icon {
+  width: 105px;
+  height: 105px;
+
+  margin: 0 auto 20px;
+
+  border-radius: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eee8ff,
+      #e7f8ff
+    );
+}
+
+.mal-empty-suitcase {
+  font-size: 55px;
+
+  animation: maletaFlotar 3s ease-in-out infinite;
+}
+
+.mal-empty-kicker {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #8063cf;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+.mal-sin-info {
+  max-width: 500px;
+
+  margin: 14px auto 22px;
+
+  color: #80798e;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+/* =========================================================
+   BOTÓN CREAR
+   ========================================================= */
+
+.mal-boton-crear {
+  width: 100%;
+
+  padding: 15px 20px;
+
+  border: none;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d43df,
+      #8054e9 45%,
+      #48bde9
+    );
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 850;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 11px 25px rgba(105, 65, 220, 0.22);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mal-boton-crear:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 15px 31px rgba(105, 65, 220, 0.27);
+}
+
+.mal-boton-crear:active {
+  transform: scale(0.98);
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.maleta-cargando {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 70vh;
+}
+
+.mal-loading-maleta {
+  position: relative;
+
+  width: 90px;
+  height: 100px;
+
+  animation: maletaFlotar 2s ease-in-out infinite;
+}
+
+.mal-loading-handle {
+  position: absolute;
+
+  top: 0;
+  left: 30px;
+
+  width: 30px;
+  height: 23px;
+
+  border: 7px solid #6d50c8;
+  border-bottom: none;
+
+  border-radius: 12px 12px 0 0;
+}
+
+.mal-loading-body {
+  position: absolute;
+
+  left: 9px;
+  bottom: 0;
+
+  width: 72px;
+  height: 65px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #c4b3ff,
+      #8b76de
+    );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 34px;
+
+  box-shadow:
+    5px 7px 0 rgba(72, 55, 135, 0.2);
+}
+
+.maleta-cargando p {
+  margin-top: 20px;
+
+  color: #777087;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   ANIMACIÓN GENERAL
+   ========================================================= */
+
+@keyframes malAparecer {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .maleta {
+    padding: 17px 13px 28px;
+  }
+
+  .mal-hero {
+    min-height: 205px;
+
+    padding: 22px 19px;
+
+    border-radius: 25px;
+  }
+
+  .mal-hero-text {
+    max-width: 62%;
+  }
+
+  .mal-titulo {
+    font-size: 29px;
+  }
+
+  .mal-destino {
+    font-size: 14px;
+  }
+
+  .mal-hero-suitcase {
+    width: 130px;
+    transform: scale(0.82) rotate(4deg);
+  }
+
+  .mal-progreso-card {
+    padding: 16px;
+  }
+
+  .mal-categoria-header {
+    min-height: 70px;
+
+    padding: 9px 10px;
+
+    gap: 9px;
+  }
+
+  .mal-categoria-icono {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 13px;
+
+    font-size: 21px;
+  }
+
+  .mal-categoria-mini-progress {
+    display: none;
+  }
+
+  .mal-item {
+    min-height: 65px;
+  }
+
+  .mal-item-dibujo {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* =========================================================
+   CELULAR PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 470px) {
+  .mal-header {
+    margin-bottom: 16px;
+  }
+
+  .mal-logo {
+    font-size: 16px;
+  }
+
+  .mal-volver {
+    padding: 8px 11px;
+
+    font-size: 11px;
+  }
+
+  .mal-hero {
+    min-height: 225px;
+
+    align-items: flex-start;
+
+    padding: 21px 17px;
+  }
+
+  .mal-hero-text {
+    max-width: 72%;
+  }
+
+  .mal-kicker {
+    font-size: 8px;
+  }
+
+  .mal-titulo {
+    font-size: 27px;
+  }
+
+  .mal-hero-suitcase {
+    position: absolute;
+
+    right: -24px;
+    bottom: -13px;
+
+    transform: scale(0.73) rotate(4deg);
+  }
+
+  .mal-mensaje {
+    max-width: 210px;
+  }
+
+  .mal-clima-card {
+    padding: 11px 12px;
+  }
+
+  .mal-clima-icon {
+    width: 36px;
+    height: 36px;
+
+    font-size: 18px;
+  }
+
+  .mal-categoria-info strong {
+    font-size: 13px;
+  }
+
+  .mal-categoria-info span {
+    font-size: 9px;
+  }
+
+  .mal-item {
+    padding: 6px;
+  }
+
+  .mal-item-dibujo {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 12px;
+  }
+
+  .mal-icono-svg {
+    width: 37px;
+    height: 37px;
+  }
+
+  .mal-item-texto > span {
+    font-size: 12px;
+  }
+
+  .mal-item-texto small {
+    font-size: 8px;
+  }
+
+  .mal-item-acciones {
+    gap: 4px;
+  }
+
+  .mal-cantidad {
+    gap: 2px;
+  }
+
+  .mal-cantidad button {
+    width: 22px;
+    height: 22px;
+
+    font-size: 14px;
+  }
+
+  .mal-cantidad span {
+    min-width: 15px;
+
+    font-size: 11px;
+  }
+
+  .mal-check {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* =========================================================
+   MUY PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 370px) {
+  .maleta {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .mal-hero {
+    min-height: 215px;
+  }
+
+  .mal-hero-suitcase {
+    right: -35px;
+
+    transform: scale(0.65) rotate(4deg);
+  }
+
+  .mal-item-texto > span {
+    max-width: 115px;
+  }
+
+  .mal-cantidad {
+    display: none;
+  }
+}
+
+/* =========================================================
+   ACCESIBILIDAD
+   ========================================================= */
+
+.mal-volver:focus-visible,
+.mal-categoria-header:focus-visible,
+.mal-check:focus-visible,
+.mal-cantidad button:focus-visible,
+.mal-boton-crear:focus-visible,
+.mal-boton-ver-viaje:focus-visible {
+  outline: 3px solid rgba(76, 184, 234, 0.45);
+
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   REDUCIR ANIMACIONES
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .maleta *,
+  .maleta *::before,
+  .maleta *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
